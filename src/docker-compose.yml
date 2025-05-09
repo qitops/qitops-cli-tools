@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  qitops:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./tests/configs:/app/configs
+      - ./results:/app/results
+    environment:
+      - API_BASE_URL=https://api.example.com
+      - API_TOKEN=${API_TOKEN:-default_token}
+    command: api -c /app/configs/api_test.json
+
+  qitops-performance:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./tests/configs:/app/configs
+      - ./results:/app/results
+    environment:
+      - API_BASE_URL=https://api.example.com
+      - API_TOKEN=${API_TOKEN:-default_token}
+    command: performance -c /app/configs/performance_test.json -u 10 -d 30
+
+  qitops-security:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./tests/configs:/app/configs
+      - ./results:/app/results
+    environment:
+      - API_BASE_URL=https://api.example.com
+      - API_TOKEN=${API_TOKEN:-default_token}
+    command: security -c /app/configs/security_test.json -d 3
+
+  qitops-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./tests/configs:/app/configs
+      - ./results:/app/results
+    environment:
+      - API_BASE_URL=https://api.example.com
+      - API_TOKEN=${API_TOKEN:-default_token}
+    command: web -c /app/configs/web_test.json

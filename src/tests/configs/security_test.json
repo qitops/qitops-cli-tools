@@ -1,0 +1,41 @@
+{
+    "name": "API Security Test",
+    "description": "Security scan of the API endpoints",
+    "timeout": 600,
+    "retries": 3,
+    "environment": "production",
+    "target_url": "${API_BASE_URL}",
+    "headers": {
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Security-Scanner"
+    },
+    "auth": {
+        "auth_type": "bearer",
+        "token": "${API_TOKEN}",
+        "headers": {
+            "Authorization": "Bearer ${API_TOKEN}"
+        }
+    },
+    "scan_types": [
+        "XSS",
+        "SQLInjection",
+        "CSRF",
+        "OpenRedirect",
+        "SSLVuln",
+        "Headers",
+        "JWT",
+        "API"
+    ],
+    "excluded_paths": [
+        "/health",
+        "/metrics",
+        "/docs"
+    ],
+    "custom_headers": {
+        "X-Custom-Header": "security-scan"
+    },
+    "rate_limit": {
+        "requests_per_second": 10,
+        "burst_size": 20
+    }
+} 

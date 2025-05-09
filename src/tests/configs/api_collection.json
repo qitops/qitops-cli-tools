@@ -1,0 +1,82 @@
+{
+    "name": "GitHub API Collection",
+    "description": "A collection of GitHub API tests",
+    "version": "1.0.0",
+    "variables": {
+        "base_url": "https://api.github.com",
+        "username": "octocat",
+        "repo": "Hello-World"
+    },
+    "auth": {
+        "type": "bearer",
+        "token": "{{GITHUB_TOKEN}}"
+    },
+    "defaults": {
+        "headers": {
+            "Accept": "application/vnd.github.v3+json",
+            "User-Agent": "QitOps-Test"
+        },
+        "timeout": 30,
+        "retries": 3
+    },
+    "requests": [
+        {
+            "name": "Get User",
+            "description": "Get a GitHub user",
+            "id": "get-user",
+            "url": "{{base_url}}/users/{{username}}",
+            "method": "GET",
+            "expected_status": 200,
+            "expected_body": {
+                "login": "{{username}}",
+                "type": "User"
+            },
+            "capture": {
+                "user_id": "$.id",
+                "user_url": "$.url"
+            }
+        },
+        {
+            "name": "Get User Repos",
+            "description": "Get repositories for a user",
+            "id": "get-user-repos",
+            "url": "{{user_url}}/repos",
+            "method": "GET",
+            "depends_on": ["get-user"],
+            "expected_status": 200,
+            "expected_body_type": "array",
+            "capture": {
+                "first_repo_name": "$[0].name",
+                "first_repo_url": "$[0].url"
+            }
+        },
+        {
+            "name": "Get Repo Details",
+            "description": "Get details for a repository",
+            "id": "get-repo-details",
+            "url": "{{base_url}}/repos/{{username}}/{{first_repo_name}}",
+            "method": "GET",
+            "depends_on": ["get-user-repos"],
+            "expected_status": 200,
+            "expected_body": {
+                "name": "{{first_repo_name}}",
+                "owner": {
+                    "login": "{{username}}"
+                }
+            }
+        }
+    ],
+    "environments": {
+        "production": {
+            "base_url": "https://api.github.com"
+        },
+        "staging": {
+            "base_url": "https://api.staging.github.com"
+        }
+    },
+    "run_options": {
+        "sequential": true,
+        "stop_on_failure": true,
+        "delay_between_requests_ms": 500
+    }
+}

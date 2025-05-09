@@ -1,0 +1,86 @@
+{
+    "name": "HTTPBin API Collection",
+    "description": "A collection of HTTPBin API tests to demonstrate request chaining and variable capture",
+    "version": "1.0.0",
+    "variables": {
+        "base_url": "https://httpbin.org",
+        "test_value": "qitops_test_value"
+    },
+    "defaults": {
+        "headers": {
+            "Accept": "application/json",
+            "User-Agent": "QitOps-Test/1.0"
+        },
+        "timeout": 30,
+        "retries": 2
+    },
+    "requests": [
+        {
+            "name": "Get IP Address",
+            "description": "Get the client's IP address",
+            "id": "get-ip",
+            "url": "{{base_url}}/ip",
+            "method": "GET",
+            "expected_status": 200,
+            "expected_body_type": "object",
+            "capture": {
+                "client_ip": "$.origin"
+            }
+        },
+        {
+            "name": "Post with JSON",
+            "description": "Post data and get it back in the response",
+            "id": "post-json",
+            "url": "{{base_url}}/post",
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "body": {
+                "test_value": "{{test_value}}",
+                "client_ip": "{{client_ip}}"
+            },
+            "expected_status": 200,
+            "depends_on": ["get-ip"],
+            "capture": {
+                "request_id": "$.headers.X-Request-Id",
+                "posted_data": "$.json"
+            }
+        },
+        {
+            "name": "Get with Headers",
+            "description": "Send custom headers and verify they are received",
+            "id": "get-headers",
+            "url": "{{base_url}}/headers",
+            "method": "GET",
+            "headers": {
+                "X-Custom-Header": "{{test_value}}",
+                "X-Previous-Request-Id": "{{request_id}}"
+            },
+            "expected_status": 200,
+            "depends_on": ["post-json"]
+        },
+        {
+            "name": "Get with Query Parameters",
+            "description": "Send query parameters using captured values",
+            "id": "get-query",
+            "url": "{{base_url}}/get?ip={{client_ip}}&test_value={{test_value}}",
+            "method": "GET",
+            "expected_status": 200,
+            "depends_on": ["get-ip"]
+        }
+    ],
+    "environments": {
+        "production": {
+            "base_url": "https://httpbin.org"
+        },
+        "staging": {
+            "base_url": "https://httpbin.org"
+        }
+    },
+    "run_options": {
+        "sequential": true,
+        "stop_on_failure": true,
+        "delay_between_requests_ms": 500
+    }
+}

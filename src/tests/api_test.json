@@ -1,0 +1,18 @@
+{
+    "name": "Sample API Test",
+    "description": "Test the GitHub API",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "url": "https://api.github.com/users/octocat",
+    "method": "GET",
+    "headers": {
+        "Accept": "application/vnd.github.v3+json",
+        "User-Agent": "QitOps-Test"
+    },
+    "expected_status": 200,
+    "expected_body": {
+        "login": "octocat",
+        "type": "User"
+    }
+} 
