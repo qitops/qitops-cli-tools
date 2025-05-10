@@ -201,7 +201,8 @@ impl AiTestGenerator {
                     "login": "octocat",
                     "type": "User"
                 }
-            }"#.to_string())
+            }"#
+            .to_string())
         } else if prompt.contains("performance test") {
             Ok(r#"{
                 "name": "Performance Test",
@@ -213,7 +214,8 @@ impl AiTestGenerator {
                 "duration": 30,
                 "ramp_up": 5,
                 "success_threshold": 95
-            }"#.to_string())
+            }"#
+            .to_string())
         } else {
             Ok("Mistral mock response for testing".to_string())
         }
@@ -235,7 +237,8 @@ The test was successful with a response time of 0.45 seconds.
 ## Recommendations
 - The test is performing well
 - Consider adding more assertions to validate the response body
-            "#.to_string())
+            "#
+            .to_string())
         } else {
             Ok("GPT-J mock response for testing".to_string())
         }
@@ -257,7 +260,8 @@ The test was successful with a response time of 0.45 seconds.
 ## Coverage
 - Add negative test cases
 - Test edge cases with invalid inputs
-            "#.to_string())
+            "#
+            .to_string())
         } else {
             Ok("Phi mock response for testing".to_string())
         }
@@ -265,7 +269,10 @@ The test was successful with a response time of 0.45 seconds.
 
     async fn run_custom_inference(&self, prompt: &str, model_path: &str) -> Result<String> {
         // Mock implementation for testing
-        Ok(format!("Custom model mock response for: {} using model at {}", prompt, model_path))
+        Ok(format!(
+            "Custom model mock response for: {} using model at {}",
+            prompt, model_path
+        ))
     }
 
     fn extract_json_from_output(&self, output: &str) -> String {

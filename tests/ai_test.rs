@@ -194,7 +194,7 @@ mod general_ai_tests {
 
         let config: AiConfig = serde_json::from_str(json).unwrap();
         assert_eq!(config.context_size, 2048); // Default value
-        assert_eq!(config.temperature, 0.7);   // Default value
-        assert_eq!(config.max_tokens, 1024);   // Default value
+        assert_eq!(config.temperature, 0.7); // Default value
+        assert_eq!(config.max_tokens, 1024); // Default value
     }
 }

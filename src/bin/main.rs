@@ -602,7 +602,7 @@ async fn main() -> Result<()> {
             // Load test results
             let mut loaded_results = Vec::new();
             for result_path in results {
-                let content = std::fs::read_to_string(&result_path)?;
+                let content = std::fs::read_to_string(result_path)?;
                 let result: qitops::common::TestResult = serde_json::from_str(&content)?;
                 loaded_results.push(result);
             }
@@ -652,7 +652,7 @@ async fn main() -> Result<()> {
             // Load test results
             let mut loaded_results = Vec::new();
             for result_path in results {
-                let content = std::fs::read_to_string(&result_path)?;
+                let content = std::fs::read_to_string(result_path)?;
                 let result: qitops::common::TestResult = serde_json::from_str(&content)?;
                 loaded_results.push(result);
             }
@@ -681,7 +681,7 @@ async fn main() -> Result<()> {
             );
 
             // Determine the test type from the config file
-            let test_type = qitops::schema::determine_test_type(&config)?;
+            let test_type = qitops::schema::determine_test_type(config)?;
             info!("Detected test type: {}", test_type);
 
             // Create data-driven configuration
@@ -730,37 +730,37 @@ async fn main() -> Result<()> {
                 // Load the appropriate test configuration based on test type
                 let result = match test_type.as_str() {
                     "api" => {
-                        let base_config: ApiTestConfig = load_config(&config)?;
+                        let base_config: ApiTestConfig = load_config(config)?;
                         let test_config = runner.apply_replacements(&base_config, row)?;
                         let api_runner = ApiTestRunner::new();
                         api_runner.run(&test_config).await
                     }
                     "performance" => {
-                        let base_config: PerformanceTestConfig = load_config(&config)?;
+                        let base_config: PerformanceTestConfig = load_config(config)?;
                         let test_config = runner.apply_replacements(&base_config, row)?;
                         let perf_runner = PerformanceTestRunner::new(10, 30); // Default values
                         perf_runner.run(&test_config).await
                     }
                     "performance_enhanced" => {
-                        let base_config: EnhancedPerformanceConfig = load_config(&config)?;
+                        let base_config: EnhancedPerformanceConfig = load_config(config)?;
                         let test_config = runner.apply_replacements(&base_config, row)?;
                         let perf_runner = EnhancedPerformanceRunner::new();
                         perf_runner.run(&test_config).await
                     }
                     "security" => {
-                        let base_config: SecurityTestConfig = load_config(&config)?;
+                        let base_config: SecurityTestConfig = load_config(config)?;
                         let test_config = runner.apply_replacements(&base_config, row)?;
                         let sec_runner = SecurityTestRunner::new(3, false); // Default values
                         sec_runner.run(&test_config).await
                     }
                     "web" => {
-                        let base_config: WebTestConfig = load_config(&config)?;
+                        let base_config: WebTestConfig = load_config(config)?;
                         let test_config = runner.apply_replacements(&base_config, row)?;
                         let web_runner = WebTestRunner::new(true, None); // Default values
                         web_runner.run(&test_config).await
                     }
                     "collection" => {
-                        let collection = ApiCollectionRunner::load_collection(&config)?;
+                        let collection = ApiCollectionRunner::load_collection(config)?;
                         // Apply replacements to the collection
                         let collection_json = serde_json::to_value(&collection)?;
                         let mut collection_json_mut = collection_json.clone();
