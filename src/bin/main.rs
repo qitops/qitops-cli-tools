@@ -5,6 +5,7 @@ use std::path::PathBuf;
 
 // Import modules from the crate
 use qitops::ai::{AiConfig, AiModelType, AiTestGenerator};
+use qitops::ai_compat;
 use qitops::api::{ApiTestConfig, ApiTestRunner};
 use qitops::api_collection::ApiCollectionRunner;
 use qitops::common::{load_config, TestRunner};
@@ -233,6 +234,9 @@ async fn main() -> Result<()> {
     if cli.ci_mode {
         info!("Running in CI mode");
     }
+
+    // Log AI features availability
+    info!("{}", ai_compat::ai_features_info());
 
     // Determine report format if specified
     let report_format = if let Some(format) = &cli.report {
@@ -531,6 +535,13 @@ async fn main() -> Result<()> {
         } => {
             info!("Generating {} test configuration using AI", test_type);
 
+            // Check if AI features are available
+            if !ai_compat::ai_features_available() {
+                return Err(Error::ConfigError(
+                    "AI features are not available. Build with --features ai to enable them.".to_string()
+                ));
+            }
+
             // Create AI configuration
             let model_type = match model.to_lowercase().as_str() {
                 "llama" => AiModelType::Llama,
@@ -574,6 +585,13 @@ async fn main() -> Result<()> {
             model_path,
         } => {
             info!("Analyzing test results using AI");
+
+            // Check if AI features are available
+            if !ai_compat::ai_features_available() {
+                return Err(Error::ConfigError(
+                    "AI features are not available. Build with --features ai to enable them.".to_string()
+                ));
+            }
 
             // Create AI configuration
             let model_type = match model.to_lowercase().as_str() {
@@ -624,6 +642,13 @@ async fn main() -> Result<()> {
             model_path,
         } => {
             info!("Generating improvement suggestions using AI");
+
+            // Check if AI features are available
+            if !ai_compat::ai_features_available() {
+                return Err(Error::ConfigError(
+                    "AI features are not available. Build with --features ai to enable them.".to_string()
+                ));
+            }
 
             // Create AI configuration
             let model_type = match model.to_lowercase().as_str() {

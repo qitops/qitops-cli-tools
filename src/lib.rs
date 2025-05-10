@@ -1,4 +1,5 @@
 pub mod ai;
+pub mod ai_compat;
 pub mod api;
 pub mod api_collection;
 pub mod common;

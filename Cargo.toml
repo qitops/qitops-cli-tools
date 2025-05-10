@@ -29,7 +29,7 @@ async-trait = "0.1"
 log = "0.4"
 env_logger = "0.11"
 jsonschema = "0.17"
-rand = "0.8"
+rand = "0.8.5"
 envsubst = "0.2"
 dotenv = "0.15"
 once_cell = "1.18"
@@ -40,10 +40,14 @@ futures = "0.3"
 tempfile = "3.10"
 
 # Optional AI dependencies - these can be enabled with features
-llama_cpp_rs = { version = "0.2", optional = true }
-candle-core = { version = "0.3", optional = true }
-candle-transformers = { version = "0.3", optional = true }
+llama_cpp_rs = { version = "0.2.0", optional = true }
+candle-core = { version = "0.3.3", optional = true, features = ["metal"] }
+candle-transformers = { version = "0.3.3", optional = true }
+half = { version = "2.3.1", optional = true }
+rand_distr = { version = "0.4.3", optional = true }
 
 [features]
 default = []
-ai = ["llama_cpp_rs", "candle-core", "candle-transformers"]
+ai = ["llama_cpp_rs", "candle-core", "candle-transformers", "half", "rand_distr"]
+
+# We'll handle compatibility issues in the code instead of using patches
