@@ -1,0 +1,181 @@
+/* QitOps Documentation Custom Styles */
+
+:root {
+    --primary-color: #4a86e8;
+    --secondary-color: #6aa84f;
+    --accent-color: #f1c232;
+    --text-color: #333333;
+    --background-color: #ffffff;
+    --code-background: #f5f5f5;
+    --border-color: #e0e0e0;
+    --sidebar-background: #f8f9fa;
+    --sidebar-active: #e6f0ff;
+}
+
+/* Dark theme colors */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #f0f0f0;
+        --background-color: #1e1e1e;
+        --code-background: #2d2d2d;
+        --border-color: #444444;
+        --sidebar-background: #252525;
+        --sidebar-active: #3a3a3a;
+    }
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--primary-color);
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+
+h1 {
+    font-size: 2.2em;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.3em;
+}
+
+h2 {
+    font-size: 1.8em;
+}
+
+h3 {
+    font-size: 1.5em;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    background-color: var(--code-background);
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+
+pre {
+    background-color: var(--code-background);
+    padding: 1em;
+    border-radius: 5px;
+    overflow-x: auto;
+    border: 1px solid var(--border-color);
+}
+
+pre code {
+    background-color: transparent;
+    padding: 0;
+}
+
+blockquote {
+    border-left: 4px solid var(--accent-color);
+    padding-left: 1em;
+    margin-left: 0;
+    color: #666;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+}
+
+table, th, td {
+    border: 1px solid var(--border-color);
+}
+
+th, td {
+    padding: 0.5em;
+    text-align: left;
+}
+
+th {
+    background-color: var(--sidebar-background);
+}
+
+tr:nth-child(even) {
+    background-color: var(--sidebar-background);
+}
+
+/* Sidebar customization */
+.sidebar {
+    background-color: var(--sidebar-background);
+    border-right: 1px solid var(--border-color);
+}
+
+.sidebar .sidebar-scrollbox {
+    padding: 10px;
+}
+
+.sidebar .sidebar-scrollbox a.active {
+    background-color: var(--sidebar-active);
+    color: var(--primary-color);
+}
+
+/* Content customization */
+.content {
+    padding: 0 15px;
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+/* Code highlighting */
+.hljs {
+    background: var(--code-background) !important;
+}
+
+/* Buttons */
+.nav-chapters {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 5px;
+}
+
+.nav-chapters:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Print styles */
+@media print {
+    .sidebar, .nav-chapters {
+        display: none;
+    }
+    
+    .content {
+        margin: 0;
+        max-width: 100%;
+    }
+}
+
+/* Mobile styles */
+@media only screen and (max-width: 768px) {
+    .content {
+        padding: 0 10px;
+    }
+    
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    h2 {
+        font-size: 1.5em;
+    }
+    
+    h3 {
+        font-size: 1.3em;
+    }
+}
