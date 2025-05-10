@@ -33,10 +33,49 @@ pub fn ai_features_available() -> bool {
     cfg!(feature = "ai")
 }
 
+/// Check if CUDA acceleration is available
+pub fn ai_cuda_available() -> bool {
+    cfg!(feature = "ai-cuda")
+}
+
+/// Check if Metal acceleration is available
+pub fn ai_metal_available() -> bool {
+    cfg!(feature = "ai-metal")
+}
+
+/// Get the best available hardware acceleration for the current platform
+pub fn get_hardware_acceleration() -> &'static str {
+    if ai_cuda_available() {
+        "CUDA"
+    } else if ai_metal_available() {
+        "Metal"
+    } else {
+        "None"
+    }
+}
+
 /// Get information about available AI features
 pub fn ai_features_info() -> String {
     if ai_features_available() {
-        "AI features are available. Supported models: LLaMA, Mistral, GPT-J, Phi.".to_string()
+        let mut info = "AI features are available. Supported models: LLaMA, Mistral, GPT-J, Phi.".to_string();
+
+        // Add information about platform-specific optimizations
+        #[cfg(feature = "ai-cuda")]
+        {
+            info.push_str(" CUDA acceleration enabled.");
+        }
+
+        #[cfg(feature = "ai-metal")]
+        {
+            info.push_str(" Metal acceleration enabled.");
+        }
+
+        #[cfg(not(any(feature = "ai-cuda", feature = "ai-metal")))]
+        {
+            info.push_str(" No hardware acceleration enabled.");
+        }
+
+        info
     } else {
         "AI features are not available. Build with --features ai to enable them.".to_string()
     }
