@@ -141,12 +141,37 @@ qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/pr
 - Custom user agent configuration
 
 ### AI-Powered Features
-- Test configuration generation from natural language descriptions
-- Test results analysis with insights and patterns
-- Improvement suggestions based on test results
-- Support for local LLM models (LLaMA, Mistral, GPT-J, Phi)
-- Customizable model parameters (temperature, context size, etc.)
-- Offline operation with no data sent to external services
+- **Test Configuration Generation**: Create test configurations from natural language descriptions
+  ```bash
+  qitops generate --test-type api --description "Test the GitHub API to fetch user information" --output github_test.json
+  ```
+
+- **Test Results Analysis**: Analyze test results to identify patterns and issues
+  ```bash
+  qitops analyze --results test_results.json --output analysis.md
+  ```
+
+- **Improvement Suggestions**: Get actionable suggestions to improve your tests
+  ```bash
+  qitops improve --results test_results.json --output improvements.md
+  ```
+
+- **Local LLM Support**: Works with various local models (LLaMA, Mistral, GPT-J, Phi)
+  ```bash
+  qitops generate --test-type api --description "Test description" --model custom --model-path "ollama:phi"
+  ```
+
+- **Model Parameter Customization**: Configure temperature, context size, and other parameters
+  ```bash
+  qitops generate --test-type api --description "Test description" --temperature 0.7 --context-size 4096
+  ```
+
+- **Offline Operation**: Run completely offline with no data sent to external services
+  ```bash
+  export QITOPS_OFFLINE=true
+  export QITOPS_MODEL_PATH="/path/to/model.gguf"
+  qitops analyze --results test_results.json --output analysis.md
+  ```
 
 ## Installation
 
@@ -789,22 +814,43 @@ All outputs include consistent timestamping for audit trails and traceability.
 ### AI-Powered Features
 ```bash
 # Generate an API test configuration from a description
-qitops generate -t api -d "Test the GitHub API to fetch user information" -o tests/configs/github_api_test.json
+qitops generate --test-type api --description "Test the GitHub API to fetch user information" --output tests/configs/github_api_test.json
 
 # Generate a web test configuration from a description
-qitops generate -t web -d "Test the login form on example.com with valid credentials" -o tests/configs/login_test.json
+qitops generate --test-type web --description "Test the login form on example.com with valid credentials" --output tests/configs/login_test.json
 
 # Analyze test results
-qitops analyze -r results/api_test_result.json -o analysis.md
+qitops analyze --results results/api_test_result.json --output analysis.md
 
 # Get improvement suggestions based on test results
-qitops improve -r results/performance_test_result.json -o improvements.md
+qitops improve --results results/performance_test_result.json --output improvements.md
 
 # Use a specific AI model
-qitops generate -t security -d "Test for SQL injection vulnerabilities" -o tests/configs/sql_injection_test.json -m mistral
+qitops generate --test-type security --description "Test for SQL injection vulnerabilities" --output tests/configs/sql_injection_test.json --model mistral
 
 # Use a custom model
-qitops analyze -r results/security_test_result.json -o analysis.md -m custom -p /path/to/custom/model.gguf
+qitops analyze --results results/security_test_result.json --output analysis.md --model custom --model-path /path/to/custom/model.gguf
+
+# Use Ollama for local LLM inference
+qitops generate --test-type api --description "Test the Twitter API" --output twitter_test.json --model custom --model-path "ollama:phi"
+```
+
+### Testing AI Features
+```bash
+# Run the test script to verify AI features
+./test_ai_features.sh
+
+# Test with a real local LLM using Ollama
+# 1. Install Ollama
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# 2. Pull a model
+ollama pull phi
+
+# 3. Test with Ollama
+cargo run --features ai -- generate --test-type api --description "Test description" --model custom --model-path "ollama:phi"
+
+# For more detailed instructions, see docs/testing-ai-features.md
 ```
 
 ## Command Line Options

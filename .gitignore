@@ -95,6 +95,9 @@ test_*.json
 *_result.json
 analysis.md
 improvements.md
+test_outputs/
+ai_test_outputs/
+ollama_test_outputs/
 
 # OS specific files
 # Windows
