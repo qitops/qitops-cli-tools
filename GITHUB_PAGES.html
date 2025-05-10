@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>License - QitOps Documentation</title>
+        <title>GitHub Pages Setup - QitOps Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -133,7 +133,7 @@
                         <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./index.md#license" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./GITHUB_PAGES.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -162,16 +162,61 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="license"><a class="header" href="#license">License</a></h1>
+                        <h1 id="enabling-github-pages"><a class="header" href="#enabling-github-pages">Enabling GitHub Pages</a></h1>
+<p>This document explains how to enable GitHub Pages for the QitOps documentation.</p>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<ul>
+<li>You need to have admin access to the QitOps repository</li>
+<li>The gh-pages branch should already exist (created by the GitHub Actions workflow)</li>
+</ul>
+<h2 id="steps-to-enable-github-pages"><a class="header" href="#steps-to-enable-github-pages">Steps to Enable GitHub Pages</a></h2>
+<ol>
+<li>Go to the repository on GitHub</li>
+<li>Navigate to Settings &gt; Pages</li>
+<li>Under “Build and deployment”, set the following:
+<ul>
+<li>Source: “Deploy from a branch”</li>
+<li>Branch: “gh-pages”</li>
+<li>Folder: “/ (root)”</li>
+</ul>
+</li>
+<li>Click “Save”</li>
+</ol>
+<p>After enabling GitHub Pages, the documentation will be available at:
+https://qitops.github.io/qitops-cli-tools/</p>
+<h2 id="verifying-the-setup"><a class="header" href="#verifying-the-setup">Verifying the Setup</a></h2>
+<p>Once GitHub Pages is enabled, you can verify that the documentation is accessible by visiting:
+https://qitops.github.io/qitops-cli-tools/index.html</p>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<p>If the documentation is not accessible after enabling GitHub Pages:</p>
+<ol>
+<li>Check that the gh-pages branch exists</li>
+<li>Check that the GitHub Actions workflow has run successfully</li>
+<li>Check that the gh-pages branch contains the built documentation</li>
+<li>Wait a few minutes for the changes to propagate</li>
+</ol>
+<h2 id="using-the-github-cli"><a class="header" href="#using-the-github-cli">Using the GitHub CLI</a></h2>
+<p>If you have the GitHub CLI installed and authenticated, you can enable GitHub Pages with the following command:</p>
+<pre><code class="language-bash">gh api -X PUT repos/qitops/qitops-cli-tools/pages \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  -f build_type=workflow \
+  -f source.branch=gh-pages \
+  -f source.path=/
+</code></pre>
+<p>This requires a personal access token with the <code>repo</code> scope.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="GITHUB_PAGES.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../CONTRIBUTING.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next prefetch" href="index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -179,10 +224,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="GITHUB_PAGES.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../CONTRIBUTING.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next prefetch" href="index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>

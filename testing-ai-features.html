@@ -1,0 +1,460 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Testing AI Features - QitOps Documentation</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">QitOps Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./testing-ai-features.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="testing-ai-features"><a class="header" href="#testing-ai-features">Testing AI Features</a></h1>
+<p>This guide provides detailed instructions on how to test the AI features of QitOps locally. These features include test configuration generation, test results analysis, and improvement suggestions.</p>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<p>Before testing the AI features, make sure you have:</p>
+<ol>
+<li>
+<p><strong>QitOps built with AI features</strong>:</p>
+<pre><code class="language-bash">cargo build --features ai
+</code></pre>
+</li>
+<li>
+<p><strong>A local LLM setup</strong> (one of the following):</p>
+<ul>
+<li><strong>Ollama</strong>: For easy local LLM management</li>
+<li><strong>Direct model files</strong>: GGUF format models</li>
+<li><strong>Mock implementation</strong>: For testing without a real model</li>
+</ul>
+</li>
+</ol>
+<h2 id="option-1-testing-with-ollama"><a class="header" href="#option-1-testing-with-ollama">Option 1: Testing with Ollama</a></h2>
+<p><a href="https://ollama.ai/">Ollama</a> provides an easy way to run local LLMs. It’s recommended for testing as it handles model management and provides a simple API.</p>
+<h3 id="step-1-install-ollama"><a class="header" href="#step-1-install-ollama">Step 1: Install Ollama</a></h3>
+<pre><code class="language-bash"># Linux
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# macOS
+brew install ollama
+
+# Windows
+# Download from https://ollama.ai/download
+</code></pre>
+<h3 id="step-2-start-ollama-server"><a class="header" href="#step-2-start-ollama-server">Step 2: Start Ollama Server</a></h3>
+<pre><code class="language-bash">ollama serve
+</code></pre>
+<h3 id="step-3-pull-a-model"><a class="header" href="#step-3-pull-a-model">Step 3: Pull a Model</a></h3>
+<p>Pull a small model for testing:</p>
+<pre><code class="language-bash"># Pull a small model (recommended for testing)
+ollama pull phi
+
+# Or pull a larger model for better results
+ollama pull llama2
+</code></pre>
+<h3 id="step-4-test-ai-features-with-ollama"><a class="header" href="#step-4-test-ai-features-with-ollama">Step 4: Test AI Features with Ollama</a></h3>
+<pre><code class="language-bash"># Test configuration generation
+cargo run --features ai -- generate --test-type api --description "Test the Twitter API to fetch user timeline" --output twitter_api_test.json --model ollama:phi
+
+# Test results analysis
+cargo run --features ai -- analyze --results sample_test_results.json --output test_analysis.md --model ollama:phi
+
+# Test improvement suggestions
+cargo run --features ai -- improve --results sample_test_results.json --output test_improvements.md --model ollama:phi
+</code></pre>
+<h2 id="option-2-testing-with-direct-model-files"><a class="header" href="#option-2-testing-with-direct-model-files">Option 2: Testing with Direct Model Files</a></h2>
+<p>If you prefer to use model files directly, you can download GGUF format models and use them with QitOps.</p>
+<h3 id="step-1-download-a-model"><a class="header" href="#step-1-download-a-model">Step 1: Download a Model</a></h3>
+<p>Download a GGUF model from Hugging Face or other sources:</p>
+<pre><code class="language-bash"># Create a models directory
+mkdir -p models
+
+# Download a model (example using wget)
+wget https://huggingface.co/TheBloke/phi-2-GGUF/resolve/main/phi-2.Q4_K_M.gguf -O models/phi-2.gguf
+</code></pre>
+<h3 id="step-2-test-ai-features-with-direct-model-files"><a class="header" href="#step-2-test-ai-features-with-direct-model-files">Step 2: Test AI Features with Direct Model Files</a></h3>
+<pre><code class="language-bash"># Test configuration generation
+cargo run --features ai -- generate --test-type api --description "Test the Twitter API to fetch user timeline" --output twitter_api_test.json --model custom --model-path models/phi-2.gguf
+
+# Test results analysis
+cargo run --features ai -- analyze --results sample_test_results.json --output test_analysis.md --model custom --model-path models/phi-2.gguf
+
+# Test improvement suggestions
+cargo run --features ai -- improve --results sample_test_results.json --output test_improvements.md --model custom --model-path models/phi-2.gguf
+</code></pre>
+<h2 id="option-3-testing-with-mock-implementation"><a class="header" href="#option-3-testing-with-mock-implementation">Option 3: Testing with Mock Implementation</a></h2>
+<p>For quick testing without a real model, you can use the built-in mock implementation.</p>
+<h3 id="step-1-create-sample-test-results"><a class="header" href="#step-1-create-sample-test-results">Step 1: Create Sample Test Results</a></h3>
+<p>Create a sample test results file for testing analysis and improvement features:</p>
+<pre><code class="language-bash">cat &gt; sample_test_results.json &lt;&lt; EOF
+[
+  {
+    "test_id": "api-test-1",
+    "name": "GitHub User API Test",
+    "description": "Test the GitHub API to fetch user information",
+    "timestamp": "2025-05-10T21:15:00Z",
+    "duration_ms": 190,
+    "status": "success",
+    "url": "https://api.github.com/users/octocat",
+    "method": "GET",
+    "request_headers": {
+      "Accept": "application/vnd.github.v3+json",
+      "User-Agent": "QitOps-Test"
+    },
+    "response_status": 200,
+    "response_headers": {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "public, max-age=60, s-maxage=60"
+    },
+    "assertions": [
+      {
+        "type": "status",
+        "expected": 200,
+        "actual": 200,
+        "result": "pass"
+      },
+      {
+        "type": "json",
+        "path": "$.login",
+        "expected": "octocat",
+        "actual": "octocat",
+        "result": "pass"
+      }
+    ]
+  },
+  {
+    "test_id": "api-test-2",
+    "name": "GitHub Non-existent User Test",
+    "description": "Test the GitHub API with a non-existent user",
+    "timestamp": "2025-05-10T21:15:02Z",
+    "duration_ms": 180,
+    "status": "failure",
+    "url": "https://api.github.com/users/non-existent-user-12345",
+    "method": "GET",
+    "request_headers": {
+      "Accept": "application/vnd.github.v3+json",
+      "User-Agent": "QitOps-Test"
+    },
+    "response_status": 404,
+    "response_headers": {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "public, max-age=60, s-maxage=60"
+    },
+    "assertions": [
+      {
+        "type": "status",
+        "expected": 200,
+        "actual": 404,
+        "result": "fail"
+      }
+    ],
+    "error": "Expected status 200 but got 404"
+  }
+]
+EOF
+</code></pre>
+<h3 id="step-2-test-ai-features-with-mock-implementation"><a class="header" href="#step-2-test-ai-features-with-mock-implementation">Step 2: Test AI Features with Mock Implementation</a></h3>
+<pre><code class="language-bash"># Test configuration generation
+cargo run --features ai -- generate --test-type api --description "Test the Twitter API to fetch user timeline" --output twitter_api_test.json
+
+# Test results analysis
+cargo run --features ai -- analyze --results sample_test_results.json --output test_analysis.md
+
+# Test improvement suggestions
+cargo run --features ai -- improve --results sample_test_results.json --output test_improvements.md
+</code></pre>
+<h2 id="automated-testing-script"><a class="header" href="#automated-testing-script">Automated Testing Script</a></h2>
+<p>For convenience, you can use the provided test script to test all AI features at once:</p>
+<pre><code class="language-bash"># Download the test script
+curl -O https://raw.githubusercontent.com/qitops/qitops-cli-tools/master/test_local_ai.sh
+chmod +x test_local_ai.sh
+
+# Run the test script
+./test_local_ai.sh
+</code></pre>
+<p>The test script will:</p>
+<ol>
+<li>Set up environment variables for offline mode</li>
+<li>Create a directory for test outputs</li>
+<li>Test all AI features (generation, analysis, improvement)</li>
+<li>Show the generated files</li>
+</ol>
+<h2 id="verifying-test-results"><a class="header" href="#verifying-test-results">Verifying Test Results</a></h2>
+<p>After running the tests, you should check the generated files:</p>
+<pre><code class="language-bash"># Check the generated API test configuration
+cat twitter_api_test.json
+
+# Check the test analysis
+cat test_analysis.md
+
+# Check the improvement suggestions
+cat test_improvements.md
+</code></pre>
+<p>The generated files should contain:</p>
+<ol>
+<li>
+<p><strong>API Test Configuration</strong>:</p>
+<ul>
+<li>URL, method, headers, and assertions</li>
+<li>Properly formatted JSON</li>
+</ul>
+</li>
+<li>
+<p><strong>Test Analysis</strong>:</p>
+<ul>
+<li>Overview of test results</li>
+<li>Details about performance and status codes</li>
+<li>Recommendations for improvement</li>
+</ul>
+</li>
+<li>
+<p><strong>Improvement Suggestions</strong>:</p>
+<ul>
+<li>Performance optimizations</li>
+<li>Reliability enhancements</li>
+<li>Coverage improvements</li>
+</ul>
+</li>
+</ol>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<h3 id="model-loading-issues"><a class="header" href="#model-loading-issues">Model Loading Issues</a></h3>
+<p>If you encounter issues loading a model:</p>
+<pre><code class="language-bash"># Check if the model file exists
+ls -la models/phi-2.gguf
+
+# Try with verbose logging
+RUST_LOG=debug cargo run --features ai -- generate --test-type api --description "Test description" --model custom --model-path models/phi-2.gguf
+</code></pre>
+<h3 id="ollama-connection-issues"><a class="header" href="#ollama-connection-issues">Ollama Connection Issues</a></h3>
+<p>If you have trouble connecting to Ollama:</p>
+<pre><code class="language-bash"># Check if Ollama is running
+curl http://localhost:11434/api/version
+
+# Check available models
+ollama list
+
+# Pull the model if it's not available
+ollama pull phi
+</code></pre>
+<h3 id="memory-issues"><a class="header" href="#memory-issues">Memory Issues</a></h3>
+<p>If you encounter memory issues with large models:</p>
+<pre><code class="language-bash"># Use a smaller model
+ollama pull tinyllama
+cargo run --features ai -- generate --test-type api --description "Test description" --model ollama:tinyllama
+
+# Or reduce context size
+cargo run --features ai -- generate --test-type api --description "Test description" --context-size 2048
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="ai-features.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../ROADMAP.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="ai-features.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../ROADMAP.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="editor.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

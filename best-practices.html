@@ -1,0 +1,346 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Best Practices - QitOps Documentation</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">QitOps Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./best-practices.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h1>
+<p>This page provides recommendations on how to use QitOps effectively.</p>
+<h2 id="general-best-practices"><a class="header" href="#general-best-practices">General Best Practices</a></h2>
+<h3 id="configuration-management"><a class="header" href="#configuration-management">Configuration Management</a></h3>
+<ul>
+<li><strong>Use Version Control</strong>: Store your test configurations in a version control system like Git.</li>
+<li><strong>Environment-Specific Configurations</strong>: Use environment-specific configurations for different environments (development, staging, production).</li>
+<li><strong>Parameterize Configurations</strong>: Use variables and environment variables to parameterize your configurations.</li>
+<li><strong>Validate Configurations</strong>: Use the JSON schema validation feature to validate your configurations.</li>
+</ul>
+<h3 id="test-organization"><a class="header" href="#test-organization">Test Organization</a></h3>
+<ul>
+<li><strong>Group Related Tests</strong>: Group related tests into collections or directories.</li>
+<li><strong>Use Descriptive Names</strong>: Use descriptive names for your tests and collections.</li>
+<li><strong>Include Descriptions</strong>: Include descriptions for your tests and collections to document their purpose.</li>
+<li><strong>Tag Tests</strong>: Use tags to categorize tests for easier filtering and reporting.</li>
+</ul>
+<h3 id="cicd-integration"><a class="header" href="#cicd-integration">CI/CD Integration</a></h3>
+<ul>
+<li><strong>Use CI Mode</strong>: Use the <code>--ci-mode</code> flag when running tests in CI/CD pipelines.</li>
+<li><strong>Generate Reports</strong>: Generate reports in a format that can be consumed by your CI/CD system.</li>
+<li><strong>Set Exit Codes</strong>: Use exit codes to determine the success or failure of your tests.</li>
+<li><strong>Store Artifacts</strong>: Store test results and reports as artifacts for historical analysis.</li>
+</ul>
+<h2 id="api-testing-best-practices"><a class="header" href="#api-testing-best-practices">API Testing Best Practices</a></h2>
+<h3 id="test-design"><a class="header" href="#test-design">Test Design</a></h3>
+<ul>
+<li><strong>Test Happy Paths</strong>: Test the expected behavior of your API.</li>
+<li><strong>Test Edge Cases</strong>: Test edge cases and error conditions.</li>
+<li><strong>Test Performance</strong>: Test the performance of your API under different loads.</li>
+<li><strong>Test Security</strong>: Test the security of your API.</li>
+</ul>
+<h3 id="request-configuration"><a class="header" href="#request-configuration">Request Configuration</a></h3>
+<ul>
+<li><strong>Set Timeouts</strong>: Set appropriate timeouts for your requests.</li>
+<li><strong>Configure Retries</strong>: Configure retries for transient failures.</li>
+<li><strong>Set Headers</strong>: Set appropriate headers for your requests.</li>
+<li><strong>Validate Responses</strong>: Validate response status codes, headers, and bodies.</li>
+</ul>
+<h3 id="collections"><a class="header" href="#collections">Collections</a></h3>
+<ul>
+<li><strong>Define Dependencies</strong>: Define dependencies between requests to create test workflows.</li>
+<li><strong>Capture Data</strong>: Capture data from responses to use in subsequent requests.</li>
+<li><strong>Use Variables</strong>: Use variables to parameterize your requests.</li>
+<li><strong>Set Default Headers</strong>: Set default headers for all requests in a collection.</li>
+</ul>
+<h2 id="performance-testing-best-practices"><a class="header" href="#performance-testing-best-practices">Performance Testing Best Practices</a></h2>
+<h3 id="test-design-1"><a class="header" href="#test-design-1">Test Design</a></h3>
+<ul>
+<li><strong>Define Clear Objectives</strong>: Define clear performance objectives for your tests.</li>
+<li><strong>Start Small</strong>: Start with a small number of users and gradually increase.</li>
+<li><strong>Test Different Scenarios</strong>: Test different scenarios to understand the performance characteristics of your system.</li>
+<li><strong>Monitor System Resources</strong>: Monitor system resources during performance tests.</li>
+</ul>
+<h3 id="load-profiles"><a class="header" href="#load-profiles">Load Profiles</a></h3>
+<ul>
+<li><strong>Use Appropriate Load Profiles</strong>: Use appropriate load profiles for your tests (constant, ramping, spike).</li>
+<li><strong>Set Realistic Ramp-Up Times</strong>: Set realistic ramp-up times to avoid overwhelming your system.</li>
+<li><strong>Define Thresholds</strong>: Define thresholds for pass/fail criteria.</li>
+<li><strong>Use Tags</strong>: Use tags to categorize metrics for detailed analysis.</li>
+</ul>
+<h2 id="security-testing-best-practices"><a class="header" href="#security-testing-best-practices">Security Testing Best Practices</a></h2>
+<h3 id="test-design-2"><a class="header" href="#test-design-2">Test Design</a></h3>
+<ul>
+<li><strong>Define Security Requirements</strong>: Define clear security requirements for your tests.</li>
+<li><strong>Test Different Scan Types</strong>: Test different scan types to identify different types of vulnerabilities.</li>
+<li><strong>Set Severity Thresholds</strong>: Set severity thresholds for pass/fail criteria.</li>
+<li><strong>Regular Testing</strong>: Perform security tests regularly to identify new vulnerabilities.</li>
+</ul>
+<h3 id="authentication"><a class="header" href="#authentication">Authentication</a></h3>
+<ul>
+<li><strong>Test Authentication</strong>: Test authentication mechanisms to ensure they are secure.</li>
+<li><strong>Test Authorization</strong>: Test authorization to ensure users can only access resources they are authorized to access.</li>
+<li><strong>Test Input Validation</strong>: Test input validation to prevent injection attacks.</li>
+<li><strong>Test Error Handling</strong>: Test error handling to ensure sensitive information is not leaked.</li>
+</ul>
+<h2 id="web-testing-best-practices"><a class="header" href="#web-testing-best-practices">Web Testing Best Practices</a></h2>
+<h3 id="test-design-3"><a class="header" href="#test-design-3">Test Design</a></h3>
+<ul>
+<li><strong>Test Different Browsers</strong>: Test your web application in different browsers.</li>
+<li><strong>Test Different Devices</strong>: Test your web application on different devices.</li>
+<li><strong>Test Responsive Design</strong>: Test your web application’s responsive design.</li>
+<li><strong>Test Accessibility</strong>: Test your web application’s accessibility.</li>
+</ul>
+<h3 id="test-automation"><a class="header" href="#test-automation">Test Automation</a></h3>
+<ul>
+<li><strong>Use Selectors</strong>: Use selectors to identify elements on the page.</li>
+<li><strong>Set Wait Conditions</strong>: Set wait conditions to ensure elements are loaded before interacting with them.</li>
+<li><strong>Capture Screenshots</strong>: Capture screenshots to document test results.</li>
+<li><strong>Test User Flows</strong>: Test common user flows to ensure they work as expected.</li>
+</ul>
+<h2 id="ai-features-best-practices"><a class="header" href="#ai-features-best-practices">AI Features Best Practices</a></h2>
+<h3 id="test-generation"><a class="header" href="#test-generation">Test Generation</a></h3>
+<ul>
+<li><strong>Provide Clear Descriptions</strong>: Provide clear descriptions when generating tests.</li>
+<li><strong>Review Generated Tests</strong>: Review generated tests to ensure they meet your requirements.</li>
+<li><strong>Customize Generated Tests</strong>: Customize generated tests to fit your specific needs.</li>
+<li><strong>Use as Starting Points</strong>: Use generated tests as starting points for more complex tests.</li>
+</ul>
+<h3 id="test-analysis"><a class="header" href="#test-analysis">Test Analysis</a></h3>
+<ul>
+<li><strong>Analyze Test Results</strong>: Analyze test results to identify patterns and issues.</li>
+<li><strong>Implement Suggestions</strong>: Implement improvement suggestions to enhance your tests.</li>
+<li><strong>Combine with Manual Analysis</strong>: Combine AI analysis with manual analysis for comprehensive insights.</li>
+<li><strong>Iterate and Improve</strong>: Use analysis results to iterate and improve your tests.</li>
+</ul>
+<h2 id="data-driven-testing-best-practices"><a class="header" href="#data-driven-testing-best-practices">Data-Driven Testing Best Practices</a></h2>
+<h3 id="test-design-4"><a class="header" href="#test-design-4">Test Design</a></h3>
+<ul>
+<li><strong>Use Appropriate Data Formats</strong>: Use appropriate data formats (CSV, JSON) for your tests.</li>
+<li><strong>Structure Data Properly</strong>: Structure your data properly to ensure it can be used effectively.</li>
+<li><strong>Include Edge Cases</strong>: Include edge cases in your data to test boundary conditions.</li>
+<li><strong>Parameterize Tests</strong>: Parameterize your tests to use data from external sources.</li>
+</ul>
+<h3 id="test-execution"><a class="header" href="#test-execution">Test Execution</a></h3>
+<ul>
+<li><strong>Set Iteration Limits</strong>: Set limits on the number of iterations to avoid long-running tests.</li>
+<li><strong>Configure Stop-on-Failure</strong>: Configure whether to stop on failure or continue with other iterations.</li>
+<li><strong>Generate Detailed Reports</strong>: Generate detailed reports for each iteration.</li>
+<li><strong>Analyze Aggregate Results</strong>: Analyze aggregate results to identify patterns and issues.</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="usage.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ai-features.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="usage.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ai-features.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="editor.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

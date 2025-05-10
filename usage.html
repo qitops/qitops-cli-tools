@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>License - QitOps Documentation</title>
+        <title>Usage - QitOps Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -133,7 +133,7 @@
                         <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./index.md#license" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./usage.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -162,16 +162,159 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="license"><a class="header" href="#license">License</a></h1>
+                        <h1 id="usage-guide"><a class="header" href="#usage-guide">Usage Guide</a></h1>
+<p>This page provides detailed information on using QitOps for different testing scenarios.</p>
+<h2 id="command-line-interface"><a class="header" href="#command-line-interface">Command Line Interface</a></h2>
+<p>QitOps provides a unified command-line interface for all testing types:</p>
+<pre><code class="language-bash">qitops [global options] &lt;command&gt; [command options]
+</code></pre>
+<h3 id="global-options"><a class="header" href="#global-options">Global Options</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td>-r, –report <FORMAT></td><td>Report format (json, html, xml, csv)</td></tr>
+<tr><td>-o, –output <FILE></td><td>Output file for the report</td></tr>
+<tr><td>–ci-mode</td><td>Run in CI mode (reduced output, exit code based on test results)</td></tr>
+<tr><td>-e, –environment <ENV></td><td>Environment to use (default: production)</td></tr>
+<tr><td>-v, –verbose</td><td>Enable verbose output</td></tr>
+<tr><td>-h, –help</td><td>Show help</td></tr>
+<tr><td>-V, –version</td><td>Show version</td></tr>
+</tbody></table>
+</div>
+<h3 id="commands"><a class="header" href="#commands">Commands</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody>
+<tr><td>api</td><td>Run API tests</td></tr>
+<tr><td>collection</td><td>Run API collection tests</td></tr>
+<tr><td>performance</td><td>Run performance tests</td></tr>
+<tr><td>security</td><td>Run security tests</td></tr>
+<tr><td>web</td><td>Run web tests</td></tr>
+<tr><td>data-driven</td><td>Run data-driven tests</td></tr>
+<tr><td>generate</td><td>Generate test configurations using AI</td></tr>
+<tr><td>analyze</td><td>Analyze test results using AI</td></tr>
+<tr><td>improve</td><td>Generate improvement suggestions using AI</td></tr>
+</tbody></table>
+</div>
+<h2 id="api-testing"><a class="header" href="#api-testing">API Testing</a></h2>
+<pre><code class="language-bash"># Run a single API test
+qitops api -c tests/configs/api_test.json
 
+# Run tests in a specific environment
+qitops api -c tests/configs/api_test.json -e production
+
+# Run with custom variables
+qitops api -c tests/configs/api_test.json -v base_url=https://api.example.com -v api_key=12345
+</code></pre>
+<h2 id="api-collection-testing"><a class="header" href="#api-collection-testing">API Collection Testing</a></h2>
+<pre><code class="language-bash"># Run an API collection
+qitops collection -c tests/configs/api_collection.json
+
+# Run with environment variables
+qitops collection -c tests/configs/api_collection.json -v API_KEY=your-api-key
+
+# Run with a specific environment
+qitops collection -c tests/configs/api_collection.json -e staging
+</code></pre>
+<h2 id="performance-testing"><a class="header" href="#performance-testing">Performance Testing</a></h2>
+<pre><code class="language-bash"># Run a basic performance test
+qitops performance -c tests/configs/performance_test.json -u 10 -d 30
+
+# Run with custom users and duration
+qitops performance -c tests/configs/performance_test.json -u 20 -d 60
+
+# Run with a specific ramp-up time
+qitops performance -c tests/configs/performance_test.json -u 10 -d 30 -r 5
+</code></pre>
+<h2 id="enhanced-performance-testing"><a class="header" href="#enhanced-performance-testing">Enhanced Performance Testing</a></h2>
+<pre><code class="language-bash"># Run an enhanced performance test with multiple scenarios
+qitops performance -c tests/configs/enhanced_performance_test.json
+
+# Run with streaming metrics
+qitops performance -c tests/configs/enhanced_performance_test.json --stream-metrics
+
+# Run with custom metrics interval
+qitops performance -c tests/configs/enhanced_performance_test.json --metrics-interval 10
+</code></pre>
+<h2 id="security-testing"><a class="header" href="#security-testing">Security Testing</a></h2>
+<pre><code class="language-bash"># Run a security test
+qitops security -c tests/configs/security_test.json
+
+# Run with a specific scan depth
+qitops security -c tests/configs/security_test.json -d 3
+
+# Run with specific scan types
+qitops security -c tests/configs/security_test.json --scan-types headers,ssl
+</code></pre>
+<h2 id="web-testing"><a class="header" href="#web-testing">Web Testing</a></h2>
+<pre><code class="language-bash"># Run a web test
+qitops web -c tests/configs/web_test.json
+
+# Run in headless mode
+qitops web -c tests/configs/web_test.json --headless
+
+# Run with custom viewport
+qitops web -c tests/configs/web_test.json --width 1920 --height 1080
+</code></pre>
+<h2 id="data-driven-testing"><a class="header" href="#data-driven-testing">Data-Driven Testing</a></h2>
+<pre><code class="language-bash"># Run data-driven tests with CSV data
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv
+
+# Run data-driven tests with JSON data
+qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/products.json -t json
+
+# Run with a limit on iterations
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv --limit 10
+
+# Run with stop-on-failure
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv --stop-on-failure
+</code></pre>
+<h2 id="ai-features"><a class="header" href="#ai-features">AI Features</a></h2>
+<pre><code class="language-bash"># Generate an API test configuration
+qitops generate --test-type api --description "Test the GitHub API to fetch user information" --output github_test.json
+
+# Generate a performance test configuration
+qitops generate --test-type performance --description "Load test for a web service" --output performance_test.json
+
+# Analyze test results
+qitops analyze --results test_result.json --output analysis.md
+
+# Generate improvement suggestions
+qitops improve --results test_result.json --output improvements.md
+
+# Use a custom AI model
+qitops generate --test-type api --description "Test description" --model custom --model-path /path/to/model.gguf
+</code></pre>
+<h2 id="cicd-integration"><a class="header" href="#cicd-integration">CI/CD Integration</a></h2>
+<pre><code class="language-bash"># Run in CI mode with JSON report
+qitops --ci-mode -r json -o results.json api -c tests/configs/api_test.json
+
+# Run in CI mode with XML report (JUnit format)
+qitops --ci-mode -r xml -o test-results.xml api -c tests/configs/api_test.json
+
+# Run in CI mode with HTML report
+qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
+</code></pre>
+<h2 id="environment-variables"><a class="header" href="#environment-variables">Environment Variables</a></h2>
+<p>QitOps supports the following environment variables:</p>
+<div class="table-wrapper"><table><thead><tr><th>Variable</th><th>Description</th></tr></thead><tbody>
+<tr><td>QITOPS_ENV</td><td>Default environment to use</td></tr>
+<tr><td>QITOPS_REPORT_FORMAT</td><td>Default report format</td></tr>
+<tr><td>QITOPS_OUTPUT_FILE</td><td>Default output file</td></tr>
+<tr><td>QITOPS_CI_MODE</td><td>Run in CI mode if set to “true”</td></tr>
+<tr><td>QITOPS_VERBOSE</td><td>Enable verbose output if set to “true”</td></tr>
+<tr><td>QITOPS_CONFIG_DIR</td><td>Directory containing configuration files</td></tr>
+<tr><td>QITOPS_DATA_DIR</td><td>Directory containing data files</td></tr>
+<tr><td>QITOPS_MODEL_PATH</td><td>Path to AI model weights</td></tr>
+</tbody></table>
+</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="GITHUB_PAGES.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="configuration.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next prefetch" href="best-practices.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -179,10 +322,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="GITHUB_PAGES.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="configuration.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next prefetch" href="best-practices.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>License - QitOps Documentation</title>
+        <title>Configuration - QitOps Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -133,7 +133,7 @@
                         <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./index.md#license" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./configuration.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -162,16 +162,227 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="license"><a class="header" href="#license">License</a></h1>
+                        <h1 id="configuration-reference"><a class="header" href="#configuration-reference">Configuration Reference</a></h1>
+<p>This page provides detailed information on configuring QitOps for different test types.</p>
+<h2 id="api-test-configuration"><a class="header" href="#api-test-configuration">API Test Configuration</a></h2>
+<pre><code class="language-json">{
+    "name": "Example API Test",
+    "description": "Test description",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "url": "https://api.example.com",
+    "method": "GET",
+    "headers": {
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Test"
+    },
+    "expected_status": 200,
+    "expected_body": {
+        "field1": "value1",
+        "field2": "value2"
+    },
+    "max_response_time": 2,
+    "expected_headers": {
+        "content-type": "application/json",
+        "cache-control": "no-cache"
+    },
+    "retry": {
+        "max_retries": 3,
+        "initial_delay_ms": 100,
+        "max_delay_ms": 1000,
+        "retry_status_codes": [408, 429, 500, 502, 503, 504],
+        "retry_on_timeout": true,
+        "retry_on_connection_error": true
+    }
+}
+</code></pre>
+<h3 id="api-test-configuration-fields"><a class="header" href="#api-test-configuration-fields">API Test Configuration Fields</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody>
+<tr><td>name</td><td>string</td><td>Yes</td><td>Name of the test</td></tr>
+<tr><td>description</td><td>string</td><td>No</td><td>Description of the test</td></tr>
+<tr><td>timeout</td><td>number</td><td>No</td><td>Request timeout in seconds (default: 30)</td></tr>
+<tr><td>retries</td><td>number</td><td>No</td><td>Number of retries (default: 3)</td></tr>
+<tr><td>environment</td><td>string</td><td>No</td><td>Environment to use (default: production)</td></tr>
+<tr><td>url</td><td>string</td><td>Yes</td><td>URL to test</td></tr>
+<tr><td>method</td><td>string</td><td>Yes</td><td>HTTP method (GET, POST, PUT, DELETE, etc.)</td></tr>
+<tr><td>headers</td><td>object</td><td>No</td><td>HTTP headers to send</td></tr>
+<tr><td>body</td><td>object/string</td><td>No</td><td>Request body (JSON object or string)</td></tr>
+<tr><td>expected_status</td><td>number</td><td>No</td><td>Expected HTTP status code (default: 200)</td></tr>
+<tr><td>expected_body</td><td>object/string</td><td>No</td><td>Expected response body (JSON object or string)</td></tr>
+<tr><td>max_response_time</td><td>number</td><td>No</td><td>Maximum acceptable response time in seconds</td></tr>
+<tr><td>expected_headers</td><td>object</td><td>No</td><td>Expected response headers</td></tr>
+<tr><td>retry</td><td>object</td><td>No</td><td>Retry configuration</td></tr>
+</tbody></table>
+</div>
+<h2 id="api-collection-configuration"><a class="header" href="#api-collection-configuration">API Collection Configuration</a></h2>
+<pre><code class="language-json">{
+    "name": "GitHub API Collection",
+    "description": "A collection of GitHub API tests",
+    "version": "1.0.0",
+    "variables": {
+        "base_url": "https://api.github.com",
+        "username": "octocat",
+        "repo": "Hello-World"
+    },
+    "auth": {
+        "type": "bearer",
+        "token": "{{GITHUB_TOKEN}}"
+    },
+    "defaults": {
+        "headers": {
+            "Accept": "application/vnd.github.v3+json",
+            "User-Agent": "QitOps-Test"
+        },
+        "timeout": 30,
+        "retries": 3
+    },
+    "requests": [
+        {
+            "name": "Get User",
+            "description": "Get a GitHub user",
+            "id": "get-user",
+            "url": "{{base_url}}/users/{{username}}",
+            "method": "GET",
+            "expected_status": 200,
+            "expected_body": {
+                "login": "{{username}}",
+                "type": "User"
+            },
+            "capture": {
+                "user_id": "$.id",
+                "user_url": "$.url"
+            }
+        },
+        {
+            "name": "Get User Repos",
+            "description": "Get repositories for a user",
+            "id": "get-user-repos",
+            "url": "{{user_url}}/repos",
+            "method": "GET",
+            "depends_on": ["get-user"],
+            "expected_status": 200
+        }
+    ],
+    "environments": {
+        "production": {
+            "base_url": "https://api.github.com"
+        },
+        "staging": {
+            "base_url": "https://api.staging.github.com"
+        }
+    },
+    "run_options": {
+        "sequential": true,
+        "stop_on_failure": true,
+        "delay_between_requests_ms": 500
+    }
+}
+</code></pre>
+<h2 id="performance-test-configuration"><a class="header" href="#performance-test-configuration">Performance Test Configuration</a></h2>
+<pre><code class="language-json">{
+    "name": "Sample Performance Test",
+    "description": "Load testing a public API endpoint",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "target_url": "https://api.example.com/endpoint",
+    "method": "GET",
+    "headers": {
+        "Accept": "application/json"
+    },
+    "success_threshold": 95.0,
+    "ramp_up_time_secs": 5
+}
+</code></pre>
+<h2 id="security-test-configuration"><a class="header" href="#security-test-configuration">Security Test Configuration</a></h2>
+<pre><code class="language-json">{
+    "name": "Security Scan",
+    "description": "Comprehensive security scan of the API",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "target_url": "https://api.example.com",
+    "headers": {
+        "Accept": "application/json"
+    },
+    "auth": {
+        "type": "bearer",
+        "token": "your-token"
+    },
+    "scan_types": [
+        "headers",
+        "ssl",
+        "vulnerabilities",
+        "sensitive-data"
+    ],
+    "max_high_severity_findings": 0
+}
+</code></pre>
+<h2 id="web-test-configuration"><a class="header" href="#web-test-configuration">Web Test Configuration</a></h2>
+<pre><code class="language-json">{
+    "name": "Sample Web Test",
+    "description": "Testing a public website",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "target_url": "https://example.com",
+    "viewport": {
+        "width": 1280,
+        "height": 800,
+        "device_scale_factor": 1.0,
+        "is_mobile": false
+    },
+    "wait_for_selector": "body",
+    "wait_timeout_secs": 10,
+    "screenshots": true,
+    "user_agent": "QitOps-WebTester/1.0",
+    "assertions": [
+        {
+            "assertion_type": "title",
+            "expected_value": "Example Domain",
+            "comparison": "contains"
+        },
+        {
+            "assertion_type": "element",
+            "selector": "h1",
+            "expected_value": "true"
+        }
+    ],
+    "actions": [
+        {
+            "action_type": "wait",
+            "wait_time_ms": 1000
+        },
+        {
+            "action_type": "click",
+            "selector": "a"
+        }
+    ]
+}
+</code></pre>
+<h2 id="ai-configuration"><a class="header" href="#ai-configuration">AI Configuration</a></h2>
+<pre><code class="language-json">{
+    "model_type": "llama",
+    "model_path": "/usr/local/share/models/llama-2-7b-chat.gguf",
+    "context_size": 4096,
+    "temperature": 0.7,
+    "max_tokens": 2048,
+    "system_prompt": "You are an AI assistant specialized in software testing. Your task is to help generate test configurations, analyze test results, and suggest improvements."
+}
+</code></pre>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="GITHUB_PAGES.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
+                            <a rel="next prefetch" href="usage.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
 
                         <div style="clear: both"></div>
                     </nav>
@@ -179,10 +390,13 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="GITHUB_PAGES.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
+                    <a rel="next prefetch" href="usage.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
             </nav>
 
         </div>
