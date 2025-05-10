@@ -49,9 +49,13 @@ rand_distr = { version = "0.4.3", optional = true }
 [features]
 default = []
 # Basic AI features without platform-specific optimizations
-ai = ["llama_cpp_rs", "candle-core", "candle-transformers", "half", "rand_distr"]
+ai = []
+# Mock implementation for CI environments - doesn't require any external dependencies
+ai-mock = []
+# Full implementation with ML frameworks
+ai-full = ["llama_cpp_rs", "candle-core", "candle-transformers", "half", "rand_distr"]
 # Platform-specific optimizations - these will be enabled automatically when appropriate
-ai-cuda = ["ai", "candle-core/cuda"]
-ai-metal = ["ai", "candle-core/metal"]
+ai-cuda = ["ai-full", "candle-core/cuda"]
+ai-metal = ["ai-full", "candle-core/metal"]
 
 # We'll handle compatibility issues in the code instead of using patches

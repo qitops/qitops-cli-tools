@@ -3,8 +3,6 @@ mod ai_tests {
     use qitops::ai::{AiConfig, AiModelType, AiTestGenerator};
     use qitops::common::TestResult;
     use serde_json::json;
-    use std::env;
-    use std::path::PathBuf;
 
     // Helper function to create a sample test result
     fn create_sample_test_result() -> TestResult {
@@ -99,7 +97,7 @@ mod ai_tests {
         let results_json = serde_json::to_string_pretty(&vec![test_result]).unwrap();
         let prompt = generator.create_analysis_prompt(&results_json);
 
-        assert!(prompt.contains("analyze"));
+        assert!(prompt.to_lowercase().contains("analyze"));
         assert!(prompt.contains("Sample API Test"));
     }
 

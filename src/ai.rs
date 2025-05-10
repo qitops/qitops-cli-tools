@@ -275,7 +275,7 @@ The test was successful with a response time of 0.45 seconds.
         ))
     }
 
-    fn extract_json_from_output(&self, output: &str) -> String {
+    pub fn extract_json_from_output(&self, output: &str) -> String {
         // Extract JSON from the model output
         // First, try to extract from markdown code blocks
         if let Some(start) = output.find("```json") {
