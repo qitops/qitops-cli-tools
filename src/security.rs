@@ -1,5 +1,5 @@
 use crate::common::{TestConfig, TestResult, TestRunner};
-use crate::error::{Result};
+use crate::error::Result;
 use async_trait::async_trait;
 use chrono::Utc;
 use log::info;
@@ -72,7 +72,10 @@ impl SecurityTestRunner {
 
             if self.scan_depth >= 2 {
                 // Level 2: Common vulnerabilities
-                findings.extend(self.check_common_vulnerabilities(&config.target_url, config).await);
+                findings.extend(
+                    self.check_common_vulnerabilities(&config.target_url, config)
+                        .await,
+                );
                 findings.extend(self.check_sensitive_data(&response));
             }
 
@@ -137,7 +140,11 @@ impl SecurityTestRunner {
         findings
     }
 
-    async fn check_common_vulnerabilities(&self, _url: &str, _config: &SecurityTestConfig) -> Vec<SecurityFinding> {
+    async fn check_common_vulnerabilities(
+        &self,
+        _url: &str,
+        _config: &SecurityTestConfig,
+    ) -> Vec<SecurityFinding> {
         let findings = Vec::new();
         // TODO: Implement common vulnerability checks
         findings
@@ -149,7 +156,11 @@ impl SecurityTestRunner {
         findings
     }
 
-    async fn check_authentication(&self, _url: &str, _config: &SecurityTestConfig) -> Vec<SecurityFinding> {
+    async fn check_authentication(
+        &self,
+        _url: &str,
+        _config: &SecurityTestConfig,
+    ) -> Vec<SecurityFinding> {
         let findings = Vec::new();
         // TODO: Implement authentication checks
         findings
@@ -167,7 +178,11 @@ impl SecurityTestRunner {
         findings
     }
 
-    async fn check_sql_injection(&self, _url: &str, _config: &SecurityTestConfig) -> Vec<SecurityFinding> {
+    async fn check_sql_injection(
+        &self,
+        _url: &str,
+        _config: &SecurityTestConfig,
+    ) -> Vec<SecurityFinding> {
         let findings = Vec::new();
         // TODO: Implement SQL injection checks
         findings

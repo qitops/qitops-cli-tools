@@ -129,7 +129,7 @@ struct RequestResult {
     scenario: String,
     /// HTTP status code - Used for status code distribution analysis and metrics
     /// This field is important for tracking response status codes across requests
-    #[allow(dead_code)]  // Used in derived impls for Clone and Debug
+    #[allow(dead_code)] // Used in derived impls for Clone and Debug
     status: u16,
     /// Request duration in seconds
     duration: f64,
@@ -138,7 +138,7 @@ struct RequestResult {
     /// Timestamp when the request was made - Used for time-series analysis
     /// This field is critical for analyzing request patterns over time
     /// and calculating metrics like requests per second
-    #[allow(dead_code)]  // Used in derived impls for Clone and Debug
+    #[allow(dead_code)] // Used in derived impls for Clone and Debug
     timestamp: Instant,
     /// Custom metrics
     metrics: HashMap<String, f64>,
@@ -191,13 +191,15 @@ impl MetricsCollector {
     }
 
     fn add_metric(&mut self, name: &str, value: f64) {
-        self.metrics.entry(name.to_string())
+        self.metrics
+            .entry(name.to_string())
             .or_insert_with(Vec::new)
             .push(value);
     }
 
     fn add_metric_by_tag(&mut self, tag: &str, name: &str, value: f64) {
-        self.metrics_by_tag.entry(tag.to_string())
+        self.metrics_by_tag
+            .entry(tag.to_string())
             .or_insert_with(HashMap::new)
             .entry(name.to_string())
             .or_insert_with(Vec::new)
@@ -229,16 +231,19 @@ impl MetricsCollector {
                 let p95 = percentile(&sorted_values, 95.0);
                 let p99 = percentile(&sorted_values, 99.0);
 
-                metrics_obj.insert(name.clone(), serde_json::json!({
-                    "avg": avg,
-                    "min": min,
-                    "max": max,
-                    "p50": p50,
-                    "p90": p90,
-                    "p95": p95,
-                    "p99": p99,
-                    "count": values.len(),
-                }));
+                metrics_obj.insert(
+                    name.clone(),
+                    serde_json::json!({
+                        "avg": avg,
+                        "min": min,
+                        "max": max,
+                        "p50": p50,
+                        "p90": p90,
+                        "p95": p95,
+                        "p99": p99,
+                        "count": values.len(),
+                    }),
+                );
             }
         }
 
@@ -256,12 +261,15 @@ impl MetricsCollector {
                     let min = values.iter().fold(f64::INFINITY, |a, &b| a.min(b));
                     let max = values.iter().fold(f64::NEG_INFINITY, |a, &b| a.max(b));
 
-                    tag_metrics_obj.insert(name.clone(), serde_json::json!({
-                        "avg": avg,
-                        "min": min,
-                        "max": max,
-                        "count": values.len(),
-                    }));
+                    tag_metrics_obj.insert(
+                        name.clone(),
+                        serde_json::json!({
+                            "avg": avg,
+                            "min": min,
+                            "max": max,
+                            "count": values.len(),
+                        }),
+                    );
                 }
             }
 
@@ -274,14 +282,18 @@ impl MetricsCollector {
         let mut scenarios_summary = serde_json::json!({});
         let scenarios_obj = scenarios_summary.as_object_mut().unwrap();
 
-        let scenarios: Vec<String> = self.results.iter()
+        let scenarios: Vec<String> = self
+            .results
+            .iter()
             .map(|r| r.scenario.clone())
             .collect::<std::collections::HashSet<_>>()
             .into_iter()
             .collect();
 
         for scenario in scenarios {
-            let scenario_results: Vec<&RequestResult> = self.results.iter()
+            let scenario_results: Vec<&RequestResult> = self
+                .results
+                .iter()
                 .filter(|r| r.scenario == scenario)
                 .collect();
 
@@ -328,7 +340,10 @@ impl EnhancedPerformanceRunner {
 
     /// Run a load test with the given configuration
     async fn run_load_test(&self, config: &EnhancedPerformanceConfig) -> Result<MetricsCollector> {
-        info!("Starting load test with profile: {:?}", config.load_profile.profile_type);
+        info!(
+            "Starting load test with profile: {:?}",
+            config.load_profile.profile_type
+        );
 
         let metrics = Arc::new(Mutex::new(MetricsCollector::new()));
         let start_time = Instant::now();
@@ -354,13 +369,22 @@ impl EnhancedPerformanceRunner {
                     // Print metrics summary
                     println!("\n--- Metrics at {}s ---", elapsed);
                     println!("Total requests: {}", current_metrics["total_requests"]);
-                    println!("Success rate: {:.2}%",
-                        (current_metrics["success_count"].as_u64().unwrap_or(0) as f64 /
-                         current_metrics["total_requests"].as_u64().unwrap_or(1) as f64) * 100.0);
+                    println!(
+                        "Success rate: {:.2}%",
+                        (current_metrics["success_count"].as_u64().unwrap_or(0) as f64
+                            / current_metrics["total_requests"].as_u64().unwrap_or(1) as f64)
+                            * 100.0
+                    );
 
                     if let Some(rt) = current_metrics.get("response_time") {
-                        println!("Response time (avg): {:.2}ms", rt["avg"].as_f64().unwrap_or(0.0) * 1000.0);
-                        println!("Response time (p95): {:.2}ms", rt["p95"].as_f64().unwrap_or(0.0) * 1000.0);
+                        println!(
+                            "Response time (avg): {:.2}ms",
+                            rt["avg"].as_f64().unwrap_or(0.0) * 1000.0
+                        );
+                        println!(
+                            "Response time (p95): {:.2}ms",
+                            rt["p95"].as_f64().unwrap_or(0.0) * 1000.0
+                        );
                     }
                     println!("------------------------");
                 }
@@ -371,19 +395,21 @@ impl EnhancedPerformanceRunner {
         match config.load_profile.profile_type {
             LoadProfileType::ConstantVus => {
                 self.run_constant_vus(config, Arc::clone(&metrics)).await?;
-            },
+            }
             LoadProfileType::RampingVus => {
                 self.run_ramping_vus(config, Arc::clone(&metrics)).await?;
-            },
+            }
             LoadProfileType::ConstantArrivalRate => {
-                self.run_constant_arrival_rate(config, Arc::clone(&metrics)).await?;
-            },
+                self.run_constant_arrival_rate(config, Arc::clone(&metrics))
+                    .await?;
+            }
             LoadProfileType::RampingArrivalRate => {
-                self.run_ramping_arrival_rate(config, Arc::clone(&metrics)).await?;
-            },
+                self.run_ramping_arrival_rate(config, Arc::clone(&metrics))
+                    .await?;
+            }
             LoadProfileType::Spike => {
                 self.run_spike(config, Arc::clone(&metrics)).await?;
-            },
+            }
         }
 
         // Return the collected metrics
@@ -396,10 +422,16 @@ impl EnhancedPerformanceRunner {
     }
 
     /// Run a test with constant virtual users
-    async fn run_constant_vus(&self, config: &EnhancedPerformanceConfig, metrics: Arc<Mutex<MetricsCollector>>) -> Result<()> {
+    async fn run_constant_vus(
+        &self,
+        config: &EnhancedPerformanceConfig,
+        metrics: Arc<Mutex<MetricsCollector>>,
+    ) -> Result<()> {
         let stages = &config.load_profile.stages;
         if stages.is_empty() {
-            return Err(Error::ValidationError("No stages defined for constant VUs profile".to_string()));
+            return Err(Error::ValidationError(
+                "No stages defined for constant VUs profile".to_string(),
+            ));
         }
 
         let mut current_stage = 0;
@@ -423,7 +455,10 @@ impl EnhancedPerformanceRunner {
                 current_stage += 1;
                 if current_stage < stages.len() {
                     current_vus = stages[current_stage].target;
-                    semaphore.add_permits((current_vus as isize - semaphore.available_permits() as isize).max(0) as usize);
+                    semaphore.add_permits(
+                        (current_vus as isize - semaphore.available_permits() as isize).max(0)
+                            as usize,
+                    );
                     stage_start_time = Instant::now();
                 }
                 continue;
@@ -465,10 +500,16 @@ impl EnhancedPerformanceRunner {
     }
 
     /// Run a test with ramping virtual users
-    async fn run_ramping_vus(&self, config: &EnhancedPerformanceConfig, metrics: Arc<Mutex<MetricsCollector>>) -> Result<()> {
+    async fn run_ramping_vus(
+        &self,
+        config: &EnhancedPerformanceConfig,
+        metrics: Arc<Mutex<MetricsCollector>>,
+    ) -> Result<()> {
         let stages = &config.load_profile.stages;
         if stages.is_empty() {
-            return Err(Error::ValidationError("No stages defined for ramping VUs profile".to_string()));
+            return Err(Error::ValidationError(
+                "No stages defined for ramping VUs profile".to_string(),
+            ));
         }
 
         let mut current_stage = 0;
@@ -502,7 +543,8 @@ impl EnhancedPerformanceRunner {
             // Calculate the current number of VUs based on linear interpolation
             if stage.duration_secs > 0 {
                 let progress = stage_elapsed as f64 / stage.duration_secs as f64;
-                let interpolated_vus = current_vus as f64 + (target_vus as f64 - current_vus as f64) * progress;
+                let interpolated_vus =
+                    current_vus as f64 + (target_vus as f64 - current_vus as f64) * progress;
                 let new_vus = interpolated_vus.round() as u32;
 
                 // Adjust the semaphore if needed
@@ -551,17 +593,29 @@ impl EnhancedPerformanceRunner {
     }
 
     // Placeholder for other load profile implementations
-    async fn run_constant_arrival_rate(&self, config: &EnhancedPerformanceConfig, metrics: Arc<Mutex<MetricsCollector>>) -> Result<()> {
+    async fn run_constant_arrival_rate(
+        &self,
+        config: &EnhancedPerformanceConfig,
+        metrics: Arc<Mutex<MetricsCollector>>,
+    ) -> Result<()> {
         // Simplified implementation for now
         self.run_constant_vus(config, metrics).await
     }
 
-    async fn run_ramping_arrival_rate(&self, config: &EnhancedPerformanceConfig, metrics: Arc<Mutex<MetricsCollector>>) -> Result<()> {
+    async fn run_ramping_arrival_rate(
+        &self,
+        config: &EnhancedPerformanceConfig,
+        metrics: Arc<Mutex<MetricsCollector>>,
+    ) -> Result<()> {
         // Simplified implementation for now
         self.run_ramping_vus(config, metrics).await
     }
 
-    async fn run_spike(&self, config: &EnhancedPerformanceConfig, metrics: Arc<Mutex<MetricsCollector>>) -> Result<()> {
+    async fn run_spike(
+        &self,
+        config: &EnhancedPerformanceConfig,
+        metrics: Arc<Mutex<MetricsCollector>>,
+    ) -> Result<()> {
         // Simplified implementation for now
         self.run_ramping_vus(config, metrics).await
     }
@@ -596,8 +650,8 @@ fn select_weighted_scenario(scenarios: &[Scenario]) -> Scenario {
 /// Execute a scenario and return the result
 async fn execute_scenario(client: Client, scenario: Scenario) -> Result<RequestResult> {
     let start = Instant::now(); // For measuring duration
-    // Use the same timestamp for both start time and request timestamp
-    // This simplifies the code while still providing accurate timing
+                                // Use the same timestamp for both start time and request timestamp
+                                // This simplifies the code while still providing accurate timing
 
     // Parse the HTTP method
     let method = Method::from_bytes(scenario.method.as_bytes())
@@ -658,7 +712,8 @@ async fn execute_scenario(client: Client, scenario: Scenario) -> Result<RequestR
 #[async_trait]
 impl TestRunner for EnhancedPerformanceRunner {
     async fn run(&self, config: &(impl serde::Serialize + Send + Sync)) -> Result<TestResult> {
-        let config = serde_json::from_value::<EnhancedPerformanceConfig>(serde_json::to_value(config)?)?;
+        let config =
+            serde_json::from_value::<EnhancedPerformanceConfig>(serde_json::to_value(config)?)?;
         let start = Instant::now();
 
         info!("Starting performance test: {}", config.base.name);
@@ -670,9 +725,7 @@ impl TestRunner for EnhancedPerformanceRunner {
         let duration = start.elapsed().as_secs_f64();
 
         // Get metrics summary
-        let metrics_summary = {
-            metrics_collector.get_metrics_summary()
-        };
+        let metrics_summary = { metrics_collector.get_metrics_summary() };
 
         // Calculate success rate
         let total_requests = metrics_summary["total_requests"].as_u64().unwrap_or(0);

@@ -7,7 +7,7 @@ use std::path::PathBuf;
 use qitops::ai::{AiConfig, AiModelType, AiTestGenerator};
 use qitops::api::{ApiTestConfig, ApiTestRunner};
 use qitops::api_collection::ApiCollectionRunner;
-use qitops::common::{TestRunner, load_config};
+use qitops::common::{load_config, TestRunner};
 use qitops::data_driven::{DataDrivenConfig, DataDrivenRunner};
 use qitops::error::{Error, Result};
 use qitops::performance::{PerformanceTestConfig, PerformanceTestRunner};
@@ -242,7 +242,10 @@ async fn main() -> Result<()> {
             "html" => Some(ReportFormat::Html),
             "csv" => Some(ReportFormat::Csv),
             _ => {
-                eprintln!("Unsupported report format: {}. Using default format.", format);
+                eprintln!(
+                    "Unsupported report format: {}. Using default format.",
+                    format
+                );
                 None
             }
         }
@@ -254,7 +257,10 @@ async fn main() -> Result<()> {
     let mut test_results = Vec::new();
 
     let result = match &cli.command {
-        Commands::Api { config, environment: _ } => {
+        Commands::Api {
+            config,
+            environment: _,
+        } => {
             info!("Running API tests with config: {}", config.display());
             let test_config: ApiTestConfig = load_config(config)?;
             let runner = ApiTestRunner::new();
@@ -272,7 +278,10 @@ async fn main() -> Result<()> {
                 println!("Timestamp: {}", result.timestamp);
             } else {
                 // In CI mode, print minimal output
-                println!("API Test: {} - {} ({:.2}s)", result.name, result.status, result.duration);
+                println!(
+                    "API Test: {} - {} ({:.2}s)",
+                    result.name, result.status, result.duration
+                );
             }
 
             // Store result for reporting
@@ -280,8 +289,16 @@ async fn main() -> Result<()> {
 
             Ok(())
         }
-        Commands::Performance { config, environment: _, users, duration } => {
-            info!("Running performance tests with config: {}", config.display());
+        Commands::Performance {
+            config,
+            environment: _,
+            users,
+            duration,
+        } => {
+            info!(
+                "Running performance tests with config: {}",
+                config.display()
+            );
             let test_config: PerformanceTestConfig = load_config(config)?;
             let runner = PerformanceTestRunner::new(*users, *duration);
             let result = runner.run(&test_config).await?;
@@ -301,8 +318,14 @@ async fn main() -> Result<()> {
 
             Ok(())
         }
-        Commands::PerformanceEnhanced { config, environment: _ } => {
-            info!("Running enhanced performance tests with config: {}", config.display());
+        Commands::PerformanceEnhanced {
+            config,
+            environment: _,
+        } => {
+            info!(
+                "Running enhanced performance tests with config: {}",
+                config.display()
+            );
             let test_config: EnhancedPerformanceConfig = load_config(config)?;
             let runner = EnhancedPerformanceRunner::new();
             let result = runner.run(&test_config).await?;
@@ -326,30 +349,55 @@ async fn main() -> Result<()> {
                     println!("  Total Requests: {}", total_requests);
                     println!("  Success Count: {}", success_count);
                     println!("  Error Count: {}", error_count);
-                    println!("  Success Rate: {:.2}%",
-                        (success_count as f64 / total_requests as f64) * 100.0);
+                    println!(
+                        "  Success Rate: {:.2}%",
+                        (success_count as f64 / total_requests as f64) * 100.0
+                    );
 
                     // Print response time metrics
                     if let Some(response_time) = metrics.get("response_time") {
                         println!("\nResponse Time:");
-                        println!("  Average: {:.2}ms", response_time["avg"].as_f64().unwrap_or(0.0) * 1000.0);
-                        println!("  Min: {:.2}ms", response_time["min"].as_f64().unwrap_or(0.0) * 1000.0);
-                        println!("  Max: {:.2}ms", response_time["max"].as_f64().unwrap_or(0.0) * 1000.0);
-                        println!("  p50: {:.2}ms", response_time["p50"].as_f64().unwrap_or(0.0) * 1000.0);
-                        println!("  p90: {:.2}ms", response_time["p90"].as_f64().unwrap_or(0.0) * 1000.0);
-                        println!("  p95: {:.2}ms", response_time["p95"].as_f64().unwrap_or(0.0) * 1000.0);
-                        println!("  p99: {:.2}ms", response_time["p99"].as_f64().unwrap_or(0.0) * 1000.0);
+                        println!(
+                            "  Average: {:.2}ms",
+                            response_time["avg"].as_f64().unwrap_or(0.0) * 1000.0
+                        );
+                        println!(
+                            "  Min: {:.2}ms",
+                            response_time["min"].as_f64().unwrap_or(0.0) * 1000.0
+                        );
+                        println!(
+                            "  Max: {:.2}ms",
+                            response_time["max"].as_f64().unwrap_or(0.0) * 1000.0
+                        );
+                        println!(
+                            "  p50: {:.2}ms",
+                            response_time["p50"].as_f64().unwrap_or(0.0) * 1000.0
+                        );
+                        println!(
+                            "  p90: {:.2}ms",
+                            response_time["p90"].as_f64().unwrap_or(0.0) * 1000.0
+                        );
+                        println!(
+                            "  p95: {:.2}ms",
+                            response_time["p95"].as_f64().unwrap_or(0.0) * 1000.0
+                        );
+                        println!(
+                            "  p99: {:.2}ms",
+                            response_time["p99"].as_f64().unwrap_or(0.0) * 1000.0
+                        );
                     }
 
                     // Print scenario metrics
                     if let Some(scenarios) = metrics.get("scenarios") {
                         println!("\nScenario Results:");
                         for (name, scenario) in scenarios.as_object().unwrap() {
-                            println!("  {}: {}/{} requests successful ({:.2}%)",
+                            println!(
+                                "  {}: {}/{} requests successful ({:.2}%)",
                                 name,
                                 scenario["success_count"].as_u64().unwrap_or(0),
                                 scenario["total_requests"].as_u64().unwrap_or(0),
-                                scenario["success_rate"].as_f64().unwrap_or(0.0));
+                                scenario["success_rate"].as_f64().unwrap_or(0.0)
+                            );
                         }
                     }
 
@@ -357,10 +405,16 @@ async fn main() -> Result<()> {
                     if let Some(thresholds) = details.get("thresholds") {
                         println!("\nThresholds:");
                         for threshold in thresholds.as_array().unwrap() {
-                            println!("  {}: {} - {}",
+                            println!(
+                                "  {}: {} - {}",
                                 threshold["metric"].as_str().unwrap_or(""),
                                 threshold["expression"].as_str().unwrap_or(""),
-                                if threshold["passed"].as_bool().unwrap_or(false) { "PASSED" } else { "FAILED" });
+                                if threshold["passed"].as_bool().unwrap_or(false) {
+                                    "PASSED"
+                                } else {
+                                    "FAILED"
+                                }
+                            );
                         }
                     }
                 }
@@ -376,7 +430,12 @@ async fn main() -> Result<()> {
 
             Ok(())
         }
-        Commands::Security { config, environment: _, depth, passive } => {
+        Commands::Security {
+            config,
+            environment: _,
+            depth,
+            passive,
+        } => {
             info!("Running security tests with config: {}", config.display());
             let test_config: SecurityTestConfig = load_config(config)?;
             let runner = SecurityTestRunner::new(*depth, *passive);
@@ -397,7 +456,12 @@ async fn main() -> Result<()> {
 
             Ok(())
         }
-        Commands::Web { config, environment: _, headless, screenshot_dir } => {
+        Commands::Web {
+            config,
+            environment: _,
+            headless,
+            screenshot_dir,
+        } => {
             info!("Running web tests with config: {}", config.display());
             let test_config: WebTestConfig = load_config(config)?;
             let runner = WebTestRunner::new(*headless, screenshot_dir.clone());
@@ -418,7 +482,11 @@ async fn main() -> Result<()> {
 
             Ok(())
         }
-        Commands::Collection { config, environment, format } => {
+        Commands::Collection {
+            config,
+            environment,
+            format,
+        } => {
             info!("Running API collection with config: {}", config.display());
             let runner = ApiCollectionRunner::new();
             let collection = ApiCollectionRunner::load_collection(config)?;
@@ -428,8 +496,9 @@ async fn main() -> Result<()> {
             match format.as_str() {
                 "json" => {
                     println!("{}", serde_json::to_string_pretty(&result)?);
-                },
-                _ => { // human format
+                }
+                _ => {
+                    // human format
                     println!("\nCollection Results:");
                     println!("Name: {}", result.name);
                     println!("Status: {}", result.status);
@@ -453,7 +522,13 @@ async fn main() -> Result<()> {
 
             Ok(())
         }
-        Commands::Generate { test_type, description, output, model, model_path } => {
+        Commands::Generate {
+            test_type,
+            description,
+            output,
+            model,
+            model_path,
+        } => {
             info!("Generating {} test configuration using AI", test_type);
 
             // Create AI configuration
@@ -463,7 +538,12 @@ async fn main() -> Result<()> {
                 "gptj" => AiModelType::GptJ,
                 "phi" => AiModelType::Phi,
                 "custom" => AiModelType::Custom,
-                _ => return Err(Error::ValidationError(format!("Unsupported AI model: {}", model))),
+                _ => {
+                    return Err(Error::ValidationError(format!(
+                        "Unsupported AI model: {}",
+                        model
+                    )))
+                }
             };
 
             let ai_config = AiConfig {
@@ -476,7 +556,9 @@ async fn main() -> Result<()> {
             };
 
             let generator = AiTestGenerator::new(ai_config);
-            let json_config = generator.generate_test_config(description, test_type).await?;
+            let json_config = generator
+                .generate_test_config(description, test_type)
+                .await?;
 
             // Save the generated configuration
             std::fs::write(output, json_config)?;
@@ -485,7 +567,12 @@ async fn main() -> Result<()> {
 
             Ok(())
         }
-        Commands::Analyze { results, output, model, model_path } => {
+        Commands::Analyze {
+            results,
+            output,
+            model,
+            model_path,
+        } => {
             info!("Analyzing test results using AI");
 
             // Create AI configuration
@@ -495,7 +582,12 @@ async fn main() -> Result<()> {
                 "gptj" => AiModelType::GptJ,
                 "phi" => AiModelType::Phi,
                 "custom" => AiModelType::Custom,
-                _ => return Err(Error::ValidationError(format!("Unsupported AI model: {}", model))),
+                _ => {
+                    return Err(Error::ValidationError(format!(
+                        "Unsupported AI model: {}",
+                        model
+                    )))
+                }
             };
 
             let ai_config = AiConfig {
@@ -525,7 +617,12 @@ async fn main() -> Result<()> {
 
             Ok(())
         }
-        Commands::Improve { results, output, model, model_path } => {
+        Commands::Improve {
+            results,
+            output,
+            model,
+            model_path,
+        } => {
             info!("Generating improvement suggestions using AI");
 
             // Create AI configuration
@@ -535,7 +632,12 @@ async fn main() -> Result<()> {
                 "gptj" => AiModelType::GptJ,
                 "phi" => AiModelType::Phi,
                 "custom" => AiModelType::Custom,
-                _ => return Err(Error::ValidationError(format!("Unsupported AI model: {}", model))),
+                _ => {
+                    return Err(Error::ValidationError(format!(
+                        "Unsupported AI model: {}",
+                        model
+                    )))
+                }
             };
 
             let ai_config = AiConfig {
@@ -564,9 +666,19 @@ async fn main() -> Result<()> {
             println!("Saved to: {}", output.display());
 
             Ok(())
-        },
-        Commands::DataDriven { config, data, data_type, environment, max_iterations, stop_on_failure } => {
-            info!("Running data-driven tests with config: {}", config.display());
+        }
+        Commands::DataDriven {
+            config,
+            data,
+            data_type,
+            environment,
+            max_iterations,
+            stop_on_failure,
+        } => {
+            info!(
+                "Running data-driven tests with config: {}",
+                config.display()
+            );
 
             // Determine the test type from the config file
             let test_type = qitops::schema::determine_test_type(&config)?;
@@ -576,7 +688,12 @@ async fn main() -> Result<()> {
             let data_source_type = match data_type.to_lowercase().as_str() {
                 "csv" => qitops::data_driven::DataSourceType::Csv,
                 "json" => qitops::data_driven::DataSourceType::Json,
-                _ => return Err(Error::ValidationError(format!("Unsupported data source type: {}", data_type))),
+                _ => {
+                    return Err(Error::ValidationError(format!(
+                        "Unsupported data source type: {}",
+                        data_type
+                    )))
+                }
             };
 
             let data_source = qitops::data_driven::DataSource {
@@ -617,31 +734,31 @@ async fn main() -> Result<()> {
                         let test_config = runner.apply_replacements(&base_config, row)?;
                         let api_runner = ApiTestRunner::new();
                         api_runner.run(&test_config).await
-                    },
+                    }
                     "performance" => {
                         let base_config: PerformanceTestConfig = load_config(&config)?;
                         let test_config = runner.apply_replacements(&base_config, row)?;
                         let perf_runner = PerformanceTestRunner::new(10, 30); // Default values
                         perf_runner.run(&test_config).await
-                    },
+                    }
                     "performance_enhanced" => {
                         let base_config: EnhancedPerformanceConfig = load_config(&config)?;
                         let test_config = runner.apply_replacements(&base_config, row)?;
                         let perf_runner = EnhancedPerformanceRunner::new();
                         perf_runner.run(&test_config).await
-                    },
+                    }
                     "security" => {
                         let base_config: SecurityTestConfig = load_config(&config)?;
                         let test_config = runner.apply_replacements(&base_config, row)?;
                         let sec_runner = SecurityTestRunner::new(3, false); // Default values
                         sec_runner.run(&test_config).await
-                    },
+                    }
                     "web" => {
                         let base_config: WebTestConfig = load_config(&config)?;
                         let test_config = runner.apply_replacements(&base_config, row)?;
                         let web_runner = WebTestRunner::new(true, None); // Default values
                         web_runner.run(&test_config).await
-                    },
+                    }
                     "collection" => {
                         let collection = ApiCollectionRunner::load_collection(&config)?;
                         // Apply replacements to the collection
@@ -649,10 +766,13 @@ async fn main() -> Result<()> {
                         let mut collection_json_mut = collection_json.clone();
                         // Replace placeholders in the collection JSON
                         qitops::data_driven::replace_placeholders(&mut collection_json_mut, row);
-                        let updated_collection: qitops::api_collection::ApiCollection = serde_json::from_value(collection_json_mut)?;
+                        let updated_collection: qitops::api_collection::ApiCollection =
+                            serde_json::from_value(collection_json_mut)?;
 
                         let api_runner = ApiCollectionRunner::new();
-                        let collection_result = api_runner.run_collection(&updated_collection, environment).await?;
+                        let collection_result = api_runner
+                            .run_collection(&updated_collection, environment)
+                            .await?;
 
                         // Convert collection result to test result
                         // Get the first result or create a default one
@@ -667,8 +787,13 @@ async fn main() -> Result<()> {
                                 details: Some(serde_json::json!({})),
                             })
                         }
-                    },
-                    _ => return Err(Error::ValidationError(format!("Unsupported test type: {}", test_type))),
+                    }
+                    _ => {
+                        return Err(Error::ValidationError(format!(
+                            "Unsupported test type: {}",
+                            test_type
+                        )))
+                    }
                 };
 
                 match result {
@@ -692,7 +817,12 @@ async fn main() -> Result<()> {
                             println!();
                         } else {
                             // In CI mode, print minimal output
-                            println!("Iteration {}: {} - {}", i + 1, test_result.name, test_result.status);
+                            println!(
+                                "Iteration {}: {} - {}",
+                                i + 1,
+                                test_result.name,
+                                test_result.status
+                            );
                         }
 
                         // Update counters
@@ -709,7 +839,7 @@ async fn main() -> Result<()> {
                         // Store result
                         all_results.push(test_result);
                         test_results.push(all_results.last().unwrap().clone());
-                    },
+                    }
                     Err(e) => {
                         eprintln!("Error in iteration {}: {}", i + 1, e);
                         failure_count += 1;
@@ -726,7 +856,10 @@ async fn main() -> Result<()> {
             println!("Total Iterations: {}", success_count + failure_count);
             println!("Successful: {}", success_count);
             println!("Failed: {}", failure_count);
-            println!("Success Rate: {:.2}%", (success_count as f64 / (success_count + failure_count) as f64) * 100.0);
+            println!(
+                "Success Rate: {:.2}%",
+                (success_count as f64 / (success_count + failure_count) as f64) * 100.0
+            );
 
             Ok(())
         }
@@ -735,7 +868,10 @@ async fn main() -> Result<()> {
     // Generate report if format is specified
     if let Some(format) = report_format {
         if let Some(output_path) = &cli.output {
-            info!("Generating report in {:?} format at {}", format, output_path);
+            info!(
+                "Generating report in {:?} format at {}",
+                format, output_path
+            );
             let generator = ReportGenerator::new(format, PathBuf::from(output_path));
             generator.generate(&test_results)?;
 

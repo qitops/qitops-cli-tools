@@ -2,6 +2,7 @@ use crate::api::ApiTestRunner;
 use crate::common::{TestResult, TestRunner};
 use crate::error::{Error, Result};
 use chrono::Utc;
+use jsonpath_lib as jsonpath;
 use log::{info, warn};
 use reqwest::{Client, Method};
 use serde::{Deserialize, Serialize};
@@ -9,7 +10,6 @@ use serde_json::{json, Value};
 use std::collections::HashMap;
 use std::path::Path;
 use std::time::{Duration, Instant};
-use jsonpath_lib as jsonpath;
 
 /// Authentication configuration for API collections
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -156,7 +156,11 @@ impl ApiCollectionRunner {
     }
 
     /// Run an API collection
-    pub async fn run_collection(&self, collection: &ApiCollection, environment: &str) -> Result<CollectionResult> {
+    pub async fn run_collection(
+        &self,
+        collection: &ApiCollection,
+        environment: &str,
+    ) -> Result<CollectionResult> {
         let start = Instant::now();
 
         // Initialize variables with collection variables and environment variables
@@ -177,19 +181,29 @@ impl ApiCollectionRunner {
             variables.insert(key, value);
         }
 
-        info!("Running collection: {} with {} requests", collection.name, collection.requests.len());
+        info!(
+            "Running collection: {} with {} requests",
+            collection.name,
+            collection.requests.len()
+        );
         info!("Using environment: {}", environment);
 
         // Determine run options
-        let sequential = collection.run_options.as_ref()
+        let sequential = collection
+            .run_options
+            .as_ref()
             .and_then(|opts| opts.sequential)
             .unwrap_or(true);
 
-        let stop_on_failure = collection.run_options.as_ref()
+        let stop_on_failure = collection
+            .run_options
+            .as_ref()
             .and_then(|opts| opts.stop_on_failure)
             .unwrap_or(true);
 
-        let delay = collection.run_options.as_ref()
+        let delay = collection
+            .run_options
+            .as_ref()
             .and_then(|opts| opts.delay_between_requests_ms)
             .unwrap_or(0);
 
@@ -214,7 +228,9 @@ impl ApiCollectionRunner {
                 }
 
                 // Execute request
-                let result = self.execute_request(request, &collection, &variables).await?;
+                let result = self
+                    .execute_request(request, &collection, &variables)
+                    .await?;
 
                 // Store result
                 if let Some(id) = &request.id {
@@ -235,16 +251,28 @@ impl ApiCollectionRunner {
                                             Value::Number(n) => n.to_string(),
                                             Value::Bool(b) => b.to_string(),
                                             Value::Null => "null".to_string(),
-                                            Value::Object(_) | Value::Array(_) => serde_json::to_string(value).unwrap_or_else(|_| "{}".to_string()),
+                                            Value::Object(_) | Value::Array(_) => {
+                                                serde_json::to_string(value)
+                                                    .unwrap_or_else(|_| "{}".to_string())
+                                            }
                                         };
 
-                                        info!("Captured variable '{}' with value: {}", var_name, value_str);
+                                        info!(
+                                            "Captured variable '{}' with value: {}",
+                                            var_name, value_str
+                                        );
                                         variables.insert(var_name.clone(), value_str);
                                     } else {
-                                        warn!("JSONPath '{}' matched no values in response", json_path);
+                                        warn!(
+                                            "JSONPath '{}' matched no values in response",
+                                            json_path
+                                        );
                                     }
                                 } else {
-                                    warn!("Failed to evaluate JSONPath '{}' on response", json_path);
+                                    warn!(
+                                        "Failed to evaluate JSONPath '{}' on response",
+                                        json_path
+                                    );
                                 }
                             }
                         } else {
@@ -267,7 +295,9 @@ impl ApiCollectionRunner {
             }
         } else {
             // Parallel execution (not implemented yet)
-            return Err(Error::ValidationError("Parallel execution not yet implemented".to_string()));
+            return Err(Error::ValidationError(
+                "Parallel execution not yet implemented".to_string(),
+            ));
         }
 
         // Calculate overall status
@@ -290,7 +320,12 @@ impl ApiCollectionRunner {
     }
 
     /// Execute a single request from the collection
-    async fn execute_request(&self, request: &CollectionRequest, collection: &ApiCollection, variables: &HashMap<String, String>) -> Result<TestResult> {
+    async fn execute_request(
+        &self,
+        request: &CollectionRequest,
+        collection: &ApiCollection,
+        variables: &HashMap<String, String>,
+    ) -> Result<TestResult> {
         let start = Instant::now();
 
         // Interpolate variables in URL
@@ -342,11 +377,15 @@ impl ApiCollectionRunner {
             .map_err(|e| Error::ValidationError(format!("Invalid HTTP method: {}", e)))?;
 
         // Build request with default timeout from collection or default value
-        let timeout = collection.defaults.as_ref()
+        let timeout = collection
+            .defaults
+            .as_ref()
             .and_then(|d| d.timeout)
             .unwrap_or(30);
 
-        let mut req_builder = self.client.request(method, &url)
+        let mut req_builder = self
+            .client
+            .request(method, &url)
             .timeout(Duration::from_secs(timeout));
 
         // Add headers from collection defaults
@@ -396,13 +435,8 @@ impl ApiCollectionRunner {
 
         // Validate response
         let duration = start.elapsed().as_secs_f64();
-        let validation_result = self.validate_response(
-            &status,
-            &headers,
-            &response_body,
-            request,
-            duration
-        )?;
+        let validation_result =
+            self.validate_response(&status, &headers, &response_body, request, duration)?;
 
         // Create response details
         let mut details = json!({
@@ -440,31 +474,42 @@ impl ApiCollectionRunner {
     }
 
     /// Add authentication to the request
-    fn add_authentication(&self, mut req_builder: reqwest::RequestBuilder, auth: &CollectionAuth, variables: &HashMap<String, String>) -> Result<reqwest::RequestBuilder> {
+    fn add_authentication(
+        &self,
+        mut req_builder: reqwest::RequestBuilder,
+        auth: &CollectionAuth,
+        variables: &HashMap<String, String>,
+    ) -> Result<reqwest::RequestBuilder> {
         match auth.auth_type.as_str() {
             "basic" => {
-                let username = auth.username.as_ref()
-                    .ok_or_else(|| Error::ValidationError("Username required for basic auth".to_string()))?;
-                let password = auth.password.as_ref()
-                    .ok_or_else(|| Error::ValidationError("Password required for basic auth".to_string()))?;
+                let username = auth.username.as_ref().ok_or_else(|| {
+                    Error::ValidationError("Username required for basic auth".to_string())
+                })?;
+                let password = auth.password.as_ref().ok_or_else(|| {
+                    Error::ValidationError("Password required for basic auth".to_string())
+                })?;
 
                 let interpolated_username = self.interpolate_variables(username, variables)?;
                 let interpolated_password = self.interpolate_variables(password, variables)?;
 
-                req_builder = req_builder.basic_auth(interpolated_username, Some(interpolated_password));
-            },
+                req_builder =
+                    req_builder.basic_auth(interpolated_username, Some(interpolated_password));
+            }
             "bearer" => {
-                let token = auth.token.as_ref()
-                    .ok_or_else(|| Error::ValidationError("Token required for bearer auth".to_string()))?;
+                let token = auth.token.as_ref().ok_or_else(|| {
+                    Error::ValidationError("Token required for bearer auth".to_string())
+                })?;
 
                 let interpolated_token = self.interpolate_variables(token, variables)?;
                 req_builder = req_builder.bearer_auth(interpolated_token);
-            },
+            }
             "api_key" => {
-                let key_name = auth.key_name.as_ref()
-                    .ok_or_else(|| Error::ValidationError("Key name required for API key auth".to_string()))?;
-                let key_value = auth.key_value.as_ref()
-                    .ok_or_else(|| Error::ValidationError("Key value required for API key auth".to_string()))?;
+                let key_name = auth.key_name.as_ref().ok_or_else(|| {
+                    Error::ValidationError("Key name required for API key auth".to_string())
+                })?;
+                let key_value = auth.key_value.as_ref().ok_or_else(|| {
+                    Error::ValidationError("Key value required for API key auth".to_string())
+                })?;
 
                 let interpolated_key_value = self.interpolate_variables(key_value, variables)?;
 
@@ -473,15 +518,18 @@ impl ApiCollectionRunner {
                     Some("query") => {
                         // Add as query parameter
                         req_builder = req_builder.query(&[(key_name, interpolated_key_value)]);
-                    },
+                    }
                     _ => {
                         // Default to header
                         req_builder = req_builder.header(key_name, interpolated_key_value);
                     }
                 }
-            },
+            }
             _ => {
-                return Err(Error::ValidationError(format!("Unsupported authentication type: {}", auth.auth_type)));
+                return Err(Error::ValidationError(format!(
+                    "Unsupported authentication type: {}",
+                    auth.auth_type
+                )));
             }
         }
 
@@ -489,7 +537,11 @@ impl ApiCollectionRunner {
     }
 
     /// Interpolate variables in a string
-    fn interpolate_variables(&self, input: &str, variables: &HashMap<String, String>) -> Result<String> {
+    fn interpolate_variables(
+        &self,
+        input: &str,
+        variables: &HashMap<String, String>,
+    ) -> Result<String> {
         let mut result = input.to_string();
 
         // Find all variable references in the format {{variable_name}}
@@ -518,7 +570,7 @@ impl ApiCollectionRunner {
         _headers: &reqwest::header::HeaderMap,
         body: &Value,
         request: &CollectionRequest,
-        _duration: f64
+        _duration: f64,
     ) -> Result<Option<Vec<String>>> {
         let mut validation_issues = Vec::new();
 
@@ -547,8 +599,7 @@ impl ApiCollectionRunner {
             if actual_type != expected_type {
                 validation_issues.push(format!(
                     "Body type mismatch. Expected: {}, Got: {}",
-                    expected_type,
-                    actual_type
+                    expected_type, actual_type
                 ));
             }
         }

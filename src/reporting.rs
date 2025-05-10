@@ -19,7 +19,10 @@ impl ReportFormat {
             "html" => Ok(ReportFormat::Html),
             "csv" => Ok(ReportFormat::Csv),
             "xml" => Ok(ReportFormat::Xml),
-            _ => Err(Error::ValidationError(format!("Unsupported report format: {}", s))),
+            _ => Err(Error::ValidationError(format!(
+                "Unsupported report format: {}",
+                s
+            ))),
         }
     }
 }
@@ -68,9 +71,15 @@ impl ReportGenerator {
 
         for (suite_name, suite_results) in test_suites {
             let total_tests = suite_results.len();
-            let failures = suite_results.iter().filter(|r| r.status == "failed").count();
+            let failures = suite_results
+                .iter()
+                .filter(|r| r.status == "failed")
+                .count();
             let errors = suite_results.iter().filter(|r| r.status == "error").count();
-            let skipped = suite_results.iter().filter(|r| r.status == "skipped").count();
+            let skipped = suite_results
+                .iter()
+                .filter(|r| r.status == "skipped")
+                .count();
             let total_time: f64 = suite_results.iter().map(|r| r.duration).sum();
 
             xml.push_str(&format!(
@@ -126,12 +135,16 @@ impl ReportGenerator {
         html.push_str("    body { font-family: Arial, sans-serif; margin: 20px; }\n");
         html.push_str("    h1 { color: #333; }\n");
         html.push_str("    .summary { margin-bottom: 20px; }\n");
-        html.push_str("    .test-result { margin-bottom: 10px; border: 1px solid #ddd; padding: 10px; }\n");
+        html.push_str(
+            "    .test-result { margin-bottom: 10px; border: 1px solid #ddd; padding: 10px; }\n",
+        );
         html.push_str("    .passed { background-color: #dff0d8; }\n");
         html.push_str("    .failed { background-color: #f2dede; }\n");
         html.push_str("    .error { background-color: #fcf8e3; }\n");
         html.push_str("    .skipped { background-color: #d9edf7; }\n");
-        html.push_str("    .details { margin-top: 10px; font-family: monospace; white-space: pre-wrap; }\n");
+        html.push_str(
+            "    .details { margin-top: 10px; font-family: monospace; white-space: pre-wrap; }\n",
+        );
         html.push_str("  </style>\n");
         html.push_str("</head>\n<body>\n");
         html.push_str("  <h1>QitOps Test Report</h1>\n");
@@ -171,7 +184,10 @@ impl ReportGenerator {
 
             if let Some(details) = &result.details {
                 html.push_str("    <div class=\"details\">\n");
-                html.push_str(&format!("      <pre>{}</pre>\n", serde_json::to_string_pretty(details)?));
+                html.push_str(&format!(
+                    "      <pre>{}</pre>\n",
+                    serde_json::to_string_pretty(details)?
+                ));
                 html.push_str("    </div>\n");
             }
 

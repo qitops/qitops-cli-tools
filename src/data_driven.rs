@@ -89,18 +89,18 @@ pub fn replace_placeholders(value: &mut Value, data: &HashMap<String, String>) {
                 result = result.replace(&placeholder, val);
             }
             *s = result;
-        },
+        }
         Value::Object(obj) => {
             for (_, v) in obj {
                 replace_placeholders(v, data);
             }
-        },
+        }
         Value::Array(arr) => {
             for v in arr {
                 replace_placeholders(v, data);
             }
-        },
-        _ => {},
+        }
+        _ => {}
     }
 }
 
@@ -109,10 +109,7 @@ impl DataDrivenRunner {
     pub fn new(config: DataDrivenConfig) -> Result<Self> {
         let data_rows = Self::load_data(&config.data_source)?;
 
-        Ok(Self {
-            config,
-            data_rows,
-        })
+        Ok(Self { config, data_rows })
     }
 
     /// Load data from the specified data source
@@ -126,11 +123,16 @@ impl DataDrivenRunner {
 
     /// Load data from a CSV file
     fn load_csv_data(data_source: &DataSource) -> Result<Vec<HashMap<String, String>>> {
-        let file_path = data_source.file_path.as_ref()
-            .ok_or_else(|| Error::ValidationError("File path is required for CSV data source".to_string()))?;
+        let file_path = data_source.file_path.as_ref().ok_or_else(|| {
+            Error::ValidationError("File path is required for CSV data source".to_string())
+        })?;
 
-        let file = File::open(file_path)
-            .map_err(|e| Error::IoError(std::io::Error::new(std::io::ErrorKind::Other, format!("Failed to open CSV file: {}", e))))?;
+        let file = File::open(file_path).map_err(|e| {
+            Error::IoError(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                format!("Failed to open CSV file: {}", e),
+            ))
+        })?;
 
         let reader = BufReader::new(file);
         let delimiter = data_source.delimiter.chars().next().unwrap_or(',');
@@ -141,14 +143,17 @@ impl DataDrivenRunner {
             .from_reader(reader);
 
         let headers = if data_source.has_header {
-            csv_reader.headers()
+            csv_reader
+                .headers()
                 .map_err(|e| Error::ValidationError(format!("Failed to read CSV headers: {}", e)))?
                 .iter()
                 .map(|h| h.to_string())
                 .collect::<Vec<String>>()
         } else {
             // If no headers, use column indices as headers
-            let first_record = csv_reader.records().next()
+            let first_record = csv_reader
+                .records()
+                .next()
                 .ok_or_else(|| Error::ValidationError("CSV file is empty".to_string()))?
                 .map_err(|e| Error::ValidationError(format!("Failed to read CSV record: {}", e)))?;
 
@@ -158,8 +163,12 @@ impl DataDrivenRunner {
         };
 
         // Reopen the file to start reading from the beginning
-        let file = File::open(file_path)
-            .map_err(|e| Error::IoError(std::io::Error::new(std::io::ErrorKind::Other, format!("Failed to reopen CSV file: {}", e))))?;
+        let file = File::open(file_path).map_err(|e| {
+            Error::IoError(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                format!("Failed to reopen CSV file: {}", e),
+            ))
+        })?;
 
         // Create a new CSV reader directly from the file
         let mut csv_reader = csv::ReaderBuilder::new()
@@ -170,7 +179,8 @@ impl DataDrivenRunner {
         let mut data_rows = Vec::new();
 
         for result in csv_reader.records() {
-            let record = result.map_err(|e| Error::ValidationError(format!("Failed to read CSV record: {}", e)))?;
+            let record = result
+                .map_err(|e| Error::ValidationError(format!("Failed to read CSV record: {}", e)))?;
 
             let mut row = HashMap::new();
             for (i, value) in record.iter().enumerate() {
@@ -187,11 +197,16 @@ impl DataDrivenRunner {
 
     /// Load data from a JSON file
     fn load_json_data(data_source: &DataSource) -> Result<Vec<HashMap<String, String>>> {
-        let file_path = data_source.file_path.as_ref()
-            .ok_or_else(|| Error::ValidationError("File path is required for JSON data source".to_string()))?;
+        let file_path = data_source.file_path.as_ref().ok_or_else(|| {
+            Error::ValidationError("File path is required for JSON data source".to_string())
+        })?;
 
-        let file = File::open(file_path)
-            .map_err(|e| Error::IoError(std::io::Error::new(std::io::ErrorKind::Other, format!("Failed to open JSON file: {}", e))))?;
+        let file = File::open(file_path).map_err(|e| {
+            Error::IoError(std::io::Error::new(
+                std::io::ErrorKind::Other,
+                format!("Failed to open JSON file: {}", e),
+            ))
+        })?;
 
         let json_value: Value = serde_json::from_reader(file)
             .map_err(|e| Error::ValidationError(format!("Failed to parse JSON: {}", e)))?;
@@ -208,7 +223,10 @@ impl DataDrivenRunner {
                 .map_err(|e| Error::ValidationError(format!("Invalid JSON path: {}", e)))?;
 
             if result.is_empty() {
-                return Err(Error::ValidationError(format!("JSON path '{}' returned no results", json_path)));
+                return Err(Error::ValidationError(format!(
+                    "JSON path '{}' returned no results",
+                    json_path
+                )));
             }
 
             result[0].clone()
@@ -217,7 +235,11 @@ impl DataDrivenRunner {
         // Convert JSON data to HashMap<String, String>
         let data_array = match data {
             Value::Array(arr) => arr,
-            _ => return Err(Error::ValidationError("JSON data must be an array".to_string())),
+            _ => {
+                return Err(Error::ValidationError(
+                    "JSON data must be an array".to_string(),
+                ))
+            }
         };
 
         let mut data_rows = Vec::new();
@@ -230,7 +252,7 @@ impl DataDrivenRunner {
                         row.insert(key, Self::value_to_string(&value));
                     }
                     data_rows.push(row);
-                },
+                }
                 _ => warn!("Skipping non-object item in JSON data"),
             }
         }
@@ -240,8 +262,9 @@ impl DataDrivenRunner {
 
     /// Load data from inline data
     fn load_inline_data(data_source: &DataSource) -> Result<Vec<HashMap<String, String>>> {
-        let data = data_source.data.as_ref()
-            .ok_or_else(|| Error::ValidationError("Data is required for inline data source".to_string()))?;
+        let data = data_source.data.as_ref().ok_or_else(|| {
+            Error::ValidationError("Data is required for inline data source".to_string())
+        })?;
 
         let mut data_rows = Vec::new();
 
@@ -263,7 +286,9 @@ impl DataDrivenRunner {
             Value::Number(n) => n.to_string(),
             Value::Bool(b) => b.to_string(),
             Value::Null => "null".to_string(),
-            Value::Object(_) | Value::Array(_) => serde_json::to_string(value).unwrap_or_else(|_| "{}".to_string()),
+            Value::Object(_) | Value::Array(_) => {
+                serde_json::to_string(value).unwrap_or_else(|_| "{}".to_string())
+            }
         }
     }
 
@@ -314,18 +339,18 @@ impl DataDrivenRunner {
                     result = result.replace(&placeholder, val);
                 }
                 *s = result;
-            },
+            }
             Value::Object(obj) => {
                 for (_, v) in obj {
                     Self::replace_placeholders(v, data);
                 }
-            },
+            }
             Value::Array(arr) => {
                 for v in arr {
                     Self::replace_placeholders(v, data);
                 }
-            },
-            _ => {},
+            }
+            _ => {}
         }
     }
 }

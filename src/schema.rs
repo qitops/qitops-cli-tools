@@ -1,8 +1,8 @@
 use crate::error::{Error, Result};
 use jsonschema::{Draft, JSONSchema};
+use once_cell::sync::Lazy;
 use serde_json::Value;
 use std::collections::HashMap;
-use once_cell::sync::Lazy;
 
 // Define schemas for each test type
 static API_TEST_SCHEMA: Lazy<JSONSchema> = Lazy::new(|| {
@@ -391,14 +391,27 @@ pub fn validate_config(config: &Value, test_type: &str) -> Result<()> {
             // Add suggestions for common errors
             if message.contains("required property") {
                 let property = message.split("'").nth(1).unwrap_or("");
-                error_messages.push(format!("  Suggestion: Add the '{}' property to your configuration", property));
+                error_messages.push(format!(
+                    "  Suggestion: Add the '{}' property to your configuration",
+                    property
+                ));
             } else if message.contains("enum") {
-                let valid_values = message.split("one of: ").nth(1).unwrap_or("").trim_end_matches('.');
-                error_messages.push(format!("  Suggestion: Use one of the allowed values: {}", valid_values));
+                let valid_values = message
+                    .split("one of: ")
+                    .nth(1)
+                    .unwrap_or("")
+                    .trim_end_matches('.');
+                error_messages.push(format!(
+                    "  Suggestion: Use one of the allowed values: {}",
+                    valid_values
+                ));
             } else if message.contains("type") && message.contains("string") {
-                error_messages.push("  Suggestion: Ensure the value is a string enclosed in quotes".to_string());
+                error_messages.push(
+                    "  Suggestion: Ensure the value is a string enclosed in quotes".to_string(),
+                );
             } else if message.contains("type") && message.contains("integer") {
-                error_messages.push("  Suggestion: Ensure the value is a number without quotes".to_string());
+                error_messages
+                    .push("  Suggestion: Ensure the value is a number without quotes".to_string());
             } else if message.contains("type") && message.contains("boolean") {
                 error_messages.push("  Suggestion: Use true or false without quotes".to_string());
             }
@@ -416,7 +429,8 @@ pub fn validate_config(config: &Value, test_type: &str) -> Result<()> {
 
 /// Determine the test type from a configuration file
 pub fn determine_test_type(path: &std::path::Path) -> Result<String> {
-    let file_name = path.file_name()
+    let file_name = path
+        .file_name()
         .ok_or_else(|| Error::ValidationError("Invalid file path".to_string()))?
         .to_str()
         .ok_or_else(|| Error::ValidationError("Invalid file name".to_string()))?;
@@ -438,5 +452,8 @@ pub fn determine_test_type(path: &std::path::Path) -> Result<String> {
         return Ok("api".to_string()); // Default to API for now
     }
 
-    Err(Error::ValidationError(format!("Could not determine test type from file name: {}", file_name)))
+    Err(Error::ValidationError(format!(
+        "Could not determine test type from file name: {}",
+        file_name
+    )))
 }

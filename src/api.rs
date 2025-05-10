@@ -7,7 +7,7 @@ use log::{info, warn};
 use reqwest::{Client, Method, Response};
 use serde::{Deserialize, Serialize};
 use std::time::{Duration, Instant};
-use tokio_retry::strategy::{ExponentialBackoff, jitter};
+use tokio_retry::strategy::{jitter, ExponentialBackoff};
 use tokio_retry::Retry;
 
 #[derive(Debug, Serialize, Deserialize, Default)]
@@ -91,7 +91,11 @@ impl ApiTestRunner {
             let attempt_num = attempt;
             attempt += 1;
             async move {
-                info!("Attempt {} of {}", attempt_num, config.retry.max_retries + 1);
+                info!(
+                    "Attempt {} of {}",
+                    attempt_num,
+                    config.retry.max_retries + 1
+                );
                 match self.execute_request(config).await {
                     Ok(response) => {
                         let status = response.status();
@@ -105,7 +109,9 @@ impl ApiTestRunner {
                             );
                             Err(Error::TestError(format!(
                                 "Retryable status code: {} (attempt {}/{})",
-                                status_code, attempt_num, config.retry.max_retries + 1
+                                status_code,
+                                attempt_num,
+                                config.retry.max_retries + 1
                             )))
                         } else {
                             Ok(response)
@@ -116,10 +122,18 @@ impl ApiTestRunner {
                         let should_retry = match &e {
                             Error::RequestError(req_err) => {
                                 if req_err.is_timeout() && config.retry.retry_on_timeout {
-                                    warn!("Request timed out on attempt {}, retrying...", attempt_num);
+                                    warn!(
+                                        "Request timed out on attempt {}, retrying...",
+                                        attempt_num
+                                    );
                                     true
-                                } else if req_err.is_connect() && config.retry.retry_on_connection_error {
-                                    warn!("Connection error on attempt {}, retrying...", attempt_num);
+                                } else if req_err.is_connect()
+                                    && config.retry.retry_on_connection_error
+                                {
+                                    warn!(
+                                        "Connection error on attempt {}, retrying...",
+                                        attempt_num
+                                    );
                                     true
                                 } else {
                                     false
@@ -139,7 +153,8 @@ impl ApiTestRunner {
                     }
                 }
             }
-        }).await;
+        })
+        .await;
 
         match result {
             Ok(response) => {
@@ -147,7 +162,11 @@ impl ApiTestRunner {
                 Ok(response)
             }
             Err(e) => {
-                warn!("All {} retry attempts failed: {}", config.retry.max_retries + 1, e);
+                warn!(
+                    "All {} retry attempts failed: {}",
+                    config.retry.max_retries + 1,
+                    e
+                );
                 Err(e)
             }
         }
@@ -157,7 +176,9 @@ impl ApiTestRunner {
         let method = Method::from_bytes(config.method.as_bytes())
             .map_err(|e| Error::ValidationError(format!("Invalid HTTP method: {}", e)))?;
 
-        let mut request = self.client.request(method, &config.url)
+        let mut request = self
+            .client
+            .request(method, &config.url)
             .timeout(Duration::from_secs(config.timeout));
 
         if let Some(headers) = &config.headers {
@@ -179,7 +200,12 @@ impl ApiTestRunner {
         Ok(response)
     }
 
-    async fn validate_response(&self, response: Response, config: &ApiTestConfig, duration: f64) -> Result<serde_json::Value> {
+    async fn validate_response(
+        &self,
+        response: Response,
+        config: &ApiTestConfig,
+        duration: f64,
+    ) -> Result<serde_json::Value> {
         // Validate response time if specified
         if let Some(max_time) = config.max_response_time {
             if duration > max_time as f64 {
@@ -242,9 +268,7 @@ impl ApiTestRunner {
 
             let validation_result = compiled_schema.validate(&actual_body);
             if let Err(errors) = validation_result {
-                let error_messages: Vec<String> = errors
-                    .map(|e| format!("{}", e))
-                    .collect();
+                let error_messages: Vec<String> = errors.map(|e| format!("{}", e)).collect();
                 return Err(Error::TestError(format!(
                     "JSON Schema validation failed:\n{}",
                     error_messages.join("\n")
@@ -290,36 +314,32 @@ impl TestRunner for ApiTestRunner {
                 let headers = response.headers().clone();
 
                 match self.validate_response(response, &config, duration).await {
-                    Ok(body) => {
-                        Ok(TestResult {
-                            name: config.base.name,
-                            status: "passed".to_string(),
-                            duration,
-                            details: Some(serde_json::json!({
-                                "status_code": status.as_u16(),
-                                "response_time": duration,
-                                "headers": headers
-                                    .iter()
-                                    .map(|(k, v)| (k.to_string(), v.to_str().unwrap_or("").to_string()))
-                                    .collect::<std::collections::HashMap<_, _>>(),
-                                "body": body
-                            })),
-                            timestamp: Utc::now().to_rfc3339(),
-                        })
-                    }
-                    Err(e) => {
-                        Ok(TestResult {
-                            name: config.base.name,
-                            status: "failed".to_string(),
-                            duration,
-                            details: Some(serde_json::json!({
-                                "error": e.to_string(),
-                                "status_code": status.as_u16(),
-                                "response_time": duration
-                            })),
-                            timestamp: Utc::now().to_rfc3339(),
-                        })
-                    }
+                    Ok(body) => Ok(TestResult {
+                        name: config.base.name,
+                        status: "passed".to_string(),
+                        duration,
+                        details: Some(serde_json::json!({
+                            "status_code": status.as_u16(),
+                            "response_time": duration,
+                            "headers": headers
+                                .iter()
+                                .map(|(k, v)| (k.to_string(), v.to_str().unwrap_or("").to_string()))
+                                .collect::<std::collections::HashMap<_, _>>(),
+                            "body": body
+                        })),
+                        timestamp: Utc::now().to_rfc3339(),
+                    }),
+                    Err(e) => Ok(TestResult {
+                        name: config.base.name,
+                        status: "failed".to_string(),
+                        duration,
+                        details: Some(serde_json::json!({
+                            "error": e.to_string(),
+                            "status_code": status.as_u16(),
+                            "response_time": duration
+                        })),
+                        timestamp: Utc::now().to_rfc3339(),
+                    }),
                 }
             }
             Err(e) => {

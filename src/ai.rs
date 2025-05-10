@@ -1,9 +1,9 @@
 use crate::common::TestResult;
 use crate::error::{Error, Result};
-use serde::{Deserialize, Serialize};
-use std::process::Command;
-use std::fs;
 use log::info;
+use serde::{Deserialize, Serialize};
+use std::fs;
+use std::process::Command;
 
 /// AI model types supported by QitOps
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -65,14 +65,22 @@ impl AiTestGenerator {
 
     /// Generate a test configuration based on a description
     pub async fn generate_test_config(&self, description: &str, test_type: &str) -> Result<String> {
-        info!("Generating {} test configuration from description", test_type);
+        info!(
+            "Generating {} test configuration from description",
+            test_type
+        );
 
         let prompt = match test_type {
             "api" => self.create_api_test_prompt(description),
             "performance" => self.create_performance_test_prompt(description),
             "security" => self.create_security_test_prompt(description),
             "web" => self.create_web_test_prompt(description),
-            _ => return Err(Error::ValidationError(format!("Unsupported test type: {}", test_type))),
+            _ => {
+                return Err(Error::ValidationError(format!(
+                    "Unsupported test type: {}",
+                    test_type
+                )))
+            }
         };
 
         let json_config = self.run_inference(&prompt).await?;
@@ -83,7 +91,12 @@ impl AiTestGenerator {
             "performance" => self.validate_performance_test_config(&json_config)?,
             "security" => self.validate_security_test_config(&json_config)?,
             "web" => self.validate_web_test_config(&json_config)?,
-            _ => return Err(Error::ValidationError(format!("Unsupported test type: {}", test_type))),
+            _ => {
+                return Err(Error::ValidationError(format!(
+                    "Unsupported test type: {}",
+                    test_type
+                )))
+            }
         }
 
         Ok(json_config)
@@ -124,7 +137,9 @@ impl AiTestGenerator {
                 if let Some(path) = &self.config.model_path {
                     self.run_custom_inference(prompt, path).await
                 } else {
-                    Err(Error::ConfigError("Model path is required for custom models".to_string()))
+                    Err(Error::ConfigError(
+                        "Model path is required for custom models".to_string(),
+                    ))
                 }
             }
         }
@@ -132,9 +147,11 @@ impl AiTestGenerator {
 
     async fn run_llama_inference(&self, prompt: &str) -> Result<String> {
         // This is a simplified example using llama.cpp
-        let model_path = self.config.model_path.clone().unwrap_or_else(|| {
-            "/usr/local/share/models/llama-2-7b-chat.gguf".to_string()
-        });
+        let model_path = self
+            .config
+            .model_path
+            .clone()
+            .unwrap_or_else(|| "/usr/local/share/models/llama-2-7b-chat.gguf".to_string());
 
         let temp_file = tempfile::NamedTempFile::new()?;
         fs::write(temp_file.path(), prompt)?;
@@ -157,7 +174,10 @@ impl AiTestGenerator {
             Ok(self.extract_json_from_output(&result))
         } else {
             let error = String::from_utf8_lossy(&output.stderr).to_string();
-            Err(Error::TestError(format!("Llama inference failed: {}", error)))
+            Err(Error::TestError(format!(
+                "Llama inference failed: {}",
+                error
+            )))
         }
     }
 
@@ -179,7 +199,10 @@ impl AiTestGenerator {
 
     async fn run_custom_inference(&self, _prompt: &str, model_path: &str) -> Result<String> {
         // Placeholder for custom models
-        Ok(format!("Custom inference with model {} not yet implemented", model_path))
+        Ok(format!(
+            "Custom inference with model {} not yet implemented",
+            model_path
+        ))
     }
 
     fn extract_json_from_output(&self, output: &str) -> String {
@@ -252,7 +275,9 @@ impl AiTestGenerator {
     fn validate_api_test_config(&self, config: &str) -> Result<()> {
         // Simplified validation
         if !config.contains("url") || !config.contains("method") {
-            return Err(Error::ValidationError("Generated API test config is missing required fields".to_string()));
+            return Err(Error::ValidationError(
+                "Generated API test config is missing required fields".to_string(),
+            ));
         }
         Ok(())
     }
@@ -260,7 +285,9 @@ impl AiTestGenerator {
     fn validate_performance_test_config(&self, config: &str) -> Result<()> {
         // Simplified validation
         if !config.contains("target_url") || !config.contains("method") {
-            return Err(Error::ValidationError("Generated performance test config is missing required fields".to_string()));
+            return Err(Error::ValidationError(
+                "Generated performance test config is missing required fields".to_string(),
+            ));
         }
         Ok(())
     }
@@ -268,7 +295,9 @@ impl AiTestGenerator {
     fn validate_security_test_config(&self, config: &str) -> Result<()> {
         // Simplified validation
         if !config.contains("target_url") {
-            return Err(Error::ValidationError("Generated security test config is missing required fields".to_string()));
+            return Err(Error::ValidationError(
+                "Generated security test config is missing required fields".to_string(),
+            ));
         }
         Ok(())
     }
@@ -276,7 +305,9 @@ impl AiTestGenerator {
     fn validate_web_test_config(&self, config: &str) -> Result<()> {
         // Simplified validation
         if !config.contains("target_url") {
-            return Err(Error::ValidationError("Generated web test config is missing required fields".to_string()));
+            return Err(Error::ValidationError(
+                "Generated web test config is missing required fields".to_string(),
+            ));
         }
         Ok(())
     }

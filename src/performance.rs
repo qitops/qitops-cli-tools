@@ -67,8 +67,9 @@ impl PerformanceTestRunner {
 
                 handles.push(tokio::spawn(async move {
                     let request_start = Instant::now();
-                    let method = Method::from_bytes(method.as_bytes())
-                        .map_err(|e| Error::ValidationError(format!("Invalid HTTP method: {}", e)))?;
+                    let method = Method::from_bytes(method.as_bytes()).map_err(|e| {
+                        Error::ValidationError(format!("Invalid HTTP method: {}", e))
+                    })?;
 
                     let mut request = client.request(method, &target_url);
 
@@ -108,18 +109,18 @@ impl PerformanceTestRunner {
 #[async_trait]
 impl TestRunner for PerformanceTestRunner {
     async fn run(&self, config: &(impl serde::Serialize + Send + Sync)) -> Result<TestResult> {
-        let config = serde_json::from_value::<PerformanceTestConfig>(serde_json::to_value(config)?)?;
+        let config =
+            serde_json::from_value::<PerformanceTestConfig>(serde_json::to_value(config)?)?;
         let start = Instant::now();
 
         let results = self.run_load_test(&config).await;
         let duration = start.elapsed().as_secs_f64();
 
-        let (success_count, error_count) = results.iter().fold((0, 0), |(s, e), r| {
-            match r.status {
+        let (success_count, error_count) =
+            results.iter().fold((0, 0), |(s, e), r| match r.status {
                 200..=299 => (s + 1, e),
                 _ => (s, e + 1),
-            }
-        });
+            });
 
         let success_rate = (success_count as f64 / results.len() as f64) * 100.0;
         let status = if success_rate >= config.success_threshold {

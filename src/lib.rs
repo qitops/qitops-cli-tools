@@ -1,3 +1,4 @@
+pub mod ai;
 pub mod api;
 pub mod api_collection;
 pub mod common;
@@ -9,7 +10,6 @@ pub mod reporting;
 pub mod schema;
 pub mod security;
 pub mod web;
-pub mod ai;
 
 pub use error::Error;
 pub type Result<T> = std::result::Result<T, Error>;

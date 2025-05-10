@@ -2,10 +2,10 @@ use crate::common::{TestConfig, TestResult, TestRunner};
 use crate::error::Result;
 use async_trait::async_trait;
 use chrono::Utc;
+use log::{info, warn};
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::time::{Duration, Instant};
-use log::{info, warn};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct WebTestConfig {
@@ -73,13 +73,20 @@ impl WebTestRunner {
 
         // Log whether we're running in headless mode
         if self.headless {
-            info!("Starting web test in headless mode for URL: {}", config.target_url);
+            info!(
+                "Starting web test in headless mode for URL: {}",
+                config.target_url
+            );
         } else {
-            info!("Starting web test with visible browser for URL: {}", config.target_url);
+            info!(
+                "Starting web test with visible browser for URL: {}",
+                config.target_url
+            );
         }
 
         // Simulate browser navigation
-        let response = self.client
+        let response = self
+            .client
             .get(&config.target_url)
             .header("User-Agent", &config.user_agent)
             .timeout(Duration::from_secs(config.wait_timeout_secs.unwrap_or(30)))
@@ -94,7 +101,9 @@ impl WebTestRunner {
         let mut assertion_results = Vec::new();
         if let Some(assertions) = &config.assertions {
             for assertion in assertions {
-                let result = self.evaluate_assertion(assertion, &body, &config.target_url).await?;
+                let result = self
+                    .evaluate_assertion(assertion, &body, &config.target_url)
+                    .await?;
                 assertion_results.push(result);
             }
         }
@@ -140,7 +149,12 @@ impl WebTestRunner {
         }))
     }
 
-    async fn evaluate_assertion(&self, assertion: &WebAssertion, body: &str, url: &str) -> Result<serde_json::Value> {
+    async fn evaluate_assertion(
+        &self,
+        assertion: &WebAssertion,
+        body: &str,
+        url: &str,
+    ) -> Result<serde_json::Value> {
         // In a real implementation, this would use browser APIs to evaluate assertions
         // For now, we'll simulate the assertion evaluation
 
@@ -157,7 +171,7 @@ impl WebTestRunner {
                     _ => false,
                 };
                 (passed, format!("Title: {}", simulated_title))
-            },
+            }
             "url" => {
                 // Check URL
                 let passed = match assertion.comparison.as_deref().unwrap_or("equals") {
@@ -169,18 +183,30 @@ impl WebTestRunner {
                     _ => false,
                 };
                 (passed, format!("URL: {}", url))
-            },
+            }
             "element" => {
                 // Simulate element existence check
                 let selector = assertion.selector.as_deref().unwrap_or("");
                 let element_exists = body.contains(selector); // Very simplified simulation
-                (element_exists, format!("Element with selector '{}' exists: {}", selector, element_exists))
-            },
+                (
+                    element_exists,
+                    format!(
+                        "Element with selector '{}' exists: {}",
+                        selector, element_exists
+                    ),
+                )
+            }
             "text" => {
                 // Simulate text content check
                 let text_exists = body.contains(&assertion.expected_value);
-                (text_exists, format!("Text '{}' exists: {}", assertion.expected_value, text_exists))
-            },
+                (
+                    text_exists,
+                    format!(
+                        "Text '{}' exists: {}",
+                        assertion.expected_value, text_exists
+                    ),
+                )
+            }
             _ => (false, "Unsupported assertion type".to_string()),
         };
 
@@ -204,18 +230,21 @@ impl WebTestRunner {
                     "selector": selector,
                     "success": true
                 }))
-            },
+            }
             "type" => {
                 let selector = action.selector.as_deref().unwrap_or("");
                 let value = action.value.as_deref().unwrap_or("");
-                info!("Simulating typing '{}' into element with selector: {}", value, selector);
+                info!(
+                    "Simulating typing '{}' into element with selector: {}",
+                    value, selector
+                );
                 Ok(serde_json::json!({
                     "type": "type",
                     "selector": selector,
                     "value": value,
                     "success": true
                 }))
-            },
+            }
             "wait" => {
                 let wait_time = action.wait_time_ms.unwrap_or(1000);
                 info!("Simulating wait for {} ms", wait_time);
@@ -225,7 +254,7 @@ impl WebTestRunner {
                     "duration_ms": wait_time,
                     "success": true
                 }))
-            },
+            }
             "navigate" => {
                 let target_url = action.value.as_deref().unwrap_or(url);
                 info!("Simulating navigation to: {}", target_url);
@@ -234,7 +263,7 @@ impl WebTestRunner {
                     "url": target_url,
                     "success": true
                 }))
-            },
+            }
             _ => {
                 warn!("Unsupported action type: {}", action.action_type);
                 Ok(serde_json::json!({
@@ -259,8 +288,12 @@ impl TestRunner for WebTestRunner {
 
                 // Check if all assertions passed
                 let empty_vec = Vec::new();
-                let assertions = details["assertion_results"].as_array().unwrap_or(&empty_vec);
-                let all_assertions_passed = assertions.iter().all(|a| a["passed"].as_bool().unwrap_or(false));
+                let assertions = details["assertion_results"]
+                    .as_array()
+                    .unwrap_or(&empty_vec);
+                let all_assertions_passed = assertions
+                    .iter()
+                    .all(|a| a["passed"].as_bool().unwrap_or(false));
 
                 let status = if all_assertions_passed {
                     "passed".to_string()
@@ -275,7 +308,7 @@ impl TestRunner for WebTestRunner {
                     details: Some(details),
                     timestamp: Utc::now().to_rfc3339(),
                 })
-            },
+            }
             Err(e) => {
                 let duration = start.elapsed().as_secs_f64();
                 Ok(TestResult {
