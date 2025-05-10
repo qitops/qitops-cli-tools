@@ -56,6 +56,36 @@ cargo install --path .
 cargo install qitops --features ai
 ```
 
+The AI features require a local LLM to be available. QitOps supports various local LLM models and can work completely offline with no data sent to external services.
+
+#### Supported LLM Models
+
+- LLaMA (versions 1, 2, 3)
+- Mistral (versions 7B, 8x7B)
+- GPT-J
+- Phi (versions 1, 2, 3)
+- Any GGUF-compatible model
+
+#### Local LLM Integration Options
+
+1. **Direct Model Loading**: Load models directly from local files
+2. **Ollama Integration**: Connect to Ollama for local model inference
+3. **Custom Model Path**: Specify a custom path to your model files
+
+```bash
+# Run with a specific model
+qitops generate --test-type api --description "Test description" --model llama --model-path /path/to/model.gguf
+
+# Run with Ollama
+export QITOPS_OLLAMA_URL="http://localhost:11434"
+qitops generate --test-type api --description "Test description" --model ollama:llama2
+
+# Run in offline mode
+export QITOPS_OFFLINE=true
+export QITOPS_MODEL_PATH="/path/to/model.gguf"
+qitops analyze --results results.json --output analysis.md
+```
+
 ## Quick Start
 
 ```bash
@@ -130,12 +160,37 @@ qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/pr
 - URL and title validation
 
 ### AI-Powered Features
-- Test configuration generation from natural language descriptions
-- Test results analysis with insights and patterns
-- Improvement suggestions based on test results
-- Support for local LLM models (LLaMA, Mistral, GPT-J, Phi)
-- Customizable model parameters (temperature, context size, etc.)
-- Offline operation with no data sent to external services
+- **Test Configuration Generation**: Create test configurations from natural language descriptions
+  ```bash
+  qitops generate --test-type api --description "Test the GitHub API to fetch user information" --output github_test.json
+  ```
+
+- **Test Results Analysis**: Analyze test results to identify patterns and issues
+  ```bash
+  qitops analyze --results test_results.json --output analysis.md
+  ```
+
+- **Improvement Suggestions**: Get actionable suggestions to improve your tests
+  ```bash
+  qitops improve --results test_results.json --output improvements.md
+  ```
+
+- **Local LLM Support**: Works with various local models (LLaMA, Mistral, GPT-J, Phi)
+  ```bash
+  qitops generate --test-type api --description "Test description" --model llama --model-path /path/to/model.gguf
+  ```
+
+- **Model Parameter Customization**: Configure temperature, context size, and other parameters
+  ```bash
+  qitops generate --test-type api --description "Test description" --temperature 0.7 --context-size 4096
+  ```
+
+- **Offline Operation**: Run completely offline with no data sent to external services
+  ```bash
+  export QITOPS_OFFLINE=true
+  export QITOPS_MODEL_PATH="/path/to/model.gguf"
+  qitops analyze --results test_results.json --output analysis.md
+  ```
 
 ## Configuration
 
