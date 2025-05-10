@@ -624,7 +624,8 @@ async fn main() -> Result<()> {
             for result_path in results {
                 let content = std::fs::read_to_string(result_path)?;
                 // Try to parse as an array first
-                let parse_result = serde_json::from_str::<Vec<qitops::common::TestResult>>(&content);
+                let parse_result =
+                    serde_json::from_str::<Vec<qitops::common::TestResult>>(&content);
 
                 if let Ok(results_array) = parse_result {
                     // If it's an array, add all results
@@ -691,7 +692,8 @@ async fn main() -> Result<()> {
             for result_path in results {
                 let content = std::fs::read_to_string(result_path)?;
                 // Try to parse as an array first
-                let parse_result = serde_json::from_str::<Vec<qitops::common::TestResult>>(&content);
+                let parse_result =
+                    serde_json::from_str::<Vec<qitops::common::TestResult>>(&content);
 
                 if let Ok(results_array) = parse_result {
                     // If it's an array, add all results

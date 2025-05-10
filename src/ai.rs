@@ -174,7 +174,7 @@ The test was successful with a response time of 0.19 seconds.
 - The test is performing well
 - Consider adding more assertions to validate the response body structure
 - Add tests for error conditions (e.g., invalid IDs)"#
-            .to_string());
+                .to_string());
         } else if prompt.contains("suggest improvements") {
             return Ok(r#"# Improvement Suggestions
 
@@ -189,7 +189,7 @@ The test was successful with a response time of 0.19 seconds.
 ## Coverage
 - Add negative test cases
 - Test edge cases with invalid inputs"#
-            .to_string());
+                .to_string());
         } else if prompt.contains("Generate a JSON configuration for an API test") {
             return Ok(r#"{
     "name": "GitHub User API Test",
