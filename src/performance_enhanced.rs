@@ -193,16 +193,16 @@ impl MetricsCollector {
     fn add_metric(&mut self, name: &str, value: f64) {
         self.metrics
             .entry(name.to_string())
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(value);
     }
 
     fn add_metric_by_tag(&mut self, tag: &str, name: &str, value: f64) {
         self.metrics_by_tag
             .entry(tag.to_string())
-            .or_insert_with(HashMap::new)
+            .or_default()
             .entry(name.to_string())
-            .or_insert_with(Vec::new)
+            .or_default()
             .push(value);
     }
 
@@ -337,7 +337,15 @@ impl EnhancedPerformanceRunner {
                 .unwrap_or_else(|_| Client::new()),
         }
     }
+}
 
+impl Default for EnhancedPerformanceRunner {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl EnhancedPerformanceRunner {
     /// Run a load test with the given configuration
     async fn run_load_test(&self, config: &EnhancedPerformanceConfig) -> Result<MetricsCollector> {
         info!(
@@ -678,7 +686,7 @@ async fn execute_scenario(client: Client, scenario: Scenario) -> Result<RequestR
     let duration = start.elapsed().as_secs_f64();
 
     // Determine if the request was successful
-    let success = status >= 200 && status < 300;
+    let success = (200..300).contains(&status);
 
     // Create custom metrics
     let mut metrics = HashMap::new();

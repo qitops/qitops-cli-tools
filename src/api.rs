@@ -79,7 +79,15 @@ impl ApiTestRunner {
                 .unwrap_or_else(|_| Client::new()),
         }
     }
+}
 
+impl Default for ApiTestRunner {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl ApiTestRunner {
     async fn execute_request_with_retry(&self, config: &ApiTestConfig) -> Result<Response> {
         let retry_strategy = ExponentialBackoff::from_millis(config.retry.initial_delay_ms)
             .max_delay(Duration::from_millis(config.retry.max_delay_ms))

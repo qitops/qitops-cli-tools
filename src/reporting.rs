@@ -3,6 +3,7 @@ use crate::error::{Error, Result};
 use std::fs::File;
 use std::io::Write;
 use std::path::PathBuf;
+use std::str::FromStr;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum ReportFormat {
@@ -12,8 +13,10 @@ pub enum ReportFormat {
     Csv,
 }
 
-impl ReportFormat {
-    pub fn from_str(s: &str) -> Result<Self> {
+impl FromStr for ReportFormat {
+    type Err = Error;
+
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
         match s.to_lowercase().as_str() {
             "json" => Ok(ReportFormat::Json),
             "html" => Ok(ReportFormat::Html),

@@ -135,9 +135,8 @@ impl SecurityTestRunner {
     }
 
     async fn check_ssl(&self, _url: &str) -> Vec<SecurityFinding> {
-        let findings = Vec::new();
         // TODO: Implement SSL/TLS checks
-        findings
+        Vec::new()
     }
 
     async fn check_common_vulnerabilities(
@@ -145,15 +144,13 @@ impl SecurityTestRunner {
         _url: &str,
         _config: &SecurityTestConfig,
     ) -> Vec<SecurityFinding> {
-        let findings = Vec::new();
         // TODO: Implement common vulnerability checks
-        findings
+        Vec::new()
     }
 
     fn check_sensitive_data(&self, _response: &reqwest::Response) -> Vec<SecurityFinding> {
-        let findings = Vec::new();
         // TODO: Implement sensitive data checks
-        findings
+        Vec::new()
     }
 
     async fn check_authentication(
@@ -161,21 +158,18 @@ impl SecurityTestRunner {
         _url: &str,
         _config: &SecurityTestConfig,
     ) -> Vec<SecurityFinding> {
-        let findings = Vec::new();
         // TODO: Implement authentication checks
-        findings
+        Vec::new()
     }
 
     async fn check_csrf(&self, _url: &str, _config: &SecurityTestConfig) -> Vec<SecurityFinding> {
-        let findings = Vec::new();
         // TODO: Implement CSRF checks
-        findings
+        Vec::new()
     }
 
     async fn check_xss(&self, _url: &str, _config: &SecurityTestConfig) -> Vec<SecurityFinding> {
-        let findings = Vec::new();
         // TODO: Implement XSS checks
-        findings
+        Vec::new()
     }
 
     async fn check_sql_injection(
@@ -183,21 +177,18 @@ impl SecurityTestRunner {
         _url: &str,
         _config: &SecurityTestConfig,
     ) -> Vec<SecurityFinding> {
-        let findings = Vec::new();
         // TODO: Implement SQL injection checks
-        findings
+        Vec::new()
     }
 
     async fn check_jwt(&self, _config: &SecurityTestConfig) -> Vec<SecurityFinding> {
-        let findings = Vec::new();
         // TODO: Implement JWT checks
-        findings
+        Vec::new()
     }
 
     async fn check_access_control(&self, _config: &SecurityTestConfig) -> Vec<SecurityFinding> {
-        let findings = Vec::new();
         // TODO: Implement access control checks
-        findings
+        Vec::new()
     }
 }
 

@@ -147,7 +147,15 @@ impl ApiCollectionRunner {
             api_runner: ApiTestRunner::new(),
         }
     }
+}
 
+impl Default for ApiCollectionRunner {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+impl ApiCollectionRunner {
     /// Load an API collection from a file
     pub fn load_collection(path: &Path) -> Result<ApiCollection> {
         let content = std::fs::read_to_string(path)?;
@@ -229,7 +237,7 @@ impl ApiCollectionRunner {
 
                 // Execute request
                 let result = self
-                    .execute_request(request, &collection, &variables)
+                    .execute_request(request, collection, &variables)
                     .await?;
 
                 // Store result
