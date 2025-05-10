@@ -57,7 +57,8 @@ pub fn get_hardware_acceleration() -> &'static str {
 /// Get information about available AI features
 pub fn ai_features_info() -> String {
     if ai_features_available() {
-        let mut info = "AI features are available. Supported models: LLaMA, Mistral, GPT-J, Phi.".to_string();
+        let mut info =
+            "AI features are available. Supported models: LLaMA, Mistral, GPT-J, Phi.".to_string();
 
         // Add information about platform-specific optimizations
         #[cfg(feature = "ai-cuda")]
