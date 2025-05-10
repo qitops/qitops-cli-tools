@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>AI Features - QitOps Documentation</title>
+        <title>Local LLM Support - QitOps Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -133,7 +133,7 @@
                         <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./ai-features.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./ai-features.md#supported-llm-models" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -162,179 +162,13 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="ai-features"><a class="header" href="#ai-features">AI Features</a></h1>
-<p>QitOps includes powerful AI features that can help you generate test configurations, analyze test results, and suggest improvements to your tests. These features are designed to work completely offline with local LLM models, ensuring your data never leaves your machine.</p>
-<h2 id="installation"><a class="header" href="#installation">Installation</a></h2>
-<p>To use the AI features, you need to install QitOps with the <code>ai</code> feature flag:</p>
-<pre><code class="language-bash"># Install from crates.io with AI features
-cargo install qitops --features ai
+                        <h1 id="local-llm-support"><a class="header" href="#local-llm-support">Local LLM Support</a></h1>
 
-# Or build from source with AI features
-cargo build --features ai
-</code></pre>
-<h2 id="supported-llm-models"><a class="header" href="#supported-llm-models">Supported LLM Models</a></h2>
-<p>QitOps supports a variety of local LLM models:</p>
-<ul>
-<li><strong>LLaMA</strong>: Versions 1, 2, and 3</li>
-<li><strong>Mistral</strong>: 7B and 8x7B models</li>
-<li><strong>GPT-J</strong>: All versions</li>
-<li><strong>Phi</strong>: Versions 1, 2, and 3</li>
-<li><strong>Any GGUF-compatible model</strong>: Models in GGUF format</li>
-</ul>
-<h2 id="local-llm-integration-options"><a class="header" href="#local-llm-integration-options">Local LLM Integration Options</a></h2>
-<p>QitOps provides several ways to integrate with local LLMs:</p>
-<h3 id="1-direct-model-loading"><a class="header" href="#1-direct-model-loading">1. Direct Model Loading</a></h3>
-<p>Load models directly from local files:</p>
-<pre><code class="language-bash">qitops generate --test-type api --description "Test description" --model llama --model-path /path/to/model.gguf
-</code></pre>
-<h3 id="2-ollama-integration"><a class="header" href="#2-ollama-integration">2. Ollama Integration</a></h3>
-<p>Connect to Ollama for local model inference:</p>
-<pre><code class="language-bash"># Start Ollama server
-ollama serve
-
-# Pull a model
-ollama pull llama2
-
-# Use Ollama with QitOps
-export QITOPS_OLLAMA_URL="http://localhost:11434"
-qitops generate --test-type api --description "Test description" --model ollama:llama2
-</code></pre>
-<h3 id="3-custom-model-path"><a class="header" href="#3-custom-model-path">3. Custom Model Path</a></h3>
-<p>Specify a custom path to your model files:</p>
-<pre><code class="language-bash">qitops generate --test-type api --description "Test description" --model custom --model-path /path/to/custom/model.gguf
-</code></pre>
-<h2 id="offline-operation"><a class="header" href="#offline-operation">Offline Operation</a></h2>
-<p>QitOps AI features can work completely offline:</p>
-<pre><code class="language-bash"># Set environment variables for offline mode
-export QITOPS_OFFLINE=true
-export QITOPS_MODEL_PATH="/path/to/model.gguf"
-
-# Run AI features offline
-qitops analyze --results test_results.json --output analysis.md
-</code></pre>
-<h2 id="ai-features-1"><a class="header" href="#ai-features-1">AI Features</a></h2>
-<h3 id="test-configuration-generation"><a class="header" href="#test-configuration-generation">Test Configuration Generation</a></h3>
-<p>Generate test configurations from natural language descriptions:</p>
-<pre><code class="language-bash"># Generate an API test configuration
-qitops generate --test-type api --description "Test the GitHub API to fetch user information" --output github_test.json
-
-# Generate a performance test configuration
-qitops generate --test-type performance --description "Load test for an e-commerce checkout API with 100 concurrent users" --output perf_test.json
-
-# Generate a security test configuration
-qitops generate --test-type security --description "Security scan for a banking API" --output security_test.json
-
-# Generate a web test configuration
-qitops generate --test-type web --description "Test the checkout flow of an e-commerce website" --output web_test.json
-</code></pre>
-<h3 id="test-results-analysis"><a class="header" href="#test-results-analysis">Test Results Analysis</a></h3>
-<p>Analyze test results to identify patterns and issues:</p>
-<pre><code class="language-bash"># Analyze test results
-qitops analyze --results test_results.json --output analysis.md
-
-# Analyze with a specific model
-qitops analyze --results test_results.json --output analysis.md --model llama --model-path /path/to/model.gguf
-</code></pre>
-<p>The analysis includes:</p>
-<ul>
-<li>Overview of test results</li>
-<li>Detailed breakdown of successes and failures</li>
-<li>Performance metrics</li>
-<li>Recommendations for improvement</li>
-</ul>
-<h3 id="improvement-suggestions"><a class="header" href="#improvement-suggestions">Improvement Suggestions</a></h3>
-<p>Get actionable suggestions to improve your tests:</p>
-<pre><code class="language-bash"># Generate improvement suggestions
-qitops improve --results test_results.json --output improvements.md
-
-# Generate suggestions with a specific model
-qitops improve --results test_results.json --output improvements.md --model llama --model-path /path/to/model.gguf
-</code></pre>
-<p>Improvement suggestions cover:</p>
-<ul>
-<li>Performance optimizations</li>
-<li>Reliability enhancements</li>
-<li>Coverage improvements</li>
-<li>Best practices</li>
-</ul>
-<h2 id="model-parameter-customization"><a class="header" href="#model-parameter-customization">Model Parameter Customization</a></h2>
-<p>Customize model parameters to fine-tune the AI behavior:</p>
-<pre><code class="language-bash"># Set temperature (controls randomness, 0.0-1.0)
-qitops generate --test-type api --description "Test description" --temperature 0.7
-
-# Set context size (in tokens)
-qitops generate --test-type api --description "Test description" --context-size 4096
-
-# Set maximum tokens for generation
-qitops generate --test-type api --description "Test description" --max-tokens 2048
-
-# Set system prompt
-qitops generate --test-type api --description "Test description" --system-prompt "You are a testing expert."
-</code></pre>
-<h2 id="testing-ai-features"><a class="header" href="#testing-ai-features">Testing AI Features</a></h2>
-<p>You can test the AI features using the provided test script:</p>
-<pre><code class="language-bash"># Clone the repository
-git clone https://github.com/qitops/qitops-cli-tools.git
-cd qitops-cli-tools
-
-# Build with AI features
-cargo build --features ai
-
-# Run the test script
-./test_local_ai.sh
-</code></pre>
-<p>The test script will:</p>
-<ol>
-<li>Set up environment variables for offline mode</li>
-<li>Create a directory for test outputs</li>
-<li>Test all AI features (generation, analysis, improvement)</li>
-<li>Show the generated files</li>
-</ol>
-<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
-<h3 id="model-loading-issues"><a class="header" href="#model-loading-issues">Model Loading Issues</a></h3>
-<p>If you encounter issues loading a model:</p>
-<pre><code class="language-bash"># Check if the model file exists
-ls -la /path/to/model.gguf
-
-# Try a different model format
-qitops generate --test-type api --description "Test description" --model llama --model-path /path/to/different/model.gguf
-</code></pre>
-<h3 id="ollama-connection-issues"><a class="header" href="#ollama-connection-issues">Ollama Connection Issues</a></h3>
-<p>If you have trouble connecting to Ollama:</p>
-<pre><code class="language-bash"># Check if Ollama is running
-curl http://localhost:11434/api/version
-
-# Check available models
-ollama list
-
-# Pull the model if it's not available
-ollama pull llama2
-</code></pre>
-<h3 id="memory-issues"><a class="header" href="#memory-issues">Memory Issues</a></h3>
-<p>If you encounter memory issues with large models:</p>
-<pre><code class="language-bash"># Use a smaller model
-qitops generate --test-type api --description "Test description" --model phi --model-path /path/to/phi-2.gguf
-
-# Reduce context size
-qitops generate --test-type api --description "Test description" --context-size 2048
-</code></pre>
-<h2 id="environment-variables"><a class="header" href="#environment-variables">Environment Variables</a></h2>
-<p>QitOps supports the following environment variables for AI features:</p>
-<div class="table-wrapper"><table><thead><tr><th>Variable</th><th>Description</th><th>Default</th></tr></thead><tbody>
-<tr><td><code>QITOPS_OFFLINE</code></td><td>Run in offline mode</td><td><code>false</code></td></tr>
-<tr><td><code>QITOPS_MODEL_PATH</code></td><td>Path to the model file</td><td>None</td></tr>
-<tr><td><code>QITOPS_OLLAMA_URL</code></td><td>URL for Ollama server</td><td><code>http://localhost:11434</code></td></tr>
-<tr><td><code>QITOPS_TEMPERATURE</code></td><td>Temperature for generation</td><td><code>0.7</code></td></tr>
-<tr><td><code>QITOPS_CONTEXT_SIZE</code></td><td>Context size in tokens</td><td><code>4096</code></td></tr>
-<tr><td><code>QITOPS_MAX_TOKENS</code></td><td>Maximum tokens for generation</td><td><code>2048</code></td></tr>
-<tr><td><code>QITOPS_SYSTEM_PROMPT</code></td><td>System prompt for the model</td><td>Default system prompt</td></tr>
-</tbody></table>
-</div>
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="best-practices.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="ai-features.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
@@ -348,7 +182,7 @@ qitops generate --test-type api --description "Test description" --context-size 
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="best-practices.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="ai-features.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 

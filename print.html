@@ -1693,6 +1693,7 @@ cargo build --release --target x86_64-unknown-linux-musl
 </ul>
 <h2 id="license"><a class="header" href="#license">License</a></h2>
 <p>This project is licensed under the MIT License - see the LICENSE file for details.</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="why-qitops"><a class="header" href="#why-qitops">Why QitOps?</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installation-1"><a class="header" href="#installation-1">Installation</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="quick-start-1"><a class="header" href="#quick-start-1">Quick Start</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="features-1"><a class="header" href="#features-1">Features</a></h1>
@@ -1701,479 +1702,7 @@ cargo build --release --target x86_64-unknown-linux-musl
 <div style="break-before: page; page-break-before: always;"></div><h1 id="performance-testing-5"><a class="header" href="#performance-testing-5">Performance Testing</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="security-testing-5"><a class="header" href="#security-testing-5">Security Testing</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="web-testing-5"><a class="header" href="#web-testing-5">Web Testing</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ai-powered-features-2"><a class="header" href="#ai-powered-features-2">AI-Powered Features</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-reference-1"><a class="header" href="#configuration-reference-1">Configuration Reference</a></h1>
-<p>This page provides detailed information on configuring QitOps for different test types.</p>
-<h2 id="api-test-configuration-2"><a class="header" href="#api-test-configuration-2">API Test Configuration</a></h2>
-<pre><code class="language-json">{
-    "name": "Example API Test",
-    "description": "Test description",
-    "timeout": 30,
-    "retries": 3,
-    "environment": "production",
-    "url": "https://api.example.com",
-    "method": "GET",
-    "headers": {
-        "Accept": "application/json",
-        "User-Agent": "QitOps-Test"
-    },
-    "expected_status": 200,
-    "expected_body": {
-        "field1": "value1",
-        "field2": "value2"
-    },
-    "max_response_time": 2,
-    "expected_headers": {
-        "content-type": "application/json",
-        "cache-control": "no-cache"
-    },
-    "retry": {
-        "max_retries": 3,
-        "initial_delay_ms": 100,
-        "max_delay_ms": 1000,
-        "retry_status_codes": [408, 429, 500, 502, 503, 504],
-        "retry_on_timeout": true,
-        "retry_on_connection_error": true
-    }
-}
-</code></pre>
-<h3 id="api-test-configuration-fields"><a class="header" href="#api-test-configuration-fields">API Test Configuration Fields</a></h3>
-<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody>
-<tr><td>name</td><td>string</td><td>Yes</td><td>Name of the test</td></tr>
-<tr><td>description</td><td>string</td><td>No</td><td>Description of the test</td></tr>
-<tr><td>timeout</td><td>number</td><td>No</td><td>Request timeout in seconds (default: 30)</td></tr>
-<tr><td>retries</td><td>number</td><td>No</td><td>Number of retries (default: 3)</td></tr>
-<tr><td>environment</td><td>string</td><td>No</td><td>Environment to use (default: production)</td></tr>
-<tr><td>url</td><td>string</td><td>Yes</td><td>URL to test</td></tr>
-<tr><td>method</td><td>string</td><td>Yes</td><td>HTTP method (GET, POST, PUT, DELETE, etc.)</td></tr>
-<tr><td>headers</td><td>object</td><td>No</td><td>HTTP headers to send</td></tr>
-<tr><td>body</td><td>object/string</td><td>No</td><td>Request body (JSON object or string)</td></tr>
-<tr><td>expected_status</td><td>number</td><td>No</td><td>Expected HTTP status code (default: 200)</td></tr>
-<tr><td>expected_body</td><td>object/string</td><td>No</td><td>Expected response body (JSON object or string)</td></tr>
-<tr><td>max_response_time</td><td>number</td><td>No</td><td>Maximum acceptable response time in seconds</td></tr>
-<tr><td>expected_headers</td><td>object</td><td>No</td><td>Expected response headers</td></tr>
-<tr><td>retry</td><td>object</td><td>No</td><td>Retry configuration</td></tr>
-</tbody></table>
-</div>
-<h2 id="api-collection-configuration-2"><a class="header" href="#api-collection-configuration-2">API Collection Configuration</a></h2>
-<pre><code class="language-json">{
-    "name": "GitHub API Collection",
-    "description": "A collection of GitHub API tests",
-    "version": "1.0.0",
-    "variables": {
-        "base_url": "https://api.github.com",
-        "username": "octocat",
-        "repo": "Hello-World"
-    },
-    "auth": {
-        "type": "bearer",
-        "token": "{{GITHUB_TOKEN}}"
-    },
-    "defaults": {
-        "headers": {
-            "Accept": "application/vnd.github.v3+json",
-            "User-Agent": "QitOps-Test"
-        },
-        "timeout": 30,
-        "retries": 3
-    },
-    "requests": [
-        {
-            "name": "Get User",
-            "description": "Get a GitHub user",
-            "id": "get-user",
-            "url": "{{base_url}}/users/{{username}}",
-            "method": "GET",
-            "expected_status": 200,
-            "expected_body": {
-                "login": "{{username}}",
-                "type": "User"
-            },
-            "capture": {
-                "user_id": "$.id",
-                "user_url": "$.url"
-            }
-        },
-        {
-            "name": "Get User Repos",
-            "description": "Get repositories for a user",
-            "id": "get-user-repos",
-            "url": "{{user_url}}/repos",
-            "method": "GET",
-            "depends_on": ["get-user"],
-            "expected_status": 200
-        }
-    ],
-    "environments": {
-        "production": {
-            "base_url": "https://api.github.com"
-        },
-        "staging": {
-            "base_url": "https://api.staging.github.com"
-        }
-    },
-    "run_options": {
-        "sequential": true,
-        "stop_on_failure": true,
-        "delay_between_requests_ms": 500
-    }
-}
-</code></pre>
-<h2 id="performance-test-configuration-2"><a class="header" href="#performance-test-configuration-2">Performance Test Configuration</a></h2>
-<pre><code class="language-json">{
-    "name": "Sample Performance Test",
-    "description": "Load testing a public API endpoint",
-    "timeout": 30,
-    "retries": 3,
-    "environment": "production",
-    "target_url": "https://api.example.com/endpoint",
-    "method": "GET",
-    "headers": {
-        "Accept": "application/json"
-    },
-    "success_threshold": 95.0,
-    "ramp_up_time_secs": 5
-}
-</code></pre>
-<h2 id="security-test-configuration-2"><a class="header" href="#security-test-configuration-2">Security Test Configuration</a></h2>
-<pre><code class="language-json">{
-    "name": "Security Scan",
-    "description": "Comprehensive security scan of the API",
-    "timeout": 30,
-    "retries": 3,
-    "environment": "production",
-    "target_url": "https://api.example.com",
-    "headers": {
-        "Accept": "application/json"
-    },
-    "auth": {
-        "type": "bearer",
-        "token": "your-token"
-    },
-    "scan_types": [
-        "headers",
-        "ssl",
-        "vulnerabilities",
-        "sensitive-data"
-    ],
-    "max_high_severity_findings": 0
-}
-</code></pre>
-<h2 id="web-test-configuration-2"><a class="header" href="#web-test-configuration-2">Web Test Configuration</a></h2>
-<pre><code class="language-json">{
-    "name": "Sample Web Test",
-    "description": "Testing a public website",
-    "timeout": 30,
-    "retries": 3,
-    "environment": "production",
-    "target_url": "https://example.com",
-    "viewport": {
-        "width": 1280,
-        "height": 800,
-        "device_scale_factor": 1.0,
-        "is_mobile": false
-    },
-    "wait_for_selector": "body",
-    "wait_timeout_secs": 10,
-    "screenshots": true,
-    "user_agent": "QitOps-WebTester/1.0",
-    "assertions": [
-        {
-            "assertion_type": "title",
-            "expected_value": "Example Domain",
-            "comparison": "contains"
-        },
-        {
-            "assertion_type": "element",
-            "selector": "h1",
-            "expected_value": "true"
-        }
-    ],
-    "actions": [
-        {
-            "action_type": "wait",
-            "wait_time_ms": 1000
-        },
-        {
-            "action_type": "click",
-            "selector": "a"
-        }
-    ]
-}
-</code></pre>
-<h2 id="ai-configuration-2"><a class="header" href="#ai-configuration-2">AI Configuration</a></h2>
-<pre><code class="language-json">{
-    "model_type": "llama",
-    "model_path": "/usr/local/share/models/llama-2-7b-chat.gguf",
-    "context_size": 4096,
-    "temperature": 0.7,
-    "max_tokens": 2048,
-    "system_prompt": "You are an AI assistant specialized in software testing. Your task is to help generate test configurations, analyze test results, and suggest improvements."
-}
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="usage-guide"><a class="header" href="#usage-guide">Usage Guide</a></h1>
-<p>This page provides detailed information on using QitOps for different testing scenarios.</p>
-<h2 id="command-line-interface"><a class="header" href="#command-line-interface">Command Line Interface</a></h2>
-<p>QitOps provides a unified command-line interface for all testing types:</p>
-<pre><code class="language-bash">qitops [global options] &lt;command&gt; [command options]
-</code></pre>
-<h3 id="global-options-1"><a class="header" href="#global-options-1">Global Options</a></h3>
-<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
-<tr><td>-r, –report <FORMAT></td><td>Report format (json, html, xml, csv)</td></tr>
-<tr><td>-o, –output <FILE></td><td>Output file for the report</td></tr>
-<tr><td>–ci-mode</td><td>Run in CI mode (reduced output, exit code based on test results)</td></tr>
-<tr><td>-e, –environment <ENV></td><td>Environment to use (default: production)</td></tr>
-<tr><td>-v, –verbose</td><td>Enable verbose output</td></tr>
-<tr><td>-h, –help</td><td>Show help</td></tr>
-<tr><td>-V, –version</td><td>Show version</td></tr>
-</tbody></table>
-</div>
-<h3 id="commands"><a class="header" href="#commands">Commands</a></h3>
-<div class="table-wrapper"><table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody>
-<tr><td>api</td><td>Run API tests</td></tr>
-<tr><td>collection</td><td>Run API collection tests</td></tr>
-<tr><td>performance</td><td>Run performance tests</td></tr>
-<tr><td>security</td><td>Run security tests</td></tr>
-<tr><td>web</td><td>Run web tests</td></tr>
-<tr><td>data-driven</td><td>Run data-driven tests</td></tr>
-<tr><td>generate</td><td>Generate test configurations using AI</td></tr>
-<tr><td>analyze</td><td>Analyze test results using AI</td></tr>
-<tr><td>improve</td><td>Generate improvement suggestions using AI</td></tr>
-</tbody></table>
-</div>
-<h2 id="api-testing-6"><a class="header" href="#api-testing-6">API Testing</a></h2>
-<pre><code class="language-bash"># Run a single API test
-qitops api -c tests/configs/api_test.json
-
-# Run tests in a specific environment
-qitops api -c tests/configs/api_test.json -e production
-
-# Run with custom variables
-qitops api -c tests/configs/api_test.json -v base_url=https://api.example.com -v api_key=12345
-</code></pre>
-<h2 id="api-collection-testing"><a class="header" href="#api-collection-testing">API Collection Testing</a></h2>
-<pre><code class="language-bash"># Run an API collection
-qitops collection -c tests/configs/api_collection.json
-
-# Run with environment variables
-qitops collection -c tests/configs/api_collection.json -v API_KEY=your-api-key
-
-# Run with a specific environment
-qitops collection -c tests/configs/api_collection.json -e staging
-</code></pre>
-<h2 id="performance-testing-6"><a class="header" href="#performance-testing-6">Performance Testing</a></h2>
-<pre><code class="language-bash"># Run a basic performance test
-qitops performance -c tests/configs/performance_test.json -u 10 -d 30
-
-# Run with custom users and duration
-qitops performance -c tests/configs/performance_test.json -u 20 -d 60
-
-# Run with a specific ramp-up time
-qitops performance -c tests/configs/performance_test.json -u 10 -d 30 -r 5
-</code></pre>
-<h2 id="enhanced-performance-testing-5"><a class="header" href="#enhanced-performance-testing-5">Enhanced Performance Testing</a></h2>
-<pre><code class="language-bash"># Run an enhanced performance test with multiple scenarios
-qitops performance -c tests/configs/enhanced_performance_test.json
-
-# Run with streaming metrics
-qitops performance -c tests/configs/enhanced_performance_test.json --stream-metrics
-
-# Run with custom metrics interval
-qitops performance -c tests/configs/enhanced_performance_test.json --metrics-interval 10
-</code></pre>
-<h2 id="security-testing-6"><a class="header" href="#security-testing-6">Security Testing</a></h2>
-<pre><code class="language-bash"># Run a security test
-qitops security -c tests/configs/security_test.json
-
-# Run with a specific scan depth
-qitops security -c tests/configs/security_test.json -d 3
-
-# Run with specific scan types
-qitops security -c tests/configs/security_test.json --scan-types headers,ssl
-</code></pre>
-<h2 id="web-testing-6"><a class="header" href="#web-testing-6">Web Testing</a></h2>
-<pre><code class="language-bash"># Run a web test
-qitops web -c tests/configs/web_test.json
-
-# Run in headless mode
-qitops web -c tests/configs/web_test.json --headless
-
-# Run with custom viewport
-qitops web -c tests/configs/web_test.json --width 1920 --height 1080
-</code></pre>
-<h2 id="data-driven-testing-5"><a class="header" href="#data-driven-testing-5">Data-Driven Testing</a></h2>
-<pre><code class="language-bash"># Run data-driven tests with CSV data
-qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv
-
-# Run data-driven tests with JSON data
-qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/products.json -t json
-
-# Run with a limit on iterations
-qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv --limit 10
-
-# Run with stop-on-failure
-qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv --stop-on-failure
-</code></pre>
-<h2 id="ai-features-1"><a class="header" href="#ai-features-1">AI Features</a></h2>
-<pre><code class="language-bash"># Generate an API test configuration
-qitops generate --test-type api --description "Test the GitHub API to fetch user information" --output github_test.json
-
-# Generate a performance test configuration
-qitops generate --test-type performance --description "Load test for a web service" --output performance_test.json
-
-# Analyze test results
-qitops analyze --results test_result.json --output analysis.md
-
-# Generate improvement suggestions
-qitops improve --results test_result.json --output improvements.md
-
-# Use a custom AI model
-qitops generate --test-type api --description "Test description" --model custom --model-path /path/to/model.gguf
-</code></pre>
-<h2 id="cicd-integration-4"><a class="header" href="#cicd-integration-4">CI/CD Integration</a></h2>
-<pre><code class="language-bash"># Run in CI mode with JSON report
-qitops --ci-mode -r json -o results.json api -c tests/configs/api_test.json
-
-# Run in CI mode with XML report (JUnit format)
-qitops --ci-mode -r xml -o test-results.xml api -c tests/configs/api_test.json
-
-# Run in CI mode with HTML report
-qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
-</code></pre>
-<h2 id="environment-variables"><a class="header" href="#environment-variables">Environment Variables</a></h2>
-<p>QitOps supports the following environment variables:</p>
-<div class="table-wrapper"><table><thead><tr><th>Variable</th><th>Description</th></tr></thead><tbody>
-<tr><td>QITOPS_ENV</td><td>Default environment to use</td></tr>
-<tr><td>QITOPS_REPORT_FORMAT</td><td>Default report format</td></tr>
-<tr><td>QITOPS_OUTPUT_FILE</td><td>Default output file</td></tr>
-<tr><td>QITOPS_CI_MODE</td><td>Run in CI mode if set to “true”</td></tr>
-<tr><td>QITOPS_VERBOSE</td><td>Enable verbose output if set to “true”</td></tr>
-<tr><td>QITOPS_CONFIG_DIR</td><td>Directory containing configuration files</td></tr>
-<tr><td>QITOPS_DATA_DIR</td><td>Directory containing data files</td></tr>
-<tr><td>QITOPS_MODEL_PATH</td><td>Path to AI model weights</td></tr>
-</tbody></table>
-</div><div style="break-before: page; page-break-before: always;"></div><h1 id="best-practices-1"><a class="header" href="#best-practices-1">Best Practices</a></h1>
-<p>This page provides recommendations on how to use QitOps effectively.</p>
-<h2 id="general-best-practices"><a class="header" href="#general-best-practices">General Best Practices</a></h2>
-<h3 id="configuration-management"><a class="header" href="#configuration-management">Configuration Management</a></h3>
-<ul>
-<li><strong>Use Version Control</strong>: Store your test configurations in a version control system like Git.</li>
-<li><strong>Environment-Specific Configurations</strong>: Use environment-specific configurations for different environments (development, staging, production).</li>
-<li><strong>Parameterize Configurations</strong>: Use variables and environment variables to parameterize your configurations.</li>
-<li><strong>Validate Configurations</strong>: Use the JSON schema validation feature to validate your configurations.</li>
-</ul>
-<h3 id="test-organization"><a class="header" href="#test-organization">Test Organization</a></h3>
-<ul>
-<li><strong>Group Related Tests</strong>: Group related tests into collections or directories.</li>
-<li><strong>Use Descriptive Names</strong>: Use descriptive names for your tests and collections.</li>
-<li><strong>Include Descriptions</strong>: Include descriptions for your tests and collections to document their purpose.</li>
-<li><strong>Tag Tests</strong>: Use tags to categorize tests for easier filtering and reporting.</li>
-</ul>
-<h3 id="cicd-integration-5"><a class="header" href="#cicd-integration-5">CI/CD Integration</a></h3>
-<ul>
-<li><strong>Use CI Mode</strong>: Use the <code>--ci-mode</code> flag when running tests in CI/CD pipelines.</li>
-<li><strong>Generate Reports</strong>: Generate reports in a format that can be consumed by your CI/CD system.</li>
-<li><strong>Set Exit Codes</strong>: Use exit codes to determine the success or failure of your tests.</li>
-<li><strong>Store Artifacts</strong>: Store test results and reports as artifacts for historical analysis.</li>
-</ul>
-<h2 id="api-testing-best-practices"><a class="header" href="#api-testing-best-practices">API Testing Best Practices</a></h2>
-<h3 id="test-design"><a class="header" href="#test-design">Test Design</a></h3>
-<ul>
-<li><strong>Test Happy Paths</strong>: Test the expected behavior of your API.</li>
-<li><strong>Test Edge Cases</strong>: Test edge cases and error conditions.</li>
-<li><strong>Test Performance</strong>: Test the performance of your API under different loads.</li>
-<li><strong>Test Security</strong>: Test the security of your API.</li>
-</ul>
-<h3 id="request-configuration"><a class="header" href="#request-configuration">Request Configuration</a></h3>
-<ul>
-<li><strong>Set Timeouts</strong>: Set appropriate timeouts for your requests.</li>
-<li><strong>Configure Retries</strong>: Configure retries for transient failures.</li>
-<li><strong>Set Headers</strong>: Set appropriate headers for your requests.</li>
-<li><strong>Validate Responses</strong>: Validate response status codes, headers, and bodies.</li>
-</ul>
-<h3 id="collections"><a class="header" href="#collections">Collections</a></h3>
-<ul>
-<li><strong>Define Dependencies</strong>: Define dependencies between requests to create test workflows.</li>
-<li><strong>Capture Data</strong>: Capture data from responses to use in subsequent requests.</li>
-<li><strong>Use Variables</strong>: Use variables to parameterize your requests.</li>
-<li><strong>Set Default Headers</strong>: Set default headers for all requests in a collection.</li>
-</ul>
-<h2 id="performance-testing-best-practices"><a class="header" href="#performance-testing-best-practices">Performance Testing Best Practices</a></h2>
-<h3 id="test-design-1"><a class="header" href="#test-design-1">Test Design</a></h3>
-<ul>
-<li><strong>Define Clear Objectives</strong>: Define clear performance objectives for your tests.</li>
-<li><strong>Start Small</strong>: Start with a small number of users and gradually increase.</li>
-<li><strong>Test Different Scenarios</strong>: Test different scenarios to understand the performance characteristics of your system.</li>
-<li><strong>Monitor System Resources</strong>: Monitor system resources during performance tests.</li>
-</ul>
-<h3 id="load-profiles"><a class="header" href="#load-profiles">Load Profiles</a></h3>
-<ul>
-<li><strong>Use Appropriate Load Profiles</strong>: Use appropriate load profiles for your tests (constant, ramping, spike).</li>
-<li><strong>Set Realistic Ramp-Up Times</strong>: Set realistic ramp-up times to avoid overwhelming your system.</li>
-<li><strong>Define Thresholds</strong>: Define thresholds for pass/fail criteria.</li>
-<li><strong>Use Tags</strong>: Use tags to categorize metrics for detailed analysis.</li>
-</ul>
-<h2 id="security-testing-best-practices"><a class="header" href="#security-testing-best-practices">Security Testing Best Practices</a></h2>
-<h3 id="test-design-2"><a class="header" href="#test-design-2">Test Design</a></h3>
-<ul>
-<li><strong>Define Security Requirements</strong>: Define clear security requirements for your tests.</li>
-<li><strong>Test Different Scan Types</strong>: Test different scan types to identify different types of vulnerabilities.</li>
-<li><strong>Set Severity Thresholds</strong>: Set severity thresholds for pass/fail criteria.</li>
-<li><strong>Regular Testing</strong>: Perform security tests regularly to identify new vulnerabilities.</li>
-</ul>
-<h3 id="authentication"><a class="header" href="#authentication">Authentication</a></h3>
-<ul>
-<li><strong>Test Authentication</strong>: Test authentication mechanisms to ensure they are secure.</li>
-<li><strong>Test Authorization</strong>: Test authorization to ensure users can only access resources they are authorized to access.</li>
-<li><strong>Test Input Validation</strong>: Test input validation to prevent injection attacks.</li>
-<li><strong>Test Error Handling</strong>: Test error handling to ensure sensitive information is not leaked.</li>
-</ul>
-<h2 id="web-testing-best-practices"><a class="header" href="#web-testing-best-practices">Web Testing Best Practices</a></h2>
-<h3 id="test-design-3"><a class="header" href="#test-design-3">Test Design</a></h3>
-<ul>
-<li><strong>Test Different Browsers</strong>: Test your web application in different browsers.</li>
-<li><strong>Test Different Devices</strong>: Test your web application on different devices.</li>
-<li><strong>Test Responsive Design</strong>: Test your web application’s responsive design.</li>
-<li><strong>Test Accessibility</strong>: Test your web application’s accessibility.</li>
-</ul>
-<h3 id="test-automation"><a class="header" href="#test-automation">Test Automation</a></h3>
-<ul>
-<li><strong>Use Selectors</strong>: Use selectors to identify elements on the page.</li>
-<li><strong>Set Wait Conditions</strong>: Set wait conditions to ensure elements are loaded before interacting with them.</li>
-<li><strong>Capture Screenshots</strong>: Capture screenshots to document test results.</li>
-<li><strong>Test User Flows</strong>: Test common user flows to ensure they work as expected.</li>
-</ul>
-<h2 id="ai-features-best-practices"><a class="header" href="#ai-features-best-practices">AI Features Best Practices</a></h2>
-<h3 id="test-generation"><a class="header" href="#test-generation">Test Generation</a></h3>
-<ul>
-<li><strong>Provide Clear Descriptions</strong>: Provide clear descriptions when generating tests.</li>
-<li><strong>Review Generated Tests</strong>: Review generated tests to ensure they meet your requirements.</li>
-<li><strong>Customize Generated Tests</strong>: Customize generated tests to fit your specific needs.</li>
-<li><strong>Use as Starting Points</strong>: Use generated tests as starting points for more complex tests.</li>
-</ul>
-<h3 id="test-analysis"><a class="header" href="#test-analysis">Test Analysis</a></h3>
-<ul>
-<li><strong>Analyze Test Results</strong>: Analyze test results to identify patterns and issues.</li>
-<li><strong>Implement Suggestions</strong>: Implement improvement suggestions to enhance your tests.</li>
-<li><strong>Combine with Manual Analysis</strong>: Combine AI analysis with manual analysis for comprehensive insights.</li>
-<li><strong>Iterate and Improve</strong>: Use analysis results to iterate and improve your tests.</li>
-</ul>
-<h2 id="data-driven-testing-best-practices"><a class="header" href="#data-driven-testing-best-practices">Data-Driven Testing Best Practices</a></h2>
-<h3 id="test-design-4"><a class="header" href="#test-design-4">Test Design</a></h3>
-<ul>
-<li><strong>Use Appropriate Data Formats</strong>: Use appropriate data formats (CSV, JSON) for your tests.</li>
-<li><strong>Structure Data Properly</strong>: Structure your data properly to ensure it can be used effectively.</li>
-<li><strong>Include Edge Cases</strong>: Include edge cases in your data to test boundary conditions.</li>
-<li><strong>Parameterize Tests</strong>: Parameterize your tests to use data from external sources.</li>
-</ul>
-<h3 id="test-execution"><a class="header" href="#test-execution">Test Execution</a></h3>
-<ul>
-<li><strong>Set Iteration Limits</strong>: Set limits on the number of iterations to avoid long-running tests.</li>
-<li><strong>Configure Stop-on-Failure</strong>: Configure whether to stop on failure or continue with other iterations.</li>
-<li><strong>Generate Detailed Reports</strong>: Generate detailed reports for each iteration.</li>
-<li><strong>Analyze Aggregate Results</strong>: Analyze aggregate results to identify patterns and issues.</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ai-features-2"><a class="header" href="#ai-features-2">AI Features</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ai-features-1"><a class="header" href="#ai-features-1">AI Features</a></h1>
 <p>QitOps includes powerful AI features that can help you generate test configurations, analyze test results, and suggest improvements to your tests. These features are designed to work completely offline with local LLM models, ensuring your data never leaves your machine.</p>
 <h2 id="installation-2"><a class="header" href="#installation-2">Installation</a></h2>
 <p>To use the AI features, you need to install QitOps with the <code>ai</code> feature flag:</p>
@@ -2223,7 +1752,7 @@ export QITOPS_MODEL_PATH="/path/to/model.gguf"
 # Run AI features offline
 qitops analyze --results test_results.json --output analysis.md
 </code></pre>
-<h2 id="ai-features-3"><a class="header" href="#ai-features-3">AI Features</a></h2>
+<h2 id="ai-features-2"><a class="header" href="#ai-features-2">AI Features</a></h2>
 <h3 id="test-configuration-generation"><a class="header" href="#test-configuration-generation">Test Configuration Generation</a></h3>
 <p>Generate test configurations from natural language descriptions:</p>
 <pre><code class="language-bash"># Generate an API test configuration
@@ -2329,7 +1858,7 @@ qitops generate --test-type api --description "Test description" --model phi --m
 # Reduce context size
 qitops generate --test-type api --description "Test description" --context-size 2048
 </code></pre>
-<h2 id="environment-variables-1"><a class="header" href="#environment-variables-1">Environment Variables</a></h2>
+<h2 id="environment-variables"><a class="header" href="#environment-variables">Environment Variables</a></h2>
 <p>QitOps supports the following environment variables for AI features:</p>
 <div class="table-wrapper"><table><thead><tr><th>Variable</th><th>Description</th><th>Default</th></tr></thead><tbody>
 <tr><td><code>QITOPS_OFFLINE</code></td><td>Run in offline mode</td><td><code>false</code></td></tr>
@@ -2340,7 +1869,11 @@ qitops generate --test-type api --description "Test description" --context-size 
 <tr><td><code>QITOPS_MAX_TOKENS</code></td><td>Maximum tokens for generation</td><td><code>2048</code></td></tr>
 <tr><td><code>QITOPS_SYSTEM_PROMPT</code></td><td>System prompt for the model</td><td>Default system prompt</td></tr>
 </tbody></table>
-</div><div style="break-before: page; page-break-before: always;"></div><h1 id="testing-ai-features-2"><a class="header" href="#testing-ai-features-2">Testing AI Features</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="test-generation"><a class="header" href="#test-generation">Test Generation</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="results-analysis"><a class="header" href="#results-analysis">Results Analysis</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="improvement-suggestions-1"><a class="header" href="#improvement-suggestions-1">Improvement Suggestions</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="local-llm-support"><a class="header" href="#local-llm-support">Local LLM Support</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="testing-ai-features-2"><a class="header" href="#testing-ai-features-2">Testing AI Features</a></h1>
 <p>This guide provides detailed instructions on how to test the AI features of QitOps locally. These features include test configuration generation, test results analysis, and improvement suggestions.</p>
 <h2 id="prerequisites-1"><a class="header" href="#prerequisites-1">Prerequisites</a></h2>
 <p>Before testing the AI features, make sure you have:</p>
@@ -2575,6 +2108,479 @@ cargo run --features ai -- generate --test-type api --description "Test descript
 # Or reduce context size
 cargo run --features ai -- generate --test-type api --description "Test description" --context-size 2048
 </code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="usage-guide"><a class="header" href="#usage-guide">Usage Guide</a></h1>
+<p>This page provides detailed information on using QitOps for different testing scenarios.</p>
+<h2 id="command-line-interface"><a class="header" href="#command-line-interface">Command Line Interface</a></h2>
+<p>QitOps provides a unified command-line interface for all testing types:</p>
+<pre><code class="language-bash">qitops [global options] &lt;command&gt; [command options]
+</code></pre>
+<h3 id="global-options-1"><a class="header" href="#global-options-1">Global Options</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td>-r, –report <FORMAT></td><td>Report format (json, html, xml, csv)</td></tr>
+<tr><td>-o, –output <FILE></td><td>Output file for the report</td></tr>
+<tr><td>–ci-mode</td><td>Run in CI mode (reduced output, exit code based on test results)</td></tr>
+<tr><td>-e, –environment <ENV></td><td>Environment to use (default: production)</td></tr>
+<tr><td>-v, –verbose</td><td>Enable verbose output</td></tr>
+<tr><td>-h, –help</td><td>Show help</td></tr>
+<tr><td>-V, –version</td><td>Show version</td></tr>
+</tbody></table>
+</div>
+<h3 id="commands"><a class="header" href="#commands">Commands</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Command</th><th>Description</th></tr></thead><tbody>
+<tr><td>api</td><td>Run API tests</td></tr>
+<tr><td>collection</td><td>Run API collection tests</td></tr>
+<tr><td>performance</td><td>Run performance tests</td></tr>
+<tr><td>security</td><td>Run security tests</td></tr>
+<tr><td>web</td><td>Run web tests</td></tr>
+<tr><td>data-driven</td><td>Run data-driven tests</td></tr>
+<tr><td>generate</td><td>Generate test configurations using AI</td></tr>
+<tr><td>analyze</td><td>Analyze test results using AI</td></tr>
+<tr><td>improve</td><td>Generate improvement suggestions using AI</td></tr>
+</tbody></table>
+</div>
+<h2 id="api-testing-6"><a class="header" href="#api-testing-6">API Testing</a></h2>
+<pre><code class="language-bash"># Run a single API test
+qitops api -c tests/configs/api_test.json
+
+# Run tests in a specific environment
+qitops api -c tests/configs/api_test.json -e production
+
+# Run with custom variables
+qitops api -c tests/configs/api_test.json -v base_url=https://api.example.com -v api_key=12345
+</code></pre>
+<h2 id="api-collection-testing"><a class="header" href="#api-collection-testing">API Collection Testing</a></h2>
+<pre><code class="language-bash"># Run an API collection
+qitops collection -c tests/configs/api_collection.json
+
+# Run with environment variables
+qitops collection -c tests/configs/api_collection.json -v API_KEY=your-api-key
+
+# Run with a specific environment
+qitops collection -c tests/configs/api_collection.json -e staging
+</code></pre>
+<h2 id="performance-testing-6"><a class="header" href="#performance-testing-6">Performance Testing</a></h2>
+<pre><code class="language-bash"># Run a basic performance test
+qitops performance -c tests/configs/performance_test.json -u 10 -d 30
+
+# Run with custom users and duration
+qitops performance -c tests/configs/performance_test.json -u 20 -d 60
+
+# Run with a specific ramp-up time
+qitops performance -c tests/configs/performance_test.json -u 10 -d 30 -r 5
+</code></pre>
+<h2 id="enhanced-performance-testing-5"><a class="header" href="#enhanced-performance-testing-5">Enhanced Performance Testing</a></h2>
+<pre><code class="language-bash"># Run an enhanced performance test with multiple scenarios
+qitops performance -c tests/configs/enhanced_performance_test.json
+
+# Run with streaming metrics
+qitops performance -c tests/configs/enhanced_performance_test.json --stream-metrics
+
+# Run with custom metrics interval
+qitops performance -c tests/configs/enhanced_performance_test.json --metrics-interval 10
+</code></pre>
+<h2 id="security-testing-6"><a class="header" href="#security-testing-6">Security Testing</a></h2>
+<pre><code class="language-bash"># Run a security test
+qitops security -c tests/configs/security_test.json
+
+# Run with a specific scan depth
+qitops security -c tests/configs/security_test.json -d 3
+
+# Run with specific scan types
+qitops security -c tests/configs/security_test.json --scan-types headers,ssl
+</code></pre>
+<h2 id="web-testing-6"><a class="header" href="#web-testing-6">Web Testing</a></h2>
+<pre><code class="language-bash"># Run a web test
+qitops web -c tests/configs/web_test.json
+
+# Run in headless mode
+qitops web -c tests/configs/web_test.json --headless
+
+# Run with custom viewport
+qitops web -c tests/configs/web_test.json --width 1920 --height 1080
+</code></pre>
+<h2 id="data-driven-testing-5"><a class="header" href="#data-driven-testing-5">Data-Driven Testing</a></h2>
+<pre><code class="language-bash"># Run data-driven tests with CSV data
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv
+
+# Run data-driven tests with JSON data
+qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/products.json -t json
+
+# Run with a limit on iterations
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv --limit 10
+
+# Run with stop-on-failure
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv --stop-on-failure
+</code></pre>
+<h2 id="ai-features-3"><a class="header" href="#ai-features-3">AI Features</a></h2>
+<pre><code class="language-bash"># Generate an API test configuration
+qitops generate --test-type api --description "Test the GitHub API to fetch user information" --output github_test.json
+
+# Generate a performance test configuration
+qitops generate --test-type performance --description "Load test for a web service" --output performance_test.json
+
+# Analyze test results
+qitops analyze --results test_result.json --output analysis.md
+
+# Generate improvement suggestions
+qitops improve --results test_result.json --output improvements.md
+
+# Use a custom AI model
+qitops generate --test-type api --description "Test description" --model custom --model-path /path/to/model.gguf
+</code></pre>
+<h2 id="cicd-integration-4"><a class="header" href="#cicd-integration-4">CI/CD Integration</a></h2>
+<pre><code class="language-bash"># Run in CI mode with JSON report
+qitops --ci-mode -r json -o results.json api -c tests/configs/api_test.json
+
+# Run in CI mode with XML report (JUnit format)
+qitops --ci-mode -r xml -o test-results.xml api -c tests/configs/api_test.json
+
+# Run in CI mode with HTML report
+qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
+</code></pre>
+<h2 id="environment-variables-1"><a class="header" href="#environment-variables-1">Environment Variables</a></h2>
+<p>QitOps supports the following environment variables:</p>
+<div class="table-wrapper"><table><thead><tr><th>Variable</th><th>Description</th></tr></thead><tbody>
+<tr><td>QITOPS_ENV</td><td>Default environment to use</td></tr>
+<tr><td>QITOPS_REPORT_FORMAT</td><td>Default report format</td></tr>
+<tr><td>QITOPS_OUTPUT_FILE</td><td>Default output file</td></tr>
+<tr><td>QITOPS_CI_MODE</td><td>Run in CI mode if set to “true”</td></tr>
+<tr><td>QITOPS_VERBOSE</td><td>Enable verbose output if set to “true”</td></tr>
+<tr><td>QITOPS_CONFIG_DIR</td><td>Directory containing configuration files</td></tr>
+<tr><td>QITOPS_DATA_DIR</td><td>Directory containing data files</td></tr>
+<tr><td>QITOPS_MODEL_PATH</td><td>Path to AI model weights</td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-reference-1"><a class="header" href="#configuration-reference-1">Configuration Reference</a></h1>
+<p>This page provides detailed information on configuring QitOps for different test types.</p>
+<h2 id="api-test-configuration-2"><a class="header" href="#api-test-configuration-2">API Test Configuration</a></h2>
+<pre><code class="language-json">{
+    "name": "Example API Test",
+    "description": "Test description",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "url": "https://api.example.com",
+    "method": "GET",
+    "headers": {
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Test"
+    },
+    "expected_status": 200,
+    "expected_body": {
+        "field1": "value1",
+        "field2": "value2"
+    },
+    "max_response_time": 2,
+    "expected_headers": {
+        "content-type": "application/json",
+        "cache-control": "no-cache"
+    },
+    "retry": {
+        "max_retries": 3,
+        "initial_delay_ms": 100,
+        "max_delay_ms": 1000,
+        "retry_status_codes": [408, 429, 500, 502, 503, 504],
+        "retry_on_timeout": true,
+        "retry_on_connection_error": true
+    }
+}
+</code></pre>
+<h3 id="api-test-configuration-fields"><a class="header" href="#api-test-configuration-fields">API Test Configuration Fields</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody>
+<tr><td>name</td><td>string</td><td>Yes</td><td>Name of the test</td></tr>
+<tr><td>description</td><td>string</td><td>No</td><td>Description of the test</td></tr>
+<tr><td>timeout</td><td>number</td><td>No</td><td>Request timeout in seconds (default: 30)</td></tr>
+<tr><td>retries</td><td>number</td><td>No</td><td>Number of retries (default: 3)</td></tr>
+<tr><td>environment</td><td>string</td><td>No</td><td>Environment to use (default: production)</td></tr>
+<tr><td>url</td><td>string</td><td>Yes</td><td>URL to test</td></tr>
+<tr><td>method</td><td>string</td><td>Yes</td><td>HTTP method (GET, POST, PUT, DELETE, etc.)</td></tr>
+<tr><td>headers</td><td>object</td><td>No</td><td>HTTP headers to send</td></tr>
+<tr><td>body</td><td>object/string</td><td>No</td><td>Request body (JSON object or string)</td></tr>
+<tr><td>expected_status</td><td>number</td><td>No</td><td>Expected HTTP status code (default: 200)</td></tr>
+<tr><td>expected_body</td><td>object/string</td><td>No</td><td>Expected response body (JSON object or string)</td></tr>
+<tr><td>max_response_time</td><td>number</td><td>No</td><td>Maximum acceptable response time in seconds</td></tr>
+<tr><td>expected_headers</td><td>object</td><td>No</td><td>Expected response headers</td></tr>
+<tr><td>retry</td><td>object</td><td>No</td><td>Retry configuration</td></tr>
+</tbody></table>
+</div>
+<h2 id="api-collection-configuration-2"><a class="header" href="#api-collection-configuration-2">API Collection Configuration</a></h2>
+<pre><code class="language-json">{
+    "name": "GitHub API Collection",
+    "description": "A collection of GitHub API tests",
+    "version": "1.0.0",
+    "variables": {
+        "base_url": "https://api.github.com",
+        "username": "octocat",
+        "repo": "Hello-World"
+    },
+    "auth": {
+        "type": "bearer",
+        "token": "{{GITHUB_TOKEN}}"
+    },
+    "defaults": {
+        "headers": {
+            "Accept": "application/vnd.github.v3+json",
+            "User-Agent": "QitOps-Test"
+        },
+        "timeout": 30,
+        "retries": 3
+    },
+    "requests": [
+        {
+            "name": "Get User",
+            "description": "Get a GitHub user",
+            "id": "get-user",
+            "url": "{{base_url}}/users/{{username}}",
+            "method": "GET",
+            "expected_status": 200,
+            "expected_body": {
+                "login": "{{username}}",
+                "type": "User"
+            },
+            "capture": {
+                "user_id": "$.id",
+                "user_url": "$.url"
+            }
+        },
+        {
+            "name": "Get User Repos",
+            "description": "Get repositories for a user",
+            "id": "get-user-repos",
+            "url": "{{user_url}}/repos",
+            "method": "GET",
+            "depends_on": ["get-user"],
+            "expected_status": 200
+        }
+    ],
+    "environments": {
+        "production": {
+            "base_url": "https://api.github.com"
+        },
+        "staging": {
+            "base_url": "https://api.staging.github.com"
+        }
+    },
+    "run_options": {
+        "sequential": true,
+        "stop_on_failure": true,
+        "delay_between_requests_ms": 500
+    }
+}
+</code></pre>
+<h2 id="performance-test-configuration-2"><a class="header" href="#performance-test-configuration-2">Performance Test Configuration</a></h2>
+<pre><code class="language-json">{
+    "name": "Sample Performance Test",
+    "description": "Load testing a public API endpoint",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "target_url": "https://api.example.com/endpoint",
+    "method": "GET",
+    "headers": {
+        "Accept": "application/json"
+    },
+    "success_threshold": 95.0,
+    "ramp_up_time_secs": 5
+}
+</code></pre>
+<h2 id="security-test-configuration-2"><a class="header" href="#security-test-configuration-2">Security Test Configuration</a></h2>
+<pre><code class="language-json">{
+    "name": "Security Scan",
+    "description": "Comprehensive security scan of the API",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "target_url": "https://api.example.com",
+    "headers": {
+        "Accept": "application/json"
+    },
+    "auth": {
+        "type": "bearer",
+        "token": "your-token"
+    },
+    "scan_types": [
+        "headers",
+        "ssl",
+        "vulnerabilities",
+        "sensitive-data"
+    ],
+    "max_high_severity_findings": 0
+}
+</code></pre>
+<h2 id="web-test-configuration-2"><a class="header" href="#web-test-configuration-2">Web Test Configuration</a></h2>
+<pre><code class="language-json">{
+    "name": "Sample Web Test",
+    "description": "Testing a public website",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "target_url": "https://example.com",
+    "viewport": {
+        "width": 1280,
+        "height": 800,
+        "device_scale_factor": 1.0,
+        "is_mobile": false
+    },
+    "wait_for_selector": "body",
+    "wait_timeout_secs": 10,
+    "screenshots": true,
+    "user_agent": "QitOps-WebTester/1.0",
+    "assertions": [
+        {
+            "assertion_type": "title",
+            "expected_value": "Example Domain",
+            "comparison": "contains"
+        },
+        {
+            "assertion_type": "element",
+            "selector": "h1",
+            "expected_value": "true"
+        }
+    ],
+    "actions": [
+        {
+            "action_type": "wait",
+            "wait_time_ms": 1000
+        },
+        {
+            "action_type": "click",
+            "selector": "a"
+        }
+    ]
+}
+</code></pre>
+<h2 id="ai-configuration-2"><a class="header" href="#ai-configuration-2">AI Configuration</a></h2>
+<pre><code class="language-json">{
+    "model_type": "llama",
+    "model_path": "/usr/local/share/models/llama-2-7b-chat.gguf",
+    "context_size": 4096,
+    "temperature": 0.7,
+    "max_tokens": 2048,
+    "system_prompt": "You are an AI assistant specialized in software testing. Your task is to help generate test configurations, analyze test results, and suggest improvements."
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="best-practices-1"><a class="header" href="#best-practices-1">Best Practices</a></h1>
+<p>This page provides recommendations on how to use QitOps effectively.</p>
+<h2 id="general-best-practices"><a class="header" href="#general-best-practices">General Best Practices</a></h2>
+<h3 id="configuration-management"><a class="header" href="#configuration-management">Configuration Management</a></h3>
+<ul>
+<li><strong>Use Version Control</strong>: Store your test configurations in a version control system like Git.</li>
+<li><strong>Environment-Specific Configurations</strong>: Use environment-specific configurations for different environments (development, staging, production).</li>
+<li><strong>Parameterize Configurations</strong>: Use variables and environment variables to parameterize your configurations.</li>
+<li><strong>Validate Configurations</strong>: Use the JSON schema validation feature to validate your configurations.</li>
+</ul>
+<h3 id="test-organization"><a class="header" href="#test-organization">Test Organization</a></h3>
+<ul>
+<li><strong>Group Related Tests</strong>: Group related tests into collections or directories.</li>
+<li><strong>Use Descriptive Names</strong>: Use descriptive names for your tests and collections.</li>
+<li><strong>Include Descriptions</strong>: Include descriptions for your tests and collections to document their purpose.</li>
+<li><strong>Tag Tests</strong>: Use tags to categorize tests for easier filtering and reporting.</li>
+</ul>
+<h3 id="cicd-integration-5"><a class="header" href="#cicd-integration-5">CI/CD Integration</a></h3>
+<ul>
+<li><strong>Use CI Mode</strong>: Use the <code>--ci-mode</code> flag when running tests in CI/CD pipelines.</li>
+<li><strong>Generate Reports</strong>: Generate reports in a format that can be consumed by your CI/CD system.</li>
+<li><strong>Set Exit Codes</strong>: Use exit codes to determine the success or failure of your tests.</li>
+<li><strong>Store Artifacts</strong>: Store test results and reports as artifacts for historical analysis.</li>
+</ul>
+<h2 id="api-testing-best-practices"><a class="header" href="#api-testing-best-practices">API Testing Best Practices</a></h2>
+<h3 id="test-design"><a class="header" href="#test-design">Test Design</a></h3>
+<ul>
+<li><strong>Test Happy Paths</strong>: Test the expected behavior of your API.</li>
+<li><strong>Test Edge Cases</strong>: Test edge cases and error conditions.</li>
+<li><strong>Test Performance</strong>: Test the performance of your API under different loads.</li>
+<li><strong>Test Security</strong>: Test the security of your API.</li>
+</ul>
+<h3 id="request-configuration"><a class="header" href="#request-configuration">Request Configuration</a></h3>
+<ul>
+<li><strong>Set Timeouts</strong>: Set appropriate timeouts for your requests.</li>
+<li><strong>Configure Retries</strong>: Configure retries for transient failures.</li>
+<li><strong>Set Headers</strong>: Set appropriate headers for your requests.</li>
+<li><strong>Validate Responses</strong>: Validate response status codes, headers, and bodies.</li>
+</ul>
+<h3 id="collections"><a class="header" href="#collections">Collections</a></h3>
+<ul>
+<li><strong>Define Dependencies</strong>: Define dependencies between requests to create test workflows.</li>
+<li><strong>Capture Data</strong>: Capture data from responses to use in subsequent requests.</li>
+<li><strong>Use Variables</strong>: Use variables to parameterize your requests.</li>
+<li><strong>Set Default Headers</strong>: Set default headers for all requests in a collection.</li>
+</ul>
+<h2 id="performance-testing-best-practices"><a class="header" href="#performance-testing-best-practices">Performance Testing Best Practices</a></h2>
+<h3 id="test-design-1"><a class="header" href="#test-design-1">Test Design</a></h3>
+<ul>
+<li><strong>Define Clear Objectives</strong>: Define clear performance objectives for your tests.</li>
+<li><strong>Start Small</strong>: Start with a small number of users and gradually increase.</li>
+<li><strong>Test Different Scenarios</strong>: Test different scenarios to understand the performance characteristics of your system.</li>
+<li><strong>Monitor System Resources</strong>: Monitor system resources during performance tests.</li>
+</ul>
+<h3 id="load-profiles"><a class="header" href="#load-profiles">Load Profiles</a></h3>
+<ul>
+<li><strong>Use Appropriate Load Profiles</strong>: Use appropriate load profiles for your tests (constant, ramping, spike).</li>
+<li><strong>Set Realistic Ramp-Up Times</strong>: Set realistic ramp-up times to avoid overwhelming your system.</li>
+<li><strong>Define Thresholds</strong>: Define thresholds for pass/fail criteria.</li>
+<li><strong>Use Tags</strong>: Use tags to categorize metrics for detailed analysis.</li>
+</ul>
+<h2 id="security-testing-best-practices"><a class="header" href="#security-testing-best-practices">Security Testing Best Practices</a></h2>
+<h3 id="test-design-2"><a class="header" href="#test-design-2">Test Design</a></h3>
+<ul>
+<li><strong>Define Security Requirements</strong>: Define clear security requirements for your tests.</li>
+<li><strong>Test Different Scan Types</strong>: Test different scan types to identify different types of vulnerabilities.</li>
+<li><strong>Set Severity Thresholds</strong>: Set severity thresholds for pass/fail criteria.</li>
+<li><strong>Regular Testing</strong>: Perform security tests regularly to identify new vulnerabilities.</li>
+</ul>
+<h3 id="authentication"><a class="header" href="#authentication">Authentication</a></h3>
+<ul>
+<li><strong>Test Authentication</strong>: Test authentication mechanisms to ensure they are secure.</li>
+<li><strong>Test Authorization</strong>: Test authorization to ensure users can only access resources they are authorized to access.</li>
+<li><strong>Test Input Validation</strong>: Test input validation to prevent injection attacks.</li>
+<li><strong>Test Error Handling</strong>: Test error handling to ensure sensitive information is not leaked.</li>
+</ul>
+<h2 id="web-testing-best-practices"><a class="header" href="#web-testing-best-practices">Web Testing Best Practices</a></h2>
+<h3 id="test-design-3"><a class="header" href="#test-design-3">Test Design</a></h3>
+<ul>
+<li><strong>Test Different Browsers</strong>: Test your web application in different browsers.</li>
+<li><strong>Test Different Devices</strong>: Test your web application on different devices.</li>
+<li><strong>Test Responsive Design</strong>: Test your web application’s responsive design.</li>
+<li><strong>Test Accessibility</strong>: Test your web application’s accessibility.</li>
+</ul>
+<h3 id="test-automation"><a class="header" href="#test-automation">Test Automation</a></h3>
+<ul>
+<li><strong>Use Selectors</strong>: Use selectors to identify elements on the page.</li>
+<li><strong>Set Wait Conditions</strong>: Set wait conditions to ensure elements are loaded before interacting with them.</li>
+<li><strong>Capture Screenshots</strong>: Capture screenshots to document test results.</li>
+<li><strong>Test User Flows</strong>: Test common user flows to ensure they work as expected.</li>
+</ul>
+<h2 id="ai-features-best-practices"><a class="header" href="#ai-features-best-practices">AI Features Best Practices</a></h2>
+<h3 id="test-generation-1"><a class="header" href="#test-generation-1">Test Generation</a></h3>
+<ul>
+<li><strong>Provide Clear Descriptions</strong>: Provide clear descriptions when generating tests.</li>
+<li><strong>Review Generated Tests</strong>: Review generated tests to ensure they meet your requirements.</li>
+<li><strong>Customize Generated Tests</strong>: Customize generated tests to fit your specific needs.</li>
+<li><strong>Use as Starting Points</strong>: Use generated tests as starting points for more complex tests.</li>
+</ul>
+<h3 id="test-analysis"><a class="header" href="#test-analysis">Test Analysis</a></h3>
+<ul>
+<li><strong>Analyze Test Results</strong>: Analyze test results to identify patterns and issues.</li>
+<li><strong>Implement Suggestions</strong>: Implement improvement suggestions to enhance your tests.</li>
+<li><strong>Combine with Manual Analysis</strong>: Combine AI analysis with manual analysis for comprehensive insights.</li>
+<li><strong>Iterate and Improve</strong>: Use analysis results to iterate and improve your tests.</li>
+</ul>
+<h2 id="data-driven-testing-best-practices"><a class="header" href="#data-driven-testing-best-practices">Data-Driven Testing Best Practices</a></h2>
+<h3 id="test-design-4"><a class="header" href="#test-design-4">Test Design</a></h3>
+<ul>
+<li><strong>Use Appropriate Data Formats</strong>: Use appropriate data formats (CSV, JSON) for your tests.</li>
+<li><strong>Structure Data Properly</strong>: Structure your data properly to ensure it can be used effectively.</li>
+<li><strong>Include Edge Cases</strong>: Include edge cases in your data to test boundary conditions.</li>
+<li><strong>Parameterize Tests</strong>: Parameterize your tests to use data from external sources.</li>
+</ul>
+<h3 id="test-execution"><a class="header" href="#test-execution">Test Execution</a></h3>
+<ul>
+<li><strong>Set Iteration Limits</strong>: Set limits on the number of iterations to avoid long-running tests.</li>
+<li><strong>Configure Stop-on-Failure</strong>: Configure whether to stop on failure or continue with other iterations.</li>
+<li><strong>Generate Detailed Reports</strong>: Generate detailed reports for each iteration.</li>
+<li><strong>Analyze Aggregate Results</strong>: Analyze aggregate results to identify patterns and issues.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="cicd-integration-6"><a class="header" href="#cicd-integration-6">CI/CD Integration</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="data-driven-testing-6"><a class="header" href="#data-driven-testing-6">Data-Driven Testing</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="qitops-roadmap"><a class="header" href="#qitops-roadmap">QitOps Roadmap</a></h1>
 <p>This document outlines the development roadmap for QitOps, positioning it as a compelling alternative to established testing tools like Postman and k6.</p>
 <h2 id="vision"><a class="header" href="#vision">Vision</a></h2>
@@ -2952,6 +2958,7 @@ cargo build --all-features
 </ol>
 <h2 id="thank-you"><a class="header" href="#thank-you">Thank You!</a></h2>
 <p>Your contributions help make QitOps better for everyone. We appreciate your time and effort!</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="license-1"><a class="header" href="#license-1">License</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="github-pages-setup"><a class="header" href="#github-pages-setup">GitHub Pages Setup</a></h1>
 <p>This document explains how the QitOps documentation is deployed to GitHub Pages.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
@@ -3088,7 +3095,6 @@ mdbook serve --open
 <li><code>custom.js</code>: Contains custom JavaScript for interactive features</li>
 </ul>
 <p>These files are referenced in the <code>book.toml</code> file.</p>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="license-1"><a class="header" href="#license-1">License</a></h1>
 
                     </main>
 
