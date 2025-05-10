@@ -38,7 +38,7 @@
 - [Roadmap](../ROADMAP.md)
 - [Changelog](../CHANGELOG.md)
 - [Contributing](../CONTRIBUTING.md)
-- [License](index.md#license)
+- [License](LICENSE.md)
 
 ---
 

@@ -263,4 +263,4 @@ Contributions are welcome! Please see our [Contributing Guide](../CONTRIBUTING.m
 
 ## License
 
-QitOps is licensed under the MIT License. See the [LICENSE](../LICENSE) file for details.
+QitOps is licensed under the MIT License. See the [LICENSE](LICENSE.md) file for details.

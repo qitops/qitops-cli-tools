@@ -22,12 +22,13 @@ jobs:
       - name: Create docs directory if it doesn't exist
         run: mkdir -p docs
 
-      - name: Copy README to docs
+      - name: Copy files to docs
         run: |
           cp README.md docs/index.md
           cp CHANGELOG.md docs/changelog.md
           cp ROADMAP.md docs/roadmap.md
           cp CONTRIBUTING.md docs/contributing.md
+          cp LICENSE docs/LICENSE.md
 
       - name: Create book.toml if it doesn't exist
         run: |
