@@ -162,14 +162,46 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="enabling-github-pages"><a class="header" href="#enabling-github-pages">Enabling GitHub Pages</a></h1>
-<p>This document explains how to enable GitHub Pages for the QitOps documentation.</p>
-<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+                        <h1 id="github-pages-setup"><a class="header" href="#github-pages-setup">GitHub Pages Setup</a></h1>
+<p>This document explains how the QitOps documentation is deployed to GitHub Pages.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>The QitOps documentation is built using <a href="https://rust-lang.github.io/mdBook/">mdBook</a> and automatically deployed to GitHub Pages whenever changes are pushed to the <code>master</code> branch that affect the documentation.</p>
+<p>The deployed documentation is available at: <a href="https://qitops.github.io/qitops-cli-tools/">https://qitops.github.io/qitops-cli-tools/</a></p>
+<h2 id="deployment-workflow"><a class="header" href="#deployment-workflow">Deployment Workflow</a></h2>
+<p>The deployment is handled by a GitHub Actions workflow defined in <code>.github/workflows/docs.yml</code>. This workflow:</p>
+<ol>
+<li>
+<p>Triggers when changes are pushed to the <code>master</code> branch that affect:</p>
 <ul>
-<li>You need to have admin access to the QitOps repository</li>
-<li>The gh-pages branch should already exist (created by the GitHub Actions workflow)</li>
+<li>Files in the <code>docs/</code> directory</li>
+<li>The <code>README.md</code> file</li>
+<li>The workflow file itself</li>
 </ul>
-<h2 id="steps-to-enable-github-pages"><a class="header" href="#steps-to-enable-github-pages">Steps to Enable GitHub Pages</a></h2>
+</li>
+<li>
+<p>Sets up mdBook using the <code>peaceiris/actions-mdbook@v1</code> action</p>
+</li>
+<li>
+<p>Copies key files to the docs directory:</p>
+<ul>
+<li><code>README.md</code> → <code>docs/index.md</code></li>
+<li><code>CHANGELOG.md</code> → <code>docs/changelog.md</code></li>
+<li><code>ROADMAP.md</code> → <code>docs/roadmap.md</code></li>
+<li><code>CONTRIBUTING.md</code> → <code>docs/contributing.md</code></li>
+</ul>
+</li>
+<li>
+<p>Creates a <code>book.toml</code> configuration file if it doesn’t exist</p>
+</li>
+<li>
+<p>Builds the documentation using mdBook</p>
+</li>
+<li>
+<p>Deploys the built documentation to the <code>gh-pages</code> branch using the <code>peaceiris/actions-gh-pages@v3</code> action</p>
+</li>
+</ol>
+<h2 id="enabling-github-pages"><a class="header" href="#enabling-github-pages">Enabling GitHub Pages</a></h2>
+<p>To enable GitHub Pages for the QitOps documentation:</p>
 <ol>
 <li>Go to the repository on GitHub</li>
 <li>Navigate to Settings &gt; Pages</li>
@@ -182,20 +214,7 @@
 </li>
 <li>Click “Save”</li>
 </ol>
-<p>After enabling GitHub Pages, the documentation will be available at:
-https://qitops.github.io/qitops-cli-tools/</p>
-<h2 id="verifying-the-setup"><a class="header" href="#verifying-the-setup">Verifying the Setup</a></h2>
-<p>Once GitHub Pages is enabled, you can verify that the documentation is accessible by visiting:
-https://qitops.github.io/qitops-cli-tools/index.html</p>
-<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
-<p>If the documentation is not accessible after enabling GitHub Pages:</p>
-<ol>
-<li>Check that the gh-pages branch exists</li>
-<li>Check that the GitHub Actions workflow has run successfully</li>
-<li>Check that the gh-pages branch contains the built documentation</li>
-<li>Wait a few minutes for the changes to propagate</li>
-</ol>
-<h2 id="using-the-github-cli"><a class="header" href="#using-the-github-cli">Using the GitHub CLI</a></h2>
+<h3 id="using-the-github-cli"><a class="header" href="#using-the-github-cli">Using the GitHub CLI</a></h3>
 <p>If you have the GitHub CLI installed and authenticated, you can enable GitHub Pages with the following command:</p>
 <pre><code class="language-bash">gh api -X PUT repos/qitops/qitops-cli-tools/pages \
   -H "Accept: application/vnd.github+json" \
@@ -205,6 +224,80 @@ https://qitops.github.io/qitops-cli-tools/index.html</p>
   -f source.path=/
 </code></pre>
 <p>This requires a personal access token with the <code>repo</code> scope.</p>
+<h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
+<p>The documentation is configured in the <code>docs/book.toml</code> file, which includes:</p>
+<ul>
+<li>Book metadata (title, authors, etc.)</li>
+<li>HTML output configuration</li>
+<li>GitHub repository information</li>
+<li>Search settings</li>
+<li>Custom CSS and JavaScript</li>
+</ul>
+<p>Key configuration settings:</p>
+<pre><code class="language-toml">[book]
+authors = ["Jonathan Opperman"]
+language = "en"
+multilingual = false
+src = "."
+title = "QitOps Documentation"
+
+[output.html]
+git-repository-url = "https://github.com/qitops/qitops-cli-tools"
+git-repository-icon = "fa-github"
+edit-url-template = "https://github.com/qitops/qitops-cli-tools/edit/master/docs/{path}"
+site-url = "/qitops-cli-tools/"
+</code></pre>
+<p>The <code>site-url</code> setting is particularly important for GitHub Pages, as it ensures that all relative URLs are correctly resolved.</p>
+<h2 id="verifying-the-setup"><a class="header" href="#verifying-the-setup">Verifying the Setup</a></h2>
+<p>Once GitHub Pages is enabled, you can verify that the documentation is accessible by visiting:
+https://qitops.github.io/qitops-cli-tools/</p>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<p>If the documentation is not accessible after enabling GitHub Pages:</p>
+<ol>
+<li>Check that the gh-pages branch exists</li>
+<li>Check that the GitHub Actions workflow has run successfully</li>
+<li>Check that the gh-pages branch contains the built documentation</li>
+<li>Wait a few minutes for the changes to propagate</li>
+<li>Verify that the <code>site-url</code> in <code>book.toml</code> is set correctly</li>
+<li>Check the GitHub Actions logs for any errors</li>
+</ol>
+<h2 id="local-development"><a class="header" href="#local-development">Local Development</a></h2>
+<p>To preview the documentation locally:</p>
+<ol>
+<li>
+<p>Install mdBook:</p>
+<pre><code class="language-bash">cargo install mdbook
+</code></pre>
+</li>
+<li>
+<p>Run the development server:</p>
+<pre><code class="language-bash">cd docs
+mdbook serve --open
+</code></pre>
+</li>
+<li>
+<p>This will open the documentation in your browser and automatically reload when you make changes</p>
+</li>
+</ol>
+<h2 id="adding-new-pages"><a class="header" href="#adding-new-pages">Adding New Pages</a></h2>
+<p>To add a new page to the documentation:</p>
+<ol>
+<li>Create a new Markdown file in the <code>docs</code> directory</li>
+<li>Add the page to the <code>SUMMARY.md</code> file to include it in the navigation</li>
+</ol>
+<p>Example <code>SUMMARY.md</code> entry:</p>
+<pre><code class="language-markdown"># Summary
+
+- [Introduction](index.md)
+- [Your New Page](your-new-page.md)
+</code></pre>
+<h2 id="customization"><a class="header" href="#customization">Customization</a></h2>
+<p>The documentation uses custom CSS and JavaScript files for styling and interactivity:</p>
+<ul>
+<li><code>custom.css</code>: Contains custom styles for the documentation</li>
+<li><code>custom.js</code>: Contains custom JavaScript for interactive features</li>
+</ul>
+<p>These files are referenced in the <code>book.toml</code> file.</p>
 
                     </main>
 
