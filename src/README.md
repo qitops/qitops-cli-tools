@@ -28,6 +28,15 @@ qitops web -c tests/configs/web_test.json
 
 # Generate a report in HTML format
 qitops -r html -o report.html api -c tests/configs/api_test.json
+
+# Run in CI mode (reduced output, exit code based on test results)
+qitops --ci-mode -r json -o results.json api -c tests/configs/api_test.json
+
+# Run data-driven tests with CSV data
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv
+
+# Run data-driven tests with JSON data
+qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/products.json -t json
 ```
 
 ## Features
@@ -70,6 +79,40 @@ qitops -r html -o report.html api -c tests/configs/api_test.json
   - Total requests
   - Success/error counts
   - Success rate percentage
+
+### Enhanced Performance Testing
+- Multiple load profiles (constant, ramping, spike)
+- Multi-stage test execution
+- Multiple scenarios in a single test
+- Weighted scenario distribution
+- Detailed metrics collection and reporting
+- Percentile calculations (p50, p90, p95, p99)
+- Custom thresholds with pass/fail criteria
+- Real-time metrics streaming
+- Tagged metrics for detailed analysis
+- Scenario-based reporting
+
+### CI/CD Integration
+- GitHub Actions workflow templates
+- CI mode with reduced output
+- Exit codes based on test results
+- JSON report generation for CI pipelines
+- Parallel test execution
+- Environment-specific configurations
+- Scheduled test runs
+- Artifact storage for test results and reports
+
+### Data-Driven Testing
+- Parameterize tests with CSV and JSON datasets
+- Variable interpolation with {{placeholder}} syntax
+- Support for multiple iterations of the same test
+- Configurable iteration limits
+- Stop-on-failure option
+- Detailed iteration reporting
+- Support for all test types (API, Performance, Security, Web)
+- CSV header row support
+- JSON path extraction
+- Inline data definition
 - Customizable success thresholds
 
 ### Security Testing
@@ -252,6 +295,89 @@ cargo build --release --features ai
 }
 ```
 
+### Enhanced Performance Test Configuration
+```json
+{
+    "name": "Enhanced Performance Test",
+    "description": "Testing API performance with multiple scenarios and load profiles",
+    "timeout": 60,
+    "retries": 0,
+    "environment": "production",
+    "load_profile": {
+        "type": "ramping_vus",
+        "initial": 1,
+        "stages": [
+            {
+                "duration_secs": 30,
+                "target": 10
+            },
+            {
+                "duration_secs": 60,
+                "target": 20
+            },
+            {
+                "duration_secs": 30,
+                "target": 0
+            }
+        ]
+    },
+    "scenarios": [
+        {
+            "name": "Get Request",
+            "target_url": "https://httpbin.org/get",
+            "method": "GET",
+            "headers": {
+                "Accept": "application/json",
+                "User-Agent": "QitOps-Test/1.0"
+            },
+            "weight": 3,
+            "tags": {
+                "endpoint": "get",
+                "category": "read"
+            }
+        },
+        {
+            "name": "Post Request",
+            "target_url": "https://httpbin.org/post",
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            "body": {
+                "test": "data",
+                "number": 123
+            },
+            "weight": 1,
+            "tags": {
+                "endpoint": "post",
+                "category": "write"
+            }
+        }
+    ],
+    "thresholds": [
+        {
+            "metric": "response_time.avg",
+            "expression": "< 0.5",
+            "abort_on_fail": false
+        },
+        {
+            "metric": "response_time.p95",
+            "expression": "< 1.0",
+            "abort_on_fail": false
+        },
+        {
+            "metric": "success.avg",
+            "expression": "> 0.95",
+            "abort_on_fail": true
+        }
+    ],
+    "success_threshold": 95.0,
+    "stream_metrics": true,
+    "metrics_interval_secs": 5
+}
+```
+
 ### Security Test Configuration
 ```json
 {
@@ -429,6 +555,111 @@ Details: {
 Timestamp: 2025-05-09T21:06:50.438713024+00:00
 ```
 
+### Enhanced Performance Testing
+```bash
+# Run enhanced performance test with load profiles and scenarios
+qitops performance-enhanced -c tests/configs/enhanced_performance_test.json
+
+# Run in a specific environment
+qitops performance-enhanced -c tests/configs/enhanced_performance_test.json -e staging
+```
+
+Example output:
+```
+Enhanced Performance Test Results:
+Name: Enhanced Performance Test
+Status: passed
+Duration: 120.35s
+
+Metrics Summary:
+  Total Requests: 1250
+  Success Count: 1245
+  Error Count: 5
+  Success Rate: 99.60%
+
+Response Time:
+  Average: 125.32ms
+  Min: 57.89ms
+  Max: 521.45ms
+  p50: 115.67ms
+  p90: 198.34ms
+  p95: 245.78ms
+  p99: 378.91ms
+
+Scenario Results:
+  Get Request: 937/940 requests successful (99.68%)
+  Post Request: 308/310 requests successful (99.35%)
+
+Thresholds:
+  response_time.avg: < 0.5 - PASSED
+  response_time.p95: < 1.0 - PASSED
+  success.avg: > 0.95 - PASSED
+
+For full details, use the --report option to generate a JSON report.
+Timestamp: 2025-05-09T21:08:15.723654912+00:00
+```
+
+The enhanced performance testing feature supports:
+- Multiple load profiles (constant, ramping, spike)
+- Multi-stage test execution
+- Multiple scenarios with weighted distribution
+- Custom thresholds with pass/fail criteria
+- Real-time metrics streaming
+- Detailed metrics with percentiles
+
+### Data-Driven Testing
+```bash
+# Run data-driven API tests with CSV data
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv
+
+# Run with JSON data
+qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/products.json -t json
+
+# Limit the number of iterations
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -m 3
+
+# Stop on first failure
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -s
+```
+
+Example output:
+```
+Iteration 1 Results:
+Name: User API Test for johndoe
+Status: passed
+Duration: 0.52s
+Details: {
+  "headers": {
+    "content-type": "application/json",
+    ...
+  },
+  "response_time": 0.523456,
+  "status_code": 200
+}
+Timestamp: 2025-05-09T21:07:05.165804274+00:00
+
+Data Row:
+  username: johndoe
+  email: john.doe@example.com
+  user_id: 1001
+  role: admin
+
+...
+
+Data-Driven Test Summary:
+Total Iterations: 5
+Successful: 5
+Failed: 0
+Success Rate: 100.00%
+```
+
+The data-driven testing feature supports:
+- Parameterizing tests with CSV and JSON datasets
+- Variable interpolation using `{{placeholder}}` syntax
+- Running multiple iterations of the same test with different data
+- Configurable iteration limits and stop-on-failure options
+- Detailed reporting for each iteration
+
 ### Security Testing
 ```bash
 # Run security scan with default settings
@@ -553,6 +784,7 @@ qitops analyze -r results/security_test_result.json -o analysis.md -m custom -p 
 ### Global Options
 - `-r, --report`: Generate report in specified format (json, xml, html, csv)
 - `-o, --output`: Output path for the report
+- `--ci-mode`: Run in CI mode (reduced output, exit code based on test results)
 
 ### API Testing
 - `-c, --config`: Path to the test configuration file
@@ -568,6 +800,18 @@ qitops analyze -r results/security_test_result.json -o analysis.md -m custom -p 
 - `-e, --environment`: Environment to run tests in (default: "production")
 - `-u, --users`: Number of concurrent users (default: 10)
 - `-d, --duration`: Test duration in seconds (default: 60)
+
+### Enhanced Performance Testing
+- `-c, --config`: Path to the test configuration file
+- `-e, --environment`: Environment to run tests in (default: "production")
+
+### Data-Driven Testing
+- `-c, --config`: Path to the test configuration file
+- `-d, --data`: Path to the data source file (CSV or JSON)
+- `-t, --data-type`: Data source type (csv, json) (default: "csv")
+- `-e, --environment`: Environment to run tests in (default: "production")
+- `-m, --max-iterations`: Maximum number of iterations to run
+- `-s, --stop-on-failure`: Stop on first failure
 
 ### Security Testing
 - `-c, --config`: Path to the test configuration file
@@ -643,6 +887,26 @@ qitops analyze -r results/security_test_result.json -o analysis.md -m custom -p 
 - Timestamp
 - Environment information
 
+### Enhanced Performance Test Results
+- Test name and status
+- Duration
+- Detailed metrics:
+  - Total requests
+  - Success/error counts
+  - Success rate
+  - Response time statistics (avg, min, max)
+  - Percentile measurements (p50, p90, p95, p99)
+- Scenario-specific metrics:
+  - Per-scenario success rates
+  - Per-scenario request counts
+- Threshold evaluations:
+  - Metric name
+  - Expression
+  - Pass/fail status
+- Tagged metrics for detailed analysis
+- Timestamp
+- Environment information
+
 ### Security Test Results
 - Test name and status
 - Duration
@@ -711,6 +975,31 @@ qitops analyze -r results/security_test_result.json -o analysis.md -m custom -p 
 - Run tests in a controlled environment
 - Consider network latency in your test environment
 
+### Enhanced Performance Testing
+- Design multi-stage tests to simulate realistic user behavior
+- Use different load profiles for different testing scenarios
+- Define multiple scenarios to test different API endpoints
+- Use weighted scenarios to simulate real-world usage patterns
+- Set appropriate thresholds based on SLAs and performance requirements
+- Use tags to categorize and analyze metrics
+- Monitor real-time metrics during test execution
+- Analyze percentile measurements for a better understanding of performance
+- Use custom thresholds to catch performance regressions early
+- Run tests in different environments to compare performance
+
+### Data-Driven Testing
+- Organize test data in CSV or JSON format based on complexity
+- Use CSV for simple tabular data with a consistent structure
+- Use JSON for complex nested data structures
+- Include a header row in CSV files for better readability
+- Use meaningful placeholder names that match data column names
+- Keep test configurations generic with placeholders
+- Use stop-on-failure for dependent test iterations
+- Set appropriate max iterations for large datasets
+- Validate data files before running tests
+- Use environment-specific configurations with data-driven tests
+- Combine data-driven testing with API collections for complex workflows
+
 ### Security Testing
 - Start with passive scanning before active scanning
 - Use appropriate scan depth based on your security requirements
@@ -738,6 +1027,18 @@ qitops analyze -r results/security_test_result.json -o analysis.md -m custom -p 
 - Analyze test results regularly to identify patterns and issues
 - Combine AI suggestions with human expertise for best results
 - Keep model weights updated for best performance
+
+### CI/CD Integration
+- Use `--ci-mode` for reduced output and exit codes in CI pipelines
+- Generate JSON reports for machine-readable results
+- Use GitHub Actions templates for quick setup
+- Run different test types in parallel for faster feedback
+- Set up scheduled runs for regular testing
+- Use environment-specific configurations for different stages
+- Store test results as artifacts for historical analysis
+- Set appropriate timeouts for CI environments
+- Use exit codes to gate deployments
+- Integrate with notification systems for test failures
 
 ## Configuration Reference
 
@@ -813,6 +1114,55 @@ qitops analyze -r results/security_test_result.json -o analysis.md -m custom -p 
 | expected_body_type | string | Expected response body type | Optional |
 | depends_on | array | Request dependencies | Optional |
 | capture | object | Variables to capture from response | Optional |
+
+### Data-Driven Testing Configuration
+
+#### CSV Data File
+```csv
+username,email,user_id,role
+johndoe,john.doe@example.com,1001,admin
+janedoe,jane.doe@example.com,1002,user
+bobsmith,bob.smith@example.com,1003,user
+```
+
+#### JSON Data File
+```json
+[
+  {
+    "product_id": "P001",
+    "name": "Smartphone",
+    "price": 599.99,
+    "category": "Electronics",
+    "in_stock": true
+  },
+  {
+    "product_id": "P002",
+    "name": "Laptop",
+    "price": 1299.99,
+    "category": "Electronics",
+    "in_stock": true
+  }
+]
+```
+
+#### Test Configuration with Placeholders
+```json
+{
+  "name": "User API Test for {{username}}",
+  "description": "Test the user API for {{username}}",
+  "url": "https://api.example.com/users/{{user_id}}",
+  "method": "GET",
+  "headers": {
+    "Accept": "application/json",
+    "X-User-Email": "{{email}}"
+  },
+  "expected_status": 200,
+  "expected_body": {
+    "id": "{{user_id}}",
+    "role": "{{role}}"
+  }
+}
+```
 
 #### Run Options
 | Field | Type | Description | Default |
@@ -927,6 +1277,36 @@ qitops analyze -r results/security_test_result.json -o analysis.md -m custom -p 
 - **Slow Response Times**: Check network latency and target system load
 - **Resource Exhaustion**: Monitor system resources and adjust test parameters
 - **Inconsistent Results**: Ensure test environment stability
+
+#### Enhanced Performance Testing
+- **Stage Transition Issues**: Check stage durations and target values
+- **Threshold Failures**: Verify threshold expressions and metric names
+- **Scenario Distribution Problems**: Check scenario weights and total count
+- **Metric Collection Issues**: Ensure metrics are being properly captured
+- **High Resource Usage**: Reduce the number of concurrent VUs or increase stage duration
+- **Percentile Calculation Errors**: Ensure enough samples for accurate percentiles
+- **Tagged Metrics Missing**: Verify tag names and values in scenario configuration
+
+#### CI/CD Integration
+- **Exit Code Issues**: Ensure test status is correctly reported
+- **GitHub Actions Failures**: Check workflow YAML syntax and permissions
+- **Report Generation Failures**: Verify output directory exists and is writable
+- **Parallel Test Conflicts**: Ensure tests don't interfere with each other
+- **Timeout Errors**: Increase CI job timeout or reduce test duration
+- **Environment Variable Issues**: Check environment variable configuration
+- **Artifact Storage Problems**: Verify artifact paths and retention settings
+
+#### Data-Driven Testing
+- **CSV Parsing Errors**: Check CSV format and delimiter settings
+- **JSON Parsing Errors**: Validate JSON syntax and structure
+- **Placeholder Not Found**: Ensure placeholder names match data column names
+- **Missing Data Columns**: Verify data file contains all required columns
+- **Iteration Failures**: Check if stop-on-failure is appropriate for your test
+- **Performance Issues**: Reduce max iterations for large datasets
+- **File Not Found Errors**: Verify data file paths
+- **JSON Path Errors**: Check JSON path syntax for complex data structures
+- **Type Conversion Issues**: Ensure data types match expected values
+- **Empty Data Sets**: Verify data files contain valid test data
 
 #### Security Testing
 - **False Positives**: Review and adjust scan depth and types

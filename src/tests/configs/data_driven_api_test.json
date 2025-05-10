@@ -1,0 +1,33 @@
+{
+    "name": "User API Test for {{username}}",
+    "description": "Test the user API for {{username}}",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "url": "https://httpbin.org/get?user_id={{user_id}}&role={{role}}",
+    "method": "GET",
+    "headers": {
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Test",
+        "X-User-Email": "{{email}}"
+    },
+    "expected_status": 200,
+    "expected_body": {
+        "args": {
+            "user_id": "{{user_id}}",
+            "role": "{{role}}"
+        }
+    },
+    "max_response_time": 2,
+    "expected_headers": {
+        "content-type": "application/json"
+    },
+    "retry": {
+        "max_retries": 3,
+        "initial_delay_ms": 100,
+        "max_delay_ms": 1000,
+        "retry_status_codes": [408, 429, 500, 502, 503, 504],
+        "retry_on_timeout": true,
+        "retry_on_connection_error": true
+    }
+}

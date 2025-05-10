@@ -1,0 +1,129 @@
+name: QitOps Security Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  # Schedule security scans to run weekly
+  schedule:
+    - cron: '0 0 * * 0'  # Run at midnight on Sunday
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+      depth:
+        description: 'Scan depth (1-5)'
+        required: false
+        default: '3'
+        type: choice
+        options:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+      passive:
+        description: 'Run passive scan only'
+        required: false
+        default: 'false'
+        type: boolean
+
+# Environment variables used across jobs
+env:
+  QITOPS_VERSION: '0.1.0'
+  DEFAULT_ENVIRONMENT: 'staging'
+  DEFAULT_DEPTH: '3'
+  DEFAULT_PASSIVE: 'false'
+
+jobs:
+  security-tests:
+    name: Security Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Download the pre-built QitOps binary
+      - name: Download QitOps
+        run: |
+          mkdir -p bin
+          curl -L https://github.com/jcopperman/qitops-cli-tools/releases/download/v${QITOPS_VERSION}/qitops-linux-x86_64 -o bin/qitops
+          chmod +x bin/qitops
+          echo "$PWD/bin" >> $GITHUB_PATH
+      
+      - name: Verify QitOps installation
+        run: qitops --version
+      
+      - name: Determine environment and parameters
+        id: params
+        run: |
+          if [ "${{ github.event.inputs.environment }}" != "" ]; then
+            echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=$DEFAULT_ENVIRONMENT" >> $GITHUB_ENV
+          fi
+          
+          if [ "${{ github.event.inputs.depth }}" != "" ]; then
+            echo "DEPTH=${{ github.event.inputs.depth }}" >> $GITHUB_ENV
+          else
+            echo "DEPTH=$DEFAULT_DEPTH" >> $GITHUB_ENV
+          fi
+          
+          if [ "${{ github.event.inputs.passive }}" == "true" ]; then
+            echo "PASSIVE=-p" >> $GITHUB_ENV
+          else
+            echo "PASSIVE=" >> $GITHUB_ENV
+          fi
+      
+      - name: Run Security tests
+        run: |
+          mkdir -p test-results
+          qitops -r json -o test-results/security-test-results.json security -c tests/configs/security_test.json -e ${{ env.ENVIRONMENT }} -d ${{ env.DEPTH }} ${{ env.PASSIVE }}
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-test-results
+          path: test-results/
+          retention-days: 7
+      
+      # Generate security report
+      - name: Generate Security Report
+        run: |
+          mkdir -p reports
+          qitops -r html -o reports/security-report.html analyze -r test-results/security-test-results.json
+      
+      - name: Upload security report
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-reports
+          path: reports/
+          retention-days: 30
+      
+      # Check for critical security findings
+      - name: Check for Critical Security Findings
+        run: |
+          # Extract critical findings count from the results
+          CRITICAL_FINDINGS=$(jq '.details.summary.critical_findings' test-results/security-test-results.json)
+          HIGH_FINDINGS=$(jq '.details.summary.high_findings' test-results/security-test-results.json)
+          
+          if [ "$CRITICAL_FINDINGS" -gt 0 ]; then
+            echo "::error::Critical security findings detected! Count: $CRITICAL_FINDINGS"
+            exit 1
+          elif [ "$HIGH_FINDINGS" -gt 0 ]; then
+            echo "::warning::High severity security findings detected! Count: $HIGH_FINDINGS"
+            # Optionally fail the build on high findings
+            # exit 1
+          else
+            echo "No critical or high security findings detected."
+          fi

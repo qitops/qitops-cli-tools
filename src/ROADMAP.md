@@ -32,11 +32,11 @@ Before pursuing feature parity with other tools, we're focusing on making the cu
 - [ ] Add optional --history logging to a local SQLite file
 
 ### ⚙️ Performance Testing: k6 Core
-- [ ] Implement load profiles (constant, ramp-up, spike)
-- [ ] Support scenarios in one file (multiple endpoints)
-- [ ] Track custom metrics (via tags)
-- [ ] Add thresholds for pass/fail criteria
-- [ ] CLI streaming metrics (real-time bar/line output)
+- [x] Implement load profiles (constant, ramp-up, spike)
+- [x] Support scenarios in one file (multiple endpoints)
+- [x] Track custom metrics (via tags)
+- [x] Add thresholds for pass/fail criteria
+- [x] CLI streaming metrics (real-time bar/line output)
 
 **Milestone**: "Parity with a Purpose"
 
@@ -44,18 +44,18 @@ Before pursuing feature parity with other tools, we're focusing on making the cu
 
 ### 🔧 Integrations
 - [ ] Git sync for test configs (qitops sync)
-- [ ] GitHub Actions example template
+- [x] GitHub Actions example template
 - [ ] Dockerfile for CLI-only image
-- [ ] Native CI support: --ci-mode
+- [x] Native CI support: --ci-mode
 
 ### 📊 Reporting
-- [ ] JSON + HTML reporters (extend with templates)
+- [x] JSON + HTML reporters (extend with templates)
 - [ ] Markdown summary logs (for commits)
-- [ ] CSV export for audit logs
+- [x] CSV export for audit logs
 
 ### 🧪 Data-Driven Testing
-- [ ] Parametrize tests with CSV/JSON datasets
-- [ ] Support template placeholders: {{user_id}}
+- [x] Parametrize tests with CSV/JSON datasets
+- [x] Support template placeholders: {{user_id}}
 
 **Milestone**: "Beyond Parity"
 

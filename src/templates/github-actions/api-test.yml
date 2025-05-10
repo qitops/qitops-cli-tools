@@ -1,0 +1,78 @@
+name: QitOps API Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+
+# Environment variables used across jobs
+env:
+  QITOPS_VERSION: '0.1.0'
+  DEFAULT_ENVIRONMENT: 'staging'
+
+jobs:
+  api-tests:
+    name: API Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Download the pre-built QitOps binary
+      - name: Download QitOps
+        run: |
+          mkdir -p bin
+          curl -L https://github.com/jcopperman/qitops-cli-tools/releases/download/v${QITOPS_VERSION}/qitops-linux-x86_64 -o bin/qitops
+          chmod +x bin/qitops
+          echo "$PWD/bin" >> $GITHUB_PATH
+      
+      - name: Verify QitOps installation
+        run: qitops --version
+      
+      - name: Determine environment
+        id: env
+        run: |
+          if [ "${{ github.event.inputs.environment }}" != "" ]; then
+            echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=$DEFAULT_ENVIRONMENT" >> $GITHUB_ENV
+          fi
+      
+      - name: Run API tests
+        run: |
+          mkdir -p test-results
+          qitops -r json -o test-results/api-test-results.json api -c tests/configs/api_test.json -e ${{ env.ENVIRONMENT }}
+      
+      - name: Run API collection tests
+        run: |
+          qitops -r json -o test-results/api-collection-results.json collection -c tests/configs/api_collection.json -e ${{ env.ENVIRONMENT }}
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-test-results
+          path: test-results/
+          retention-days: 7
+      
+      # Optional: Publish test results as GitHub check
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: test-results/*.json
+          report_individual_runs: true
+          check_name: "API Test Results"

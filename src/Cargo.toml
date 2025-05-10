@@ -22,6 +22,7 @@ indicatif = "0.17"
 futures = "0.3"
 async-trait = "0.1"
 chrono = { version = "0.4", features = ["serde"] }
+tokio-stream = "0.1"
 log = "0.4"
 env_logger = "0.11"
 jsonschema = "0.17"

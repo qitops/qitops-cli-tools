@@ -1,0 +1,80 @@
+{
+    "name": "Enhanced Performance Test",
+    "description": "Testing API performance with multiple scenarios and load profiles",
+    "timeout": 60,
+    "retries": 0,
+    "environment": "production",
+    "load_profile": {
+        "type": "ramping_vus",
+        "initial": 1,
+        "stages": [
+            {
+                "duration_secs": 30,
+                "target": 10
+            },
+            {
+                "duration_secs": 60,
+                "target": 20
+            },
+            {
+                "duration_secs": 30,
+                "target": 0
+            }
+        ]
+    },
+    "scenarios": [
+        {
+            "name": "Get Request",
+            "target_url": "https://httpbin.org/get",
+            "method": "GET",
+            "headers": {
+                "Accept": "application/json",
+                "User-Agent": "QitOps-Test/1.0"
+            },
+            "weight": 3,
+            "tags": {
+                "endpoint": "get",
+                "category": "read"
+            }
+        },
+        {
+            "name": "Post Request",
+            "target_url": "https://httpbin.org/post",
+            "method": "POST",
+            "headers": {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "User-Agent": "QitOps-Test/1.0"
+            },
+            "body": {
+                "test": "data",
+                "number": 123
+            },
+            "weight": 1,
+            "tags": {
+                "endpoint": "post",
+                "category": "write"
+            }
+        }
+    ],
+    "thresholds": [
+        {
+            "metric": "response_time.avg",
+            "expression": "< 0.5",
+            "abort_on_fail": false
+        },
+        {
+            "metric": "response_time.p95",
+            "expression": "< 1.0",
+            "abort_on_fail": false
+        },
+        {
+            "metric": "success.avg",
+            "expression": "> 0.95",
+            "abort_on_fail": true
+        }
+    ],
+    "success_threshold": 95.0,
+    "stream_metrics": true,
+    "metrics_interval_secs": 5
+}

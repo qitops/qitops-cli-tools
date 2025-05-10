@@ -1,0 +1,106 @@
+name: QitOps Web Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+      headless:
+        description: 'Run in headless mode'
+        required: false
+        default: 'true'
+        type: boolean
+
+# Environment variables used across jobs
+env:
+  QITOPS_VERSION: '0.1.0'
+  DEFAULT_ENVIRONMENT: 'staging'
+  DEFAULT_HEADLESS: 'true'
+
+jobs:
+  web-tests:
+    name: Web Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Set up browser dependencies
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@latest
+      
+      # Download the pre-built QitOps binary
+      - name: Download QitOps
+        run: |
+          mkdir -p bin
+          curl -L https://github.com/jcopperman/qitops-cli-tools/releases/download/v${QITOPS_VERSION}/qitops-linux-x86_64 -o bin/qitops
+          chmod +x bin/qitops
+          echo "$PWD/bin" >> $GITHUB_PATH
+      
+      - name: Verify QitOps installation
+        run: qitops --version
+      
+      - name: Determine environment and parameters
+        id: params
+        run: |
+          if [ "${{ github.event.inputs.environment }}" != "" ]; then
+            echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=$DEFAULT_ENVIRONMENT" >> $GITHUB_ENV
+          fi
+          
+          if [ "${{ github.event.inputs.headless }}" != "" ]; then
+            echo "HEADLESS=${{ github.event.inputs.headless }}" >> $GITHUB_ENV
+          else
+            echo "HEADLESS=$DEFAULT_HEADLESS" >> $GITHUB_ENV
+          fi
+      
+      # Create directory for screenshots
+      - name: Create screenshots directory
+        run: mkdir -p screenshots
+      
+      - name: Run Web tests
+        run: |
+          mkdir -p test-results
+          qitops -r json -o test-results/web-test-results.json web -c tests/configs/web_test.json -e ${{ env.ENVIRONMENT }} -h ${{ env.HEADLESS }} -s ./screenshots
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-test-results
+          path: test-results/
+          retention-days: 7
+      
+      # Upload screenshots
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-test-screenshots
+          path: screenshots/
+          retention-days: 7
+      
+      # Generate web test report
+      - name: Generate Web Test Report
+        run: |
+          mkdir -p reports
+          qitops -r html -o reports/web-test-report.html analyze -r test-results/web-test-results.json
+      
+      - name: Upload web test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-test-reports
+          path: reports/
+          retention-days: 30

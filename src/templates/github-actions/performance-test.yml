@@ -1,0 +1,122 @@
+name: QitOps Performance Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+      users:
+        description: 'Number of concurrent users'
+        required: false
+        default: '10'
+        type: string
+      duration:
+        description: 'Test duration in seconds'
+        required: false
+        default: '60'
+        type: string
+
+# Environment variables used across jobs
+env:
+  QITOPS_VERSION: '0.1.0'
+  DEFAULT_ENVIRONMENT: 'staging'
+  DEFAULT_USERS: '10'
+  DEFAULT_DURATION: '60'
+
+jobs:
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Download the pre-built QitOps binary
+      - name: Download QitOps
+        run: |
+          mkdir -p bin
+          curl -L https://github.com/jcopperman/qitops-cli-tools/releases/download/v${QITOPS_VERSION}/qitops-linux-x86_64 -o bin/qitops
+          chmod +x bin/qitops
+          echo "$PWD/bin" >> $GITHUB_PATH
+      
+      - name: Verify QitOps installation
+        run: qitops --version
+      
+      - name: Determine environment and parameters
+        id: params
+        run: |
+          if [ "${{ github.event.inputs.environment }}" != "" ]; then
+            echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=$DEFAULT_ENVIRONMENT" >> $GITHUB_ENV
+          fi
+          
+          if [ "${{ github.event.inputs.users }}" != "" ]; then
+            echo "USERS=${{ github.event.inputs.users }}" >> $GITHUB_ENV
+          else
+            echo "USERS=$DEFAULT_USERS" >> $GITHUB_ENV
+          fi
+          
+          if [ "${{ github.event.inputs.duration }}" != "" ]; then
+            echo "DURATION=${{ github.event.inputs.duration }}" >> $GITHUB_ENV
+          else
+            echo "DURATION=$DEFAULT_DURATION" >> $GITHUB_ENV
+          fi
+      
+      - name: Run Basic Performance tests
+        run: |
+          mkdir -p test-results
+          qitops -r json -o test-results/performance-test-results.json performance -c tests/configs/performance_test.json -e ${{ env.ENVIRONMENT }} -u ${{ env.USERS }} -d ${{ env.DURATION }}
+      
+      - name: Run Enhanced Performance tests
+        run: |
+          qitops -r json -o test-results/enhanced-performance-test-results.json performance-enhanced -c tests/configs/enhanced_performance_test.json -e ${{ env.ENVIRONMENT }}
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-test-results
+          path: test-results/
+          retention-days: 7
+      
+      # Optional: Generate performance trend report
+      - name: Generate Performance Trend Report
+        run: |
+          mkdir -p reports
+          qitops -r html -o reports/performance-trend.html analyze -r test-results/performance-test-results.json test-results/enhanced-performance-test-results.json
+      
+      - name: Upload performance report
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-reports
+          path: reports/
+          retention-days: 30
+      
+      # Optional: Check for performance regressions
+      - name: Check for Performance Regressions
+        run: |
+          # Extract average response time from the results
+          AVG_RESPONSE_TIME=$(jq '.details.average_response_time' test-results/performance-test-results.json)
+          # Set a threshold for regression (e.g., 200ms)
+          THRESHOLD=0.2
+          
+          if (( $(echo "$AVG_RESPONSE_TIME > $THRESHOLD" | bc -l) )); then
+            echo "::warning::Performance regression detected! Average response time: ${AVG_RESPONSE_TIME}s exceeds threshold: ${THRESHOLD}s"
+            # Optionally fail the build on regression
+            # exit 1
+          else
+            echo "Performance is within acceptable limits. Average response time: ${AVG_RESPONSE_TIME}s"
+          fi

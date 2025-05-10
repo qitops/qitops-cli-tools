@@ -1,0 +1,37 @@
+[
+  {
+    "product_id": "P001",
+    "name": "Smartphone",
+    "price": 599.99,
+    "category": "Electronics",
+    "in_stock": true
+  },
+  {
+    "product_id": "P002",
+    "name": "Laptop",
+    "price": 1299.99,
+    "category": "Electronics",
+    "in_stock": true
+  },
+  {
+    "product_id": "P003",
+    "name": "Headphones",
+    "price": 149.99,
+    "category": "Electronics",
+    "in_stock": false
+  },
+  {
+    "product_id": "P004",
+    "name": "Coffee Maker",
+    "price": 79.99,
+    "category": "Kitchen",
+    "in_stock": true
+  },
+  {
+    "product_id": "P005",
+    "name": "Blender",
+    "price": 49.99,
+    "category": "Kitchen",
+    "in_stock": true
+  }
+]

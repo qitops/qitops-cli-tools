@@ -1,0 +1,66 @@
+{
+    "name": "Product API Collection for {{product_id}}",
+    "description": "A collection of product API tests for {{name}}",
+    "version": "1.0.0",
+    "variables": {
+        "base_url": "https://httpbin.org",
+        "product_name": "{{name}}",
+        "product_price": "{{price}}"
+    },
+    "defaults": {
+        "headers": {
+            "Accept": "application/json",
+            "User-Agent": "QitOps-Test/1.0"
+        },
+        "timeout": 30,
+        "retries": 2
+    },
+    "requests": [
+        {
+            "name": "Get Product Details",
+            "description": "Get details for product {{product_id}}",
+            "id": "get-product",
+            "url": "{{base_url}}/get?product_id={{product_id}}",
+            "method": "GET",
+            "expected_status": 200,
+            "expected_body_type": "object",
+            "capture": {
+                "product_category": "$.args.product_id"
+            }
+        },
+        {
+            "name": "Check Product Price",
+            "description": "Check price for {{name}}",
+            "id": "check-price",
+            "url": "{{base_url}}/get?price={{price}}&category={{category}}",
+            "method": "GET",
+            "headers": {
+                "X-Product-ID": "{{product_id}}"
+            },
+            "expected_status": 200,
+            "depends_on": ["get-product"]
+        },
+        {
+            "name": "Check Stock Status",
+            "description": "Check if product is in stock",
+            "id": "check-stock",
+            "url": "{{base_url}}/get?in_stock={{in_stock}}",
+            "method": "GET",
+            "expected_status": 200,
+            "depends_on": ["check-price"]
+        }
+    ],
+    "environments": {
+        "production": {
+            "base_url": "https://httpbin.org"
+        },
+        "staging": {
+            "base_url": "https://httpbin.org"
+        }
+    },
+    "run_options": {
+        "sequential": true,
+        "stop_on_failure": true,
+        "delay_between_requests_ms": 500
+    }
+}

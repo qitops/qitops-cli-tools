@@ -1,0 +1,6 @@
+username,email,user_id,role
+johndoe,john.doe@example.com,1001,admin
+janedoe,jane.doe@example.com,1002,user
+bobsmith,bob.smith@example.com,1003,user
+alicejones,alice.jones@example.com,1004,manager
+mikebrown,mike.brown@example.com,1005,user

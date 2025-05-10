@@ -1,0 +1,267 @@
+name: QitOps All Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  # Schedule to run daily
+  schedule:
+    - cron: '0 0 * * *'  # Run at midnight every day
+  # Allow manual triggering
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+      test_type:
+        description: 'Type of tests to run'
+        required: true
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - api
+          - performance
+          - security
+          - web
+
+# Environment variables used across jobs
+env:
+  QITOPS_VERSION: '0.1.0'
+  DEFAULT_ENVIRONMENT: 'staging'
+
+jobs:
+  api-tests:
+    name: API Tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'api' || github.event.inputs.test_type == '' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Download the pre-built QitOps binary
+      - name: Download QitOps
+        run: |
+          mkdir -p bin
+          curl -L https://github.com/jcopperman/qitops-cli-tools/releases/download/v${QITOPS_VERSION}/qitops-linux-x86_64 -o bin/qitops
+          chmod +x bin/qitops
+          echo "$PWD/bin" >> $GITHUB_PATH
+      
+      - name: Verify QitOps installation
+        run: qitops --version
+      
+      - name: Determine environment
+        id: env
+        run: |
+          if [ "${{ github.event.inputs.environment }}" != "" ]; then
+            echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=$DEFAULT_ENVIRONMENT" >> $GITHUB_ENV
+          fi
+      
+      - name: Run API tests
+        run: |
+          mkdir -p test-results
+          qitops -r json -o test-results/api-test-results.json api -c tests/configs/api_test.json -e ${{ env.ENVIRONMENT }}
+      
+      - name: Run API collection tests
+        run: |
+          qitops -r json -o test-results/api-collection-results.json collection -c tests/configs/api_collection.json -e ${{ env.ENVIRONMENT }}
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: api-test-results
+          path: test-results/
+          retention-days: 7
+
+  performance-tests:
+    name: Performance Tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'performance' || github.event.inputs.test_type == '' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Download the pre-built QitOps binary
+      - name: Download QitOps
+        run: |
+          mkdir -p bin
+          curl -L https://github.com/jcopperman/qitops-cli-tools/releases/download/v${QITOPS_VERSION}/qitops-linux-x86_64 -o bin/qitops
+          chmod +x bin/qitops
+          echo "$PWD/bin" >> $GITHUB_PATH
+      
+      - name: Verify QitOps installation
+        run: qitops --version
+      
+      - name: Determine environment
+        id: env
+        run: |
+          if [ "${{ github.event.inputs.environment }}" != "" ]; then
+            echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=$DEFAULT_ENVIRONMENT" >> $GITHUB_ENV
+          fi
+      
+      - name: Run Performance tests
+        run: |
+          mkdir -p test-results
+          qitops -r json -o test-results/performance-test-results.json performance -c tests/configs/performance_test.json -e ${{ env.ENVIRONMENT }} -u 5 -d 30
+      
+      - name: Run Enhanced Performance tests
+        run: |
+          qitops -r json -o test-results/enhanced-performance-test-results.json performance-enhanced -c tests/configs/enhanced_performance_test.json -e ${{ env.ENVIRONMENT }}
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-test-results
+          path: test-results/
+          retention-days: 7
+
+  security-tests:
+    name: Security Tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'security' || github.event.inputs.test_type == '' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Download the pre-built QitOps binary
+      - name: Download QitOps
+        run: |
+          mkdir -p bin
+          curl -L https://github.com/jcopperman/qitops-cli-tools/releases/download/v${QITOPS_VERSION}/qitops-linux-x86_64 -o bin/qitops
+          chmod +x bin/qitops
+          echo "$PWD/bin" >> $GITHUB_PATH
+      
+      - name: Verify QitOps installation
+        run: qitops --version
+      
+      - name: Determine environment
+        id: env
+        run: |
+          if [ "${{ github.event.inputs.environment }}" != "" ]; then
+            echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=$DEFAULT_ENVIRONMENT" >> $GITHUB_ENV
+          fi
+      
+      - name: Run Security tests
+        run: |
+          mkdir -p test-results
+          qitops -r json -o test-results/security-test-results.json security -c tests/configs/security_test.json -e ${{ env.ENVIRONMENT }} -d 2
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: security-test-results
+          path: test-results/
+          retention-days: 7
+
+  web-tests:
+    name: Web Tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.test_type == 'all' || github.event.inputs.test_type == 'web' || github.event.inputs.test_type == '' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Set up browser dependencies
+      - name: Set up Chrome
+        uses: browser-actions/setup-chrome@latest
+      
+      # Download the pre-built QitOps binary
+      - name: Download QitOps
+        run: |
+          mkdir -p bin
+          curl -L https://github.com/jcopperman/qitops-cli-tools/releases/download/v${QITOPS_VERSION}/qitops-linux-x86_64 -o bin/qitops
+          chmod +x bin/qitops
+          echo "$PWD/bin" >> $GITHUB_PATH
+      
+      - name: Verify QitOps installation
+        run: qitops --version
+      
+      - name: Determine environment
+        id: env
+        run: |
+          if [ "${{ github.event.inputs.environment }}" != "" ]; then
+            echo "ENVIRONMENT=${{ github.event.inputs.environment }}" >> $GITHUB_ENV
+          else
+            echo "ENVIRONMENT=$DEFAULT_ENVIRONMENT" >> $GITHUB_ENV
+          fi
+      
+      # Create directory for screenshots
+      - name: Create screenshots directory
+        run: mkdir -p screenshots
+      
+      - name: Run Web tests
+        run: |
+          mkdir -p test-results
+          qitops -r json -o test-results/web-test-results.json web -c tests/configs/web_test.json -e ${{ env.ENVIRONMENT }} -h true -s ./screenshots
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-test-results
+          path: test-results/
+          retention-days: 7
+      
+      # Upload screenshots
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v3
+        with:
+          name: web-test-screenshots
+          path: screenshots/
+          retention-days: 7
+
+  report:
+    name: Generate Test Report
+    needs: [api-tests, performance-tests, security-tests, web-tests]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      # Download the pre-built QitOps binary
+      - name: Download QitOps
+        run: |
+          mkdir -p bin
+          curl -L https://github.com/jcopperman/qitops-cli-tools/releases/download/v${QITOPS_VERSION}/qitops-linux-x86_64 -o bin/qitops
+          chmod +x bin/qitops
+          echo "$PWD/bin" >> $GITHUB_PATH
+      
+      - name: Verify QitOps installation
+        run: qitops --version
+      
+      - name: Download all test results
+        uses: actions/download-artifact@v3
+        with:
+          path: test-results
+      
+      - name: Generate combined report
+        run: |
+          mkdir -p reports
+          # Combine all test results into a single report
+          find test-results -name "*.json" -type f -exec cat {} \; > reports/combined-results.json
+          qitops -r html -o reports/test-report.html analyze -r reports/combined-results.json
+      
+      - name: Upload combined report
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: reports/
+          retention-days: 30
