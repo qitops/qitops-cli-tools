@@ -1,10 +1,9 @@
 use crate::api::ApiTestRunner;
-use crate::common::{TestResult, TestRunner};
+use crate::common::TestResult;
 use crate::error::{Error, Result};
-use async_trait::async_trait;
 use chrono::Utc;
 use log::{info, warn};
-use reqwest::{Client, Method, Response};
+use reqwest::{Client, Method};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::collections::HashMap;
@@ -467,10 +466,10 @@ impl ApiCollectionRunner {
     fn validate_response(
         &self,
         status: &reqwest::StatusCode,
-        headers: &reqwest::header::HeaderMap,
+        _headers: &reqwest::header::HeaderMap,
         body: &Value,
         request: &CollectionRequest,
-        duration: f64
+        _duration: f64
     ) -> Result<Option<Vec<String>>> {
         let mut validation_issues = Vec::new();
 

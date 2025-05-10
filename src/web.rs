@@ -1,5 +1,5 @@
 use crate::common::{TestConfig, TestResult, TestRunner};
-use crate::error::{Error, Result};
+use crate::error::Result;
 use async_trait::async_trait;
 use chrono::Utc;
 use reqwest::Client;
@@ -82,7 +82,7 @@ impl WebTestRunner {
             .await?;
 
         let status = response.status();
-        let headers = response.headers().clone();
+        let _headers = response.headers().clone();
         let body = response.text().await?;
 
         // Simulate assertions

@@ -2,7 +2,7 @@ use crate::common::TestResult;
 use crate::error::{Error, Result};
 use std::fs::File;
 use std::io::Write;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum ReportFormat {

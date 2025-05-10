@@ -254,7 +254,7 @@ async fn main() -> Result<()> {
     let mut test_results = Vec::new();
 
     let result = match &cli.command {
-        Commands::Api { config, environment } => {
+        Commands::Api { config, environment: _ } => {
             info!("Running API tests with config: {}", config.display());
             let test_config: ApiTestConfig = load_config(config)?;
             let runner = ApiTestRunner::new();
@@ -280,7 +280,7 @@ async fn main() -> Result<()> {
 
             Ok(())
         }
-        Commands::Performance { config, environment, users, duration } => {
+        Commands::Performance { config, environment: _, users, duration } => {
             info!("Running performance tests with config: {}", config.display());
             let test_config: PerformanceTestConfig = load_config(config)?;
             let runner = PerformanceTestRunner::new(*users, *duration);
@@ -301,7 +301,7 @@ async fn main() -> Result<()> {
 
             Ok(())
         }
-        Commands::PerformanceEnhanced { config, environment } => {
+        Commands::PerformanceEnhanced { config, environment: _ } => {
             info!("Running enhanced performance tests with config: {}", config.display());
             let test_config: EnhancedPerformanceConfig = load_config(config)?;
             let runner = EnhancedPerformanceRunner::new();
@@ -376,7 +376,7 @@ async fn main() -> Result<()> {
 
             Ok(())
         }
-        Commands::Security { config, environment, depth, passive } => {
+        Commands::Security { config, environment: _, depth, passive } => {
             info!("Running security tests with config: {}", config.display());
             let test_config: SecurityTestConfig = load_config(config)?;
             let runner = SecurityTestRunner::new(*depth, *passive);
@@ -397,7 +397,7 @@ async fn main() -> Result<()> {
 
             Ok(())
         }
-        Commands::Web { config, environment, headless, screenshot_dir } => {
+        Commands::Web { config, environment: _, headless, screenshot_dir } => {
             info!("Running web tests with config: {}", config.display());
             let test_config: WebTestConfig = load_config(config)?;
             let runner = WebTestRunner::new(*headless, screenshot_dir.clone());

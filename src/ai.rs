@@ -1,10 +1,9 @@
 use crate::common::TestResult;
 use crate::error::{Error, Result};
 use serde::{Deserialize, Serialize};
-use std::path::Path;
 use std::process::Command;
 use std::fs;
-use log::{info, warn};
+use log::info;
 
 /// AI model types supported by QitOps
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -67,7 +66,7 @@ impl AiTestGenerator {
     /// Generate a test configuration based on a description
     pub async fn generate_test_config(&self, description: &str, test_type: &str) -> Result<String> {
         info!("Generating {} test configuration from description", test_type);
-        
+
         let prompt = match test_type {
             "api" => self.create_api_test_prompt(description),
             "performance" => self.create_performance_test_prompt(description),
@@ -75,9 +74,9 @@ impl AiTestGenerator {
             "web" => self.create_web_test_prompt(description),
             _ => return Err(Error::ValidationError(format!("Unsupported test type: {}", test_type))),
         };
-        
+
         let json_config = self.run_inference(&prompt).await?;
-        
+
         // Validate the generated JSON
         match test_type {
             "api" => self.validate_api_test_config(&json_config)?,
@@ -86,36 +85,36 @@ impl AiTestGenerator {
             "web" => self.validate_web_test_config(&json_config)?,
             _ => return Err(Error::ValidationError(format!("Unsupported test type: {}", test_type))),
         }
-        
+
         Ok(json_config)
     }
-    
+
     /// Analyze test results and provide insights
     pub async fn analyze_test_results(&self, results: &[TestResult]) -> Result<String> {
         info!("Analyzing test results using AI");
-        
+
         let results_json = serde_json::to_string_pretty(results)?;
         let prompt = self.create_analysis_prompt(&results_json);
-        
+
         self.run_inference(&prompt).await
     }
-    
+
     /// Suggest improvements based on test results
     pub async fn suggest_improvements(&self, results: &[TestResult]) -> Result<String> {
         info!("Suggesting improvements based on test results");
-        
+
         let results_json = serde_json::to_string_pretty(results)?;
         let prompt = self.create_improvement_prompt(&results_json);
-        
+
         self.run_inference(&prompt).await
     }
-    
+
     // Private methods
-    
+
     async fn run_inference(&self, prompt: &str) -> Result<String> {
         // For local models, we'll use a command-line interface to the model
         // In a real implementation, this would use a proper Rust binding to the inference engine
-        
+
         match self.config.model_type {
             AiModelType::Llama => self.run_llama_inference(prompt).await,
             AiModelType::Mistral => self.run_mistral_inference(prompt).await,
@@ -130,16 +129,16 @@ impl AiTestGenerator {
             }
         }
     }
-    
+
     async fn run_llama_inference(&self, prompt: &str) -> Result<String> {
         // This is a simplified example using llama.cpp
         let model_path = self.config.model_path.clone().unwrap_or_else(|| {
             "/usr/local/share/models/llama-2-7b-chat.gguf".to_string()
         });
-        
+
         let temp_file = tempfile::NamedTempFile::new()?;
         fs::write(temp_file.path(), prompt)?;
-        
+
         let output = Command::new("llama-cli")
             .arg("--model")
             .arg(model_path)
@@ -152,7 +151,7 @@ impl AiTestGenerator {
             .arg("--file")
             .arg(temp_file.path())
             .output()?;
-        
+
         if output.status.success() {
             let result = String::from_utf8_lossy(&output.stdout).to_string();
             Ok(self.extract_json_from_output(&result))
@@ -161,28 +160,28 @@ impl AiTestGenerator {
             Err(Error::TestError(format!("Llama inference failed: {}", error)))
         }
     }
-    
-    async fn run_mistral_inference(&self, prompt: &str) -> Result<String> {
+
+    async fn run_mistral_inference(&self, _prompt: &str) -> Result<String> {
         // Similar implementation to llama but for Mistral
         // This is a placeholder
         Ok("Mistral inference not yet implemented".to_string())
     }
-    
-    async fn run_gptj_inference(&self, prompt: &str) -> Result<String> {
+
+    async fn run_gptj_inference(&self, _prompt: &str) -> Result<String> {
         // Placeholder for GPT-J
         Ok("GPT-J inference not yet implemented".to_string())
     }
-    
-    async fn run_phi_inference(&self, prompt: &str) -> Result<String> {
+
+    async fn run_phi_inference(&self, _prompt: &str) -> Result<String> {
         // Placeholder for Phi
         Ok("Phi inference not yet implemented".to_string())
     }
-    
-    async fn run_custom_inference(&self, prompt: &str, model_path: &str) -> Result<String> {
+
+    async fn run_custom_inference(&self, _prompt: &str, model_path: &str) -> Result<String> {
         // Placeholder for custom models
         Ok(format!("Custom inference with model {} not yet implemented", model_path))
     }
-    
+
     fn extract_json_from_output(&self, output: &str) -> String {
         // Extract JSON from the model output
         // This is a simplified implementation
@@ -193,7 +192,7 @@ impl AiTestGenerator {
         }
         output.to_string()
     }
-    
+
     fn create_api_test_prompt(&self, description: &str) -> String {
         format!(
             "Generate a JSON configuration for an API test based on this description: {}\n\
@@ -202,7 +201,7 @@ impl AiTestGenerator {
             description
         )
     }
-    
+
     fn create_performance_test_prompt(&self, description: &str) -> String {
         format!(
             "Generate a JSON configuration for a performance test based on this description: {}\n\
@@ -211,7 +210,7 @@ impl AiTestGenerator {
             description
         )
     }
-    
+
     fn create_security_test_prompt(&self, description: &str) -> String {
         format!(
             "Generate a JSON configuration for a security test based on this description: {}\n\
@@ -220,7 +219,7 @@ impl AiTestGenerator {
             description
         )
     }
-    
+
     fn create_web_test_prompt(&self, description: &str) -> String {
         format!(
             "Generate a JSON configuration for a web test based on this description: {}\n\
@@ -229,7 +228,7 @@ impl AiTestGenerator {
             description
         )
     }
-    
+
     fn create_analysis_prompt(&self, results_json: &str) -> String {
         format!(
             "Analyze these test results and provide insights:\n{}\n\
@@ -238,7 +237,7 @@ impl AiTestGenerator {
             results_json
         )
     }
-    
+
     fn create_improvement_prompt(&self, results_json: &str) -> String {
         format!(
             "Based on these test results, suggest improvements to the tests or the system under test:\n{}\n\
@@ -247,9 +246,9 @@ impl AiTestGenerator {
             results_json
         )
     }
-    
+
     // Validation methods
-    
+
     fn validate_api_test_config(&self, config: &str) -> Result<()> {
         // Simplified validation
         if !config.contains("url") || !config.contains("method") {
@@ -257,7 +256,7 @@ impl AiTestGenerator {
         }
         Ok(())
     }
-    
+
     fn validate_performance_test_config(&self, config: &str) -> Result<()> {
         // Simplified validation
         if !config.contains("target_url") || !config.contains("method") {
@@ -265,7 +264,7 @@ impl AiTestGenerator {
         }
         Ok(())
     }
-    
+
     fn validate_security_test_config(&self, config: &str) -> Result<()> {
         // Simplified validation
         if !config.contains("target_url") {
@@ -273,7 +272,7 @@ impl AiTestGenerator {
         }
         Ok(())
     }
-    
+
     fn validate_web_test_config(&self, config: &str) -> Result<()> {
         // Simplified validation
         if !config.contains("target_url") {

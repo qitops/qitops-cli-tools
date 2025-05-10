@@ -2,15 +2,14 @@ use crate::common::{TestConfig, TestResult, TestRunner};
 use crate::error::{Error, Result};
 use async_trait::async_trait;
 use chrono::Utc;
-use futures::stream::{self, StreamExt};
 use log::{info, warn};
-use reqwest::{Client, Method, Response};
+use reqwest::{Client, Method};
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::sync::{Arc, Mutex};
 use std::time::{Duration, Instant};
 use tokio::sync::Semaphore;
-use tokio::time::{sleep, timeout};
+use tokio::time::sleep;
 
 /// Load profile types for performance testing
 #[derive(Debug, Clone, Serialize, Deserialize)]

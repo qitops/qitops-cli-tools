@@ -1,11 +1,10 @@
 use crate::error::{Error, Result};
-use log::{debug, info, warn};
+use log::warn;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use std::collections::HashMap;
 use std::fs::File;
-use std::io::{BufRead, BufReader};
-use std::path::Path;
+use std::io::BufReader;
 
 /// Data source types for data-driven testing
 #[derive(Debug, Clone, Serialize, Deserialize)]
