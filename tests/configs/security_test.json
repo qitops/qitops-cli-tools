@@ -1,0 +1,16 @@
+{
+    "name": "Security Scan",
+    "description": "Basic security scan of a public API",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "target_url": "https://jsonplaceholder.typicode.com",
+    "headers": {
+        "Accept": "application/json"
+    },
+    "scan_types": [
+        "headers",
+        "ssl"
+    ],
+    "max_high_severity_findings": 0
+}

@@ -1,0 +1,36 @@
+{
+    "name": "Sample Web Test",
+    "description": "Testing a public website",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "target_url": "https://example.com",
+    "viewport": {
+        "width": 1280,
+        "height": 800,
+        "device_scale_factor": 1.0,
+        "is_mobile": false
+    },
+    "wait_for_selector": "body",
+    "wait_timeout_secs": 10,
+    "screenshots": true,
+    "user_agent": "QitOps-WebTester/1.0",
+    "assertions": [
+        {
+            "assertion_type": "title",
+            "expected_value": "Example Domain",
+            "comparison": "contains"
+        },
+        {
+            "assertion_type": "element",
+            "selector": "h1",
+            "expected_value": "true"
+        }
+    ],
+    "actions": [
+        {
+            "action_type": "wait",
+            "wait_time_ms": 1000
+        }
+    ]
+}

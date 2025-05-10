@@ -1,0 +1,75 @@
+{
+    "name": "Enhanced Performance Test",
+    "description": "Testing API performance with multiple scenarios and load profiles",
+    "timeout": 60,
+    "retries": 0,
+    "environment": "production",
+    "load_profile": {
+        "type": "ramping_vus",
+        "initial": 1,
+        "stages": [
+            {
+                "duration_secs": 5,
+                "target": 5
+            },
+            {
+                "duration_secs": 10,
+                "target": 10
+            },
+            {
+                "duration_secs": 5,
+                "target": 0
+            }
+        ]
+    },
+    "scenarios": [
+        {
+            "name": "Get Posts",
+            "target_url": "https://jsonplaceholder.typicode.com/posts",
+            "method": "GET",
+            "headers": {
+                "Accept": "application/json",
+                "User-Agent": "QitOps-Test/1.0"
+            },
+            "weight": 3,
+            "tags": {
+                "endpoint": "posts",
+                "category": "read"
+            }
+        },
+        {
+            "name": "Get Comments",
+            "target_url": "https://jsonplaceholder.typicode.com/comments",
+            "method": "GET",
+            "headers": {
+                "Accept": "application/json",
+                "User-Agent": "QitOps-Test/1.0"
+            },
+            "weight": 1,
+            "tags": {
+                "endpoint": "comments",
+                "category": "read"
+            }
+        }
+    ],
+    "thresholds": [
+        {
+            "metric": "response_time.avg",
+            "expression": "< 0.5",
+            "abort_on_fail": false
+        },
+        {
+            "metric": "response_time.p95",
+            "expression": "< 1.0",
+            "abort_on_fail": false
+        },
+        {
+            "metric": "success.avg",
+            "expression": "> 0.95",
+            "abort_on_fail": true
+        }
+    ],
+    "success_threshold": 95.0,
+    "stream_metrics": true,
+    "metrics_interval_secs": 1
+}

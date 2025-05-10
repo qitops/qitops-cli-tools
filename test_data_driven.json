@@ -1,0 +1,17 @@
+{
+    "name": "Data-Driven Test",
+    "description": "A simple data-driven test",
+    "url": "https://jsonplaceholder.typicode.com/posts/{{id}}",
+    "method": "GET",
+    "headers": {
+        "Accept": "application/json"
+    },
+    "expected_status": 200,
+    "assertions": [
+        {
+            "jsonpath": "$.title",
+            "operator": "contains",
+            "value": "{{title_contains}}"
+        }
+    ]
+}

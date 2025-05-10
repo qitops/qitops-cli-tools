@@ -1,0 +1,10 @@
+{
+    "name": "Security Test",
+    "description": "A simple security test",
+    "target_url": "https://jsonplaceholder.typicode.com",
+    "scan_paths": ["/posts", "/users"],
+    "auth": {
+        "type": "none"
+    },
+    "tests": ["xss", "sqli", "csrf"]
+}

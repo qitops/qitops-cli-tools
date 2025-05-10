@@ -1,0 +1,30 @@
+{
+    "name": "Example API Test",
+    "description": "Test description",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "url": "https://jsonplaceholder.typicode.com/posts/1",
+    "method": "GET",
+    "headers": {
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Test"
+    },
+    "expected_status": 200,
+    "expected_body": {
+        "userId": 1,
+        "id": 1
+    },
+    "max_response_time": 2,
+    "expected_headers": {
+        "content-type": "application/json; charset=utf-8"
+    },
+    "retry": {
+        "max_retries": 3,
+        "initial_delay_ms": 100,
+        "max_delay_ms": 1000,
+        "retry_status_codes": [408, 429, 500, 502, 503, 504],
+        "retry_on_timeout": true,
+        "retry_on_connection_error": true
+    }
+}

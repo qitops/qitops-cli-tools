@@ -1,0 +1,74 @@
+{
+    "name": "JSONPlaceholder API Collection",
+    "description": "A collection of JSONPlaceholder API tests",
+    "version": "1.0.0",
+    "variables": {
+        "base_url": "https://jsonplaceholder.typicode.com",
+        "user_id": "1",
+        "post_id": "1"
+    },
+    "defaults": {
+        "headers": {
+            "Accept": "application/json",
+            "User-Agent": "QitOps-Test"
+        },
+        "timeout": 30,
+        "retries": 3
+    },
+    "requests": [
+        {
+            "name": "Get User",
+            "description": "Get a user",
+            "id": "get-user",
+            "url": "{{base_url}}/users/{{user_id}}",
+            "method": "GET",
+            "expected_status": 200,
+            "expected_body": {
+                "id": 1
+            },
+            "capture": {
+                "username": "$.username",
+                "email": "$.email"
+            }
+        },
+        {
+            "name": "Get User Posts",
+            "description": "Get posts for a user",
+            "id": "get-user-posts",
+            "url": "{{base_url}}/users/{{user_id}}/posts",
+            "method": "GET",
+            "depends_on": ["get-user"],
+            "expected_status": 200
+        },
+        {
+            "name": "Create Post",
+            "description": "Create a new post",
+            "id": "create-post",
+            "url": "{{base_url}}/posts",
+            "method": "POST",
+            "depends_on": ["get-user"],
+            "body": {
+                "title": "Test Post by {{username}}",
+                "body": "This is a test post created by QitOps",
+                "userId": "{{user_id}}"
+            },
+            "expected_status": 201,
+            "capture": {
+                "new_post_id": "$.id"
+            }
+        }
+    ],
+    "environments": {
+        "production": {
+            "base_url": "https://jsonplaceholder.typicode.com"
+        },
+        "staging": {
+            "base_url": "https://jsonplaceholder.typicode.com"
+        }
+    },
+    "run_options": {
+        "sequential": true,
+        "stop_on_failure": true,
+        "delay_between_requests_ms": 500
+    }
+}

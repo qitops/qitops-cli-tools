@@ -1,0 +1,14 @@
+{
+    "name": "Sample Performance Test",
+    "description": "Load testing a public API endpoint",
+    "timeout": 30,
+    "retries": 3,
+    "environment": "production",
+    "target_url": "https://jsonplaceholder.typicode.com/posts",
+    "method": "GET",
+    "headers": {
+        "Accept": "application/json"
+    },
+    "success_threshold": 95.0,
+    "ramp_up_time_secs": 5
+}

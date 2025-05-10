@@ -1,0 +1,16 @@
+{
+    "name": "User API Test for {{username}}",
+    "description": "Test the user API for {{username}}",
+    "url": "https://jsonplaceholder.typicode.com/users/{{user_id}}",
+    "method": "GET",
+    "headers": {
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Test"
+    },
+    "expected_status": 200,
+    "expected_body": {
+        "id": "{{user_id}}",
+        "username": "{{username}}",
+        "email": "{{email}}"
+    }
+}

@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Implement API Collections",
+    "description": "Support grouping multiple API tests in a single config file (like Postman collections). Enables batch API testing workflows."
+  },
+  {
+    "title": "Support Environment Variables",
+    "description": "Allow variable interpolation from config-defined environments. Similar to Postman's variable resolution (e.g., {{base_url}})."
+  },
+  {
+    "title": "Enable Request Chaining",
+    "description": "Allow storing values (e.g. tokens) from a request and reusing them in subsequent requests within the same collection."
+  },
+  {
+    "title": "Add OAuth2 and JWT Authentication Support",
+    "description": "Expand authentication capabilities to include OAuth2 flows, bearer tokens, and API key headers."
+  },
+  {
+    "title": "Add GraphQL Support",
+    "description": "Enable sending GraphQL queries and handling GraphQL-specific response patterns."
+  },
+  {
+    "title": "Implement Load Profiles in Performance Module",
+    "description": "Support different load profiles such as constant, ramp-up, and spike traffic."
+  },
+  {
+    "title": "Add Thresholds for Performance Metrics",
+    "description": "Allow users to define performance thresholds and mark tests as pass/fail based on those metrics."
+  },
+  {
+    "title": "Stream Performance Metrics in Real Time",
+    "description": "Show live metrics in CLI (e.g., response time graph, concurrent users, success rate)."
+  },
+  {
+    "title": "GitHub Actions Template for QitOps",
+    "description": "Provide a reusable GitHub Actions template for running QitOps tests in CI pipelines."
+  },
+  {
+    "title": "Implement Plugin System (QitOpsPlugin Trait)",
+    "description": "Create a plugin trait and loader system to allow third-party extensions for new test types or custom logic."
+  },
+  {
+    "title": "Generate API Tests from OpenAPI Specs",
+    "description": "Parse OpenAPI documents and generate corresponding API test configs."
+  },
+  {
+    "title": "Add HTML & Markdown Reporters",
+    "description": "Generate test result outputs in HTML and Markdown formats for sharing or CI storage."
+  }
+]

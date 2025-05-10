@@ -1,0 +1,22 @@
+{
+    "name": "Web Test",
+    "description": "A simple web test",
+    "base_url": "https://example.com",
+    "viewport": {
+        "width": 1280,
+        "height": 720
+    },
+    "steps": [
+        {
+            "name": "Visit homepage",
+            "action": "navigate",
+            "url": "/"
+        },
+        {
+            "name": "Check title",
+            "action": "assert",
+            "selector": "title",
+            "expected": "Example Domain"
+        }
+    ]
+}
