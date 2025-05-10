@@ -159,7 +159,7 @@ impl AiTestGenerator {
     async fn run_llama_inference(&self, prompt: &str) -> Result<String> {
         // Mock implementation for testing
         if prompt.contains("Analyze these test results") {
-            return Ok(r#"# Test Analysis
+            Ok(r#"# Test Analysis
 
 ## Overview
 The test was successful with a response time of 0.19 seconds.
@@ -174,9 +174,9 @@ The test was successful with a response time of 0.19 seconds.
 - The test is performing well
 - Consider adding more assertions to validate the response body structure
 - Add tests for error conditions (e.g., invalid IDs)"#
-                .to_string());
+                .to_string())
         } else if prompt.contains("suggest improvements") {
-            return Ok(r#"# Improvement Suggestions
+            Ok(r#"# Improvement Suggestions
 
 ## Performance
 - Add response time thresholds to ensure consistent performance
@@ -189,9 +189,9 @@ The test was successful with a response time of 0.19 seconds.
 ## Coverage
 - Add negative test cases
 - Test edge cases with invalid inputs"#
-                .to_string());
+                .to_string())
         } else if prompt.contains("Generate a JSON configuration for an API test") {
-            return Ok(r#"{
+            Ok(r#"{
     "name": "GitHub User API Test",
     "description": "Test the GitHub API to fetch user information",
     "environment": "production",
@@ -215,9 +215,9 @@ The test was successful with a response time of 0.19 seconds.
         }
     ]
 }"#
-            .to_string());
+            .to_string())
         } else {
-            return Ok("Llama mock response for testing".to_string());
+            Ok("Llama mock response for testing".to_string())
         }
     }
 
@@ -322,19 +322,30 @@ The test was successful with a response time of 0.45 seconds.
             let code_start = start + 7; // Skip "```json" and newline
             if let Some(end) = output[code_start..].find("```") {
                 let json = output[code_start..code_start + end].trim();
-                return json.to_string();
+                json.to_string()
+            } else {
+                // If no closing code block, try other methods
+                self.extract_json_fallback(output)
             }
+        } else {
+            // If no code block, try other methods
+            self.extract_json_fallback(output)
         }
+    }
 
-        // If no code block, try to extract JSON directly
+    fn extract_json_fallback(&self, output: &str) -> String {
+        // Try to extract JSON directly
         if let Some(start) = output.find('{') {
             if let Some(end) = output.rfind('}') {
-                return output[start..=end].to_string();
+                output[start..=end].to_string()
+            } else {
+                // If all else fails, return the original output
+                output.to_string()
             }
+        } else {
+            // If all else fails, return the original output
+            output.to_string()
         }
-
-        // If all else fails, return the original output
-        output.to_string()
     }
 
     pub fn create_api_test_prompt(&self, description: &str) -> String {
@@ -396,40 +407,44 @@ The test was successful with a response time of 0.45 seconds.
     fn validate_api_test_config(&self, config: &str) -> Result<()> {
         // Simplified validation
         if !config.contains("url") || !config.contains("method") {
-            return Err(Error::ValidationError(
+            Err(Error::ValidationError(
                 "Generated API test config is missing required fields".to_string(),
-            ));
+            ))
+        } else {
+            Ok(())
         }
-        Ok(())
     }
 
     fn validate_performance_test_config(&self, config: &str) -> Result<()> {
         // Simplified validation
         if !config.contains("target_url") || !config.contains("method") {
-            return Err(Error::ValidationError(
+            Err(Error::ValidationError(
                 "Generated performance test config is missing required fields".to_string(),
-            ));
+            ))
+        } else {
+            Ok(())
         }
-        Ok(())
     }
 
     fn validate_security_test_config(&self, config: &str) -> Result<()> {
         // Simplified validation
         if !config.contains("target_url") {
-            return Err(Error::ValidationError(
+            Err(Error::ValidationError(
                 "Generated security test config is missing required fields".to_string(),
-            ));
+            ))
+        } else {
+            Ok(())
         }
-        Ok(())
     }
 
     fn validate_web_test_config(&self, config: &str) -> Result<()> {
         // Simplified validation
         if !config.contains("target_url") {
-            return Err(Error::ValidationError(
+            Err(Error::ValidationError(
                 "Generated web test config is missing required fields".to_string(),
-            ));
+            ))
+        } else {
+            Ok(())
         }
-        Ok(())
     }
 }
