@@ -71,7 +71,12 @@ impl WebTestRunner {
         // through a library like fantoccini, thirtyfour, or headless_chrome
         // For now, we'll simulate the web testing with basic HTTP requests
 
-        info!("Starting web test for URL: {}", config.target_url);
+        // Log whether we're running in headless mode
+        if self.headless {
+            info!("Starting web test in headless mode for URL: {}", config.target_url);
+        } else {
+            info!("Starting web test with visible browser for URL: {}", config.target_url);
+        }
 
         // Simulate browser navigation
         let response = self.client
@@ -108,6 +113,15 @@ impl WebTestRunner {
             if let Some(dir) = &self.screenshot_dir {
                 let timestamp = Utc::now().timestamp();
                 let filename = format!("{}/screenshot_{}.png", dir, timestamp);
+
+                // In a real implementation, we would use the headless browser to take a screenshot
+                // The headless field would determine the browser mode
+                if self.headless {
+                    info!("Taking screenshot in headless mode");
+                } else {
+                    info!("Taking screenshot in visible browser mode");
+                }
+
                 Some(filename)
             } else {
                 None

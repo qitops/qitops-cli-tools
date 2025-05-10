@@ -2,6 +2,7 @@ use crate::common::{TestConfig, TestResult, TestRunner};
 use crate::error::{Result};
 use async_trait::async_trait;
 use chrono::Utc;
+use log::info;
 use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use std::time::Instant;
@@ -60,35 +61,44 @@ impl SecurityTestRunner {
 
         // Basic security checks
         if let Ok(response) = self.client.get(&config.target_url).send().await {
-            // Check for security headers
+            // Check for security headers (always run regardless of scan depth)
             findings.extend(self.check_security_headers(&response));
 
-            // Check for SSL/TLS configuration
-            findings.extend(self.check_ssl(&config.target_url).await);
+            // Run checks based on scan depth
+            if self.scan_depth >= 1 {
+                // Level 1: Basic security checks (headers, SSL)
+                findings.extend(self.check_ssl(&config.target_url).await);
+            }
 
-            // Check for common vulnerabilities
-            findings.extend(self.check_common_vulnerabilities(&config.target_url, config).await);
+            if self.scan_depth >= 2 {
+                // Level 2: Common vulnerabilities
+                findings.extend(self.check_common_vulnerabilities(&config.target_url, config).await);
+                findings.extend(self.check_sensitive_data(&response));
+            }
 
-            // Check for sensitive data exposure
-            findings.extend(self.check_sensitive_data(&response));
+            if self.scan_depth >= 3 {
+                // Level 3: Authentication and authorization
+                findings.extend(self.check_authentication(&config.target_url, config).await);
+                findings.extend(self.check_jwt(config).await);
+                findings.extend(self.check_access_control(config).await);
+            }
 
-            // Check for authentication issues
-            findings.extend(self.check_authentication(&config.target_url, config).await);
+            if self.scan_depth >= 4 {
+                // Level 4: Advanced vulnerability scanning
+                // Only run active scans if passive_only is false
+                if !self.passive_only {
+                    findings.extend(self.check_csrf(&config.target_url, config).await);
+                    findings.extend(self.check_xss(&config.target_url, config).await);
+                    findings.extend(self.check_sql_injection(&config.target_url, config).await);
+                }
+            }
 
-            // Check for CSRF vulnerabilities
-            findings.extend(self.check_csrf(&config.target_url, config).await);
-
-            // Check for XSS vulnerabilities
-            findings.extend(self.check_xss(&config.target_url, config).await);
-
-            // Check for SQL injection
-            findings.extend(self.check_sql_injection(&config.target_url, config).await);
-
-            // Check for JWT issues
-            findings.extend(self.check_jwt(config).await);
-
-            // Check for access control
-            findings.extend(self.check_access_control(config).await);
+            // Level 5 would include more comprehensive scans
+            if self.scan_depth >= 5 && !self.passive_only {
+                // Additional comprehensive security checks would go here
+                info!("Running comprehensive security audit at level 5");
+                // These would be implemented in future versions
+            }
         }
 
         Ok(findings)

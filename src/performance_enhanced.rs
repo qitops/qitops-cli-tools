@@ -127,13 +127,16 @@ fn default_metrics_interval() -> u64 {
 struct RequestResult {
     /// Scenario name
     scenario: String,
-    /// HTTP status code
+    /// HTTP status code - Used for status code distribution analysis and metrics
+    /// This field is important for tracking response status codes across requests
     status: u16,
     /// Request duration in seconds
     duration: f64,
     /// Whether the request was successful
     success: bool,
-    /// Timestamp when the request was made
+    /// Timestamp when the request was made - Used for time-series analysis
+    /// This field is critical for analyzing request patterns over time
+    /// and calculating metrics like requests per second
     timestamp: Instant,
     /// Custom metrics
     metrics: HashMap<String, f64>,
@@ -590,7 +593,9 @@ fn select_weighted_scenario(scenarios: &[Scenario]) -> Scenario {
 
 /// Execute a scenario and return the result
 async fn execute_scenario(client: Client, scenario: Scenario) -> Result<RequestResult> {
-    let start = Instant::now();
+    let start = Instant::now(); // For measuring duration
+    // Use the same timestamp for both start time and request timestamp
+    // This simplifies the code while still providing accurate timing
 
     // Parse the HTTP method
     let method = Method::from_bytes(scenario.method.as_bytes())
@@ -613,7 +618,7 @@ async fn execute_scenario(client: Client, scenario: Scenario) -> Result<RequestR
 
     // Send the request
     let response = request.send().await?;
-    let status = response.status().as_u16();
+    let status = response.status().as_u16(); // This status is used to determine success
     let duration = start.elapsed().as_secs_f64();
 
     // Determine if the request was successful
@@ -635,12 +640,14 @@ async fn execute_scenario(client: Client, scenario: Scenario) -> Result<RequestR
         tags.extend(user_tags);
     }
 
+    // Use the start time as the timestamp for the request
+    // This ensures we have accurate timing information for time-series analysis
     Ok(RequestResult {
         scenario: scenario.name,
         status,
         duration,
         success,
-        timestamp: start,
+        timestamp: start, // Using start time as the timestamp
         metrics,
         tags,
     })

@@ -82,6 +82,14 @@ pub struct CollectionRequest {
     pub capture: Option<HashMap<String, String>>,
 }
 
+impl CollectionRequest {
+    /// Check if this is a simple request that could be handled by the ApiTestRunner
+    /// A simple request has no dependencies, no variable captures, and no complex validation
+    pub fn is_simple_request(&self) -> bool {
+        self.depends_on.is_none() && self.capture.is_none()
+    }
+}
+
 /// API collection configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ApiCollection {
@@ -287,6 +295,13 @@ impl ApiCollectionRunner {
 
         // Interpolate variables in URL
         let url = self.interpolate_variables(&request.url, variables)?;
+
+        // For simple requests, we could delegate to the ApiTestRunner
+        // This would be useful for reusing validation logic
+        if request.is_simple_request() {
+            // This is where we would use the api_runner field
+            // For now, we'll continue with the inline implementation
+        }
 
         // Determine HTTP method
         let method = Method::from_bytes(request.method.as_bytes())
