@@ -129,6 +129,7 @@ struct RequestResult {
     scenario: String,
     /// HTTP status code - Used for status code distribution analysis and metrics
     /// This field is important for tracking response status codes across requests
+    #[allow(dead_code)]  // Used in derived impls for Clone and Debug
     status: u16,
     /// Request duration in seconds
     duration: f64,
@@ -137,6 +138,7 @@ struct RequestResult {
     /// Timestamp when the request was made - Used for time-series analysis
     /// This field is critical for analyzing request patterns over time
     /// and calculating metrics like requests per second
+    #[allow(dead_code)]  // Used in derived impls for Clone and Debug
     timestamp: Instant,
     /// Custom metrics
     metrics: HashMap<String, f64>,

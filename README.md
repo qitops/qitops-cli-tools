@@ -146,6 +146,39 @@ qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/pr
 
 ## Installation
 
+### From crates.io (Recommended)
+
+```bash
+# Install directly from crates.io
+cargo install qitops
+
+# Run QitOps
+qitops --help
+```
+
+### From GitHub Releases
+
+1. Download the latest binary for your platform from the [GitHub Releases page](https://github.com/qitops/qitops-cli-tools/releases)
+2. Make the file executable (Linux/macOS): `chmod +x qitops-*`
+3. Move it to a directory in your PATH:
+   - Linux/macOS: `sudo mv qitops-* /usr/local/bin/qitops`
+   - Windows: Add the directory containing the executable to your PATH
+
+### Using Docker
+
+```bash
+# Pull the Docker image
+docker pull qitops/qitops:latest
+
+# Run QitOps
+docker run --rm qitops/qitops:latest --help
+
+# Run with mounted volumes for configs and results
+docker run --rm -v $(pwd)/configs:/workspace/configs -v $(pwd)/results:/workspace/results qitops/qitops:latest api -c /workspace/configs/api_test.json
+```
+
+### From Source
+
 ```bash
 # Clone the repository
 git clone https://github.com/qitops/qitops-cli-tools.git
@@ -156,6 +189,13 @@ cargo build --release
 
 # Install the binary (optional)
 cargo install --path .
+```
+
+### With AI Features (Optional)
+
+```bash
+# Install with AI features enabled
+cargo install qitops --features ai
 ```
 
 ## Configuration

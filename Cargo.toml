@@ -4,6 +4,13 @@ version = "0.1.0"
 edition = "2021"
 authors = ["Jonathan Opperman <opperman.jonathan@gmail.com>"]
 description = "Software Quality Assurance CLI for API, Performance, Security, and Web Testing"
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/qitops/qitops-cli-tools"
+repository = "https://github.com/qitops/qitops-cli-tools"
+documentation = "https://github.com/qitops/qitops-cli-tools"
+keywords = ["testing", "api", "performance", "security", "qa"]
+categories = ["command-line-utilities", "development-tools::testing"]
 
 [[bin]]
 name = "qitops"

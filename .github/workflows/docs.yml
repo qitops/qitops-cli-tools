@@ -1,0 +1,59 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'docs/**'
+      - 'README.md'
+      - '.github/workflows/docs.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup mdBook
+        uses: peaceiris/actions-mdbook@v1
+        with:
+          mdbook-version: 'latest'
+          
+      - name: Create docs directory if it doesn't exist
+        run: mkdir -p docs
+        
+      - name: Copy README to docs
+        run: |
+          cp README.md docs/index.md
+          cp CHANGELOG.md docs/changelog.md
+          cp ROADMAP.md docs/roadmap.md
+          
+      - name: Create book.toml if it doesn't exist
+        run: |
+          if [ ! -f docs/book.toml ]; then
+            cat > docs/book.toml << EOF
+          [book]
+          authors = ["Jonathan Opperman"]
+          language = "en"
+          multilingual = false
+          src = "."
+          title = "QitOps Documentation"
+          
+          [output.html]
+          git-repository-url = "https://github.com/qitops/qitops-cli-tools"
+          git-repository-icon = "fa-github"
+          edit-url-template = "https://github.com/qitops/qitops-cli-tools/edit/master/docs/{path}"
+          EOF
+          fi
+          
+      - name: Build documentation
+        run: |
+          cd docs
+          mdbook build
+          
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/book
+          publish_branch: gh-pages

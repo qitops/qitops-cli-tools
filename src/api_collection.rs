@@ -1,5 +1,5 @@
 use crate::api::ApiTestRunner;
-use crate::common::TestResult;
+use crate::common::{TestResult, TestRunner};
 use crate::error::{Error, Result};
 use chrono::Utc;
 use log::{info, warn};
@@ -296,11 +296,45 @@ impl ApiCollectionRunner {
         // Interpolate variables in URL
         let url = self.interpolate_variables(&request.url, variables)?;
 
-        // For simple requests, we could delegate to the ApiTestRunner
-        // This would be useful for reusing validation logic
+        // For simple requests, delegate to the ApiTestRunner
+        // This reuses validation logic and reduces code duplication
         if request.is_simple_request() {
-            // This is where we would use the api_runner field
-            // For now, we'll continue with the inline implementation
+            // Create a simplified API test config for the ApiTestRunner
+            let mut headers = HashMap::new();
+
+            // Add headers from collection defaults
+            if let Some(defaults) = &collection.defaults {
+                if let Some(default_headers) = &defaults.headers {
+                    for (key, value) in default_headers {
+                        let interpolated_value = self.interpolate_variables(value, variables)?;
+                        headers.insert(key.clone(), interpolated_value);
+                    }
+                }
+            }
+
+            // Add headers from request (overriding defaults)
+            if let Some(req_headers) = &request.headers {
+                for (key, value) in req_headers {
+                    let interpolated_value = self.interpolate_variables(value, variables)?;
+                    headers.insert(key.clone(), interpolated_value);
+                }
+            }
+
+            // Create a simplified test config
+            let test_config = serde_json::json!({
+                "name": request.name,
+                "description": request.description,
+                "url": url,
+                "method": request.method,
+                "headers": headers,
+                "expected_status": request.expected_status,
+                "expected_body": request.expected_body,
+                "timeout": collection.defaults.as_ref().and_then(|d| d.timeout).unwrap_or(30),
+                "retries": collection.defaults.as_ref().and_then(|d| d.retries).unwrap_or(3)
+            });
+
+            // Use the ApiTestRunner to execute the request
+            return self.api_runner.run(&test_config).await;
         }
 
         // Determine HTTP method

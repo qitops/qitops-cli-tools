@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  qitops:
+    image: qitops/qitops:latest
+    volumes:
+      - ./tests/configs:/workspace/configs
+      - ./results:/workspace/results
+    environment:
+      - LOG_LEVEL=info
+    command: ["api", "-c", "/workspace/configs/api_test.json"]

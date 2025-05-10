@@ -1,0 +1,23 @@
+name: qitops
+base: core20
+version: '0.1.0'
+summary: Software Quality Assurance CLI for API, Performance, Security, and Web Testing
+description: |
+  QitOps is a comprehensive Software Quality Assurance CLI tool for API, 
+  Performance, Security, and Web Testing. It provides a unified command-line 
+  interface with minimal dependencies and maximum flexibility.
+
+grade: stable
+confinement: strict
+
+parts:
+  qitops:
+    plugin: rust
+    source: .
+
+apps:
+  qitops:
+    command: bin/qitops
+    plugs:
+      - network
+      - home
