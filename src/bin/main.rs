@@ -538,7 +538,8 @@ async fn main() -> Result<()> {
             // Check if AI features are available
             if !ai_compat::ai_features_available() {
                 return Err(Error::ConfigError(
-                    "AI features are not available. Build with --features ai to enable them.".to_string()
+                    "AI features are not available. Build with --features ai to enable them."
+                        .to_string(),
                 ));
             }
 
@@ -589,7 +590,8 @@ async fn main() -> Result<()> {
             // Check if AI features are available
             if !ai_compat::ai_features_available() {
                 return Err(Error::ConfigError(
-                    "AI features are not available. Build with --features ai to enable them.".to_string()
+                    "AI features are not available. Build with --features ai to enable them."
+                        .to_string(),
                 ));
             }
 
@@ -646,7 +648,8 @@ async fn main() -> Result<()> {
             // Check if AI features are available
             if !ai_compat::ai_features_available() {
                 return Err(Error::ConfigError(
-                    "AI features are not available. Build with --features ai to enable them.".to_string()
+                    "AI features are not available. Build with --features ai to enable them."
+                        .to_string(),
                 ));
             }
 
