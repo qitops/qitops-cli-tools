@@ -1,0 +1,105 @@
+[
+  {
+    "test_id": "api-test-1",
+    "name": "GitHub User API Test",
+    "description": "Test the GitHub API to fetch user information",
+    "timestamp": "2025-05-10T21:15:00Z",
+    "duration_ms": 190,
+    "status": "success",
+    "url": "https://api.github.com/users/octocat",
+    "method": "GET",
+    "request_headers": {
+      "Accept": "application/vnd.github.v3+json",
+      "User-Agent": "QitOps-Test"
+    },
+    "response_status": 200,
+    "response_headers": {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "public, max-age=60, s-maxage=60"
+    },
+    "assertions": [
+      {
+        "type": "status",
+        "expected": 200,
+        "actual": 200,
+        "result": "pass"
+      },
+      {
+        "type": "json",
+        "path": "$.login",
+        "expected": "octocat",
+        "actual": "octocat",
+        "result": "pass"
+      },
+      {
+        "type": "json",
+        "path": "$.type",
+        "expected": "User",
+        "actual": "User",
+        "result": "pass"
+      }
+    ]
+  },
+  {
+    "test_id": "api-test-2",
+    "name": "GitHub Repos API Test",
+    "description": "Test the GitHub API to fetch repositories",
+    "timestamp": "2025-05-10T21:15:01Z",
+    "duration_ms": 250,
+    "status": "success",
+    "url": "https://api.github.com/users/octocat/repos",
+    "method": "GET",
+    "request_headers": {
+      "Accept": "application/vnd.github.v3+json",
+      "User-Agent": "QitOps-Test"
+    },
+    "response_status": 200,
+    "response_headers": {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "public, max-age=60, s-maxage=60"
+    },
+    "assertions": [
+      {
+        "type": "status",
+        "expected": 200,
+        "actual": 200,
+        "result": "pass"
+      },
+      {
+        "type": "json",
+        "path": "$[0].owner.login",
+        "expected": "octocat",
+        "actual": "octocat",
+        "result": "pass"
+      }
+    ]
+  },
+  {
+    "test_id": "api-test-3",
+    "name": "GitHub Non-existent User Test",
+    "description": "Test the GitHub API with a non-existent user",
+    "timestamp": "2025-05-10T21:15:02Z",
+    "duration_ms": 180,
+    "status": "failure",
+    "url": "https://api.github.com/users/non-existent-user-12345",
+    "method": "GET",
+    "request_headers": {
+      "Accept": "application/vnd.github.v3+json",
+      "User-Agent": "QitOps-Test"
+    },
+    "response_status": 404,
+    "response_headers": {
+      "content-type": "application/json; charset=utf-8",
+      "cache-control": "public, max-age=60, s-maxage=60"
+    },
+    "assertions": [
+      {
+        "type": "status",
+        "expected": 200,
+        "actual": 404,
+        "result": "fail"
+      }
+    ],
+    "error": "Expected status 200 but got 404"
+  }
+]

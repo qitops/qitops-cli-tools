@@ -1,0 +1,34 @@
+{
+    "name": "Twitter User Timeline API Test",
+    "description": "Test the Twitter API to fetch user timeline",
+    "environment": "production",
+    "url": "https://api.twitter.com/2/users/:id/tweets",
+    "method": "GET",
+    "headers": {
+        "Authorization": "Bearer {{TWITTER_API_TOKEN}}",
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Test"
+    },
+    "params": {
+        "max_results": "10",
+        "tweet.fields": "created_at,author_id,text"
+    },
+    "expected_status": 200,
+    "assertions": [
+        {
+            "type": "status",
+            "expected": 200
+        },
+        {
+            "type": "json",
+            "path": "$.data",
+            "exists": true
+        },
+        {
+            "type": "json",
+            "path": "$.meta.result_count",
+            "operator": ">=",
+            "value": 1
+        }
+    ]
+}

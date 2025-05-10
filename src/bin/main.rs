@@ -623,17 +623,78 @@ async fn main() -> Result<()> {
             let mut loaded_results = Vec::new();
             for result_path in results {
                 let content = std::fs::read_to_string(result_path)?;
-                // Try to parse as an array first
-                let parse_result =
-                    serde_json::from_str::<Vec<qitops::common::TestResult>>(&content);
 
-                if let Ok(results_array) = parse_result {
-                    // If it's an array, add all results
-                    loaded_results.extend(results_array);
-                } else {
-                    // If it's not an array, try to parse as a single result
-                    let result: qitops::common::TestResult = serde_json::from_str(&content)?;
-                    loaded_results.push(result);
+                // Try to parse as an array first
+                match serde_json::from_str::<Vec<qitops::common::TestResult>>(&content) {
+                    Ok(results_array) => {
+                        // If it's an array, add all results
+                        loaded_results.extend(results_array);
+                    }
+                    Err(_) => {
+                        // If it's not an array of TestResult, try to parse as a JSON array and convert
+                        match serde_json::from_str::<serde_json::Value>(&content) {
+                            Ok(serde_json::Value::Array(array)) => {
+                                // Convert each item in the array to a TestResult
+                                for item in array {
+                                    if let Ok(test_result) =
+                                        serde_json::from_value::<qitops::common::TestResult>(
+                                            item.clone(),
+                                        )
+                                    {
+                                        loaded_results.push(test_result);
+                                    } else {
+                                        // Create a TestResult from the JSON value
+                                        let _test_id = item
+                                            .get("test_id")
+                                            .and_then(|v| v.as_str())
+                                            .unwrap_or("unknown");
+                                        let name = item
+                                            .get("name")
+                                            .and_then(|v| v.as_str())
+                                            .unwrap_or("Unknown Test");
+                                        let status = item
+                                            .get("status")
+                                            .and_then(|v| v.as_str())
+                                            .unwrap_or("unknown");
+                                        let duration = item
+                                            .get("duration_ms")
+                                            .and_then(|v| v.as_f64())
+                                            .unwrap_or(0.0)
+                                            / 1000.0;
+                                        let timestamp = item
+                                            .get("timestamp")
+                                            .and_then(|v| v.as_str())
+                                            .unwrap_or("");
+
+                                        let test_result = qitops::common::TestResult {
+                                            name: name.to_string(),
+                                            status: status.to_string(),
+                                            duration,
+                                            timestamp: timestamp.to_string(),
+                                            details: Some(item.clone()),
+                                        };
+
+                                        loaded_results.push(test_result);
+                                    }
+                                }
+                            }
+                            Ok(value) => {
+                                // Try to parse as a single TestResult
+                                if let Ok(test_result) =
+                                    serde_json::from_value::<qitops::common::TestResult>(
+                                        value.clone(),
+                                    )
+                                {
+                                    loaded_results.push(test_result);
+                                } else {
+                                    return Err(Error::ConfigError(
+                                        "Could not parse test results as TestResult or convert from JSON".to_string()
+                                    ));
+                                }
+                            }
+                            Err(e) => return Err(Error::JsonError(e)),
+                        }
+                    }
                 }
             }
 
@@ -691,17 +752,78 @@ async fn main() -> Result<()> {
             let mut loaded_results = Vec::new();
             for result_path in results {
                 let content = std::fs::read_to_string(result_path)?;
-                // Try to parse as an array first
-                let parse_result =
-                    serde_json::from_str::<Vec<qitops::common::TestResult>>(&content);
 
-                if let Ok(results_array) = parse_result {
-                    // If it's an array, add all results
-                    loaded_results.extend(results_array);
-                } else {
-                    // If it's not an array, try to parse as a single result
-                    let result: qitops::common::TestResult = serde_json::from_str(&content)?;
-                    loaded_results.push(result);
+                // Try to parse as an array first
+                match serde_json::from_str::<Vec<qitops::common::TestResult>>(&content) {
+                    Ok(results_array) => {
+                        // If it's an array, add all results
+                        loaded_results.extend(results_array);
+                    }
+                    Err(_) => {
+                        // If it's not an array of TestResult, try to parse as a JSON array and convert
+                        match serde_json::from_str::<serde_json::Value>(&content) {
+                            Ok(serde_json::Value::Array(array)) => {
+                                // Convert each item in the array to a TestResult
+                                for item in array {
+                                    if let Ok(test_result) =
+                                        serde_json::from_value::<qitops::common::TestResult>(
+                                            item.clone(),
+                                        )
+                                    {
+                                        loaded_results.push(test_result);
+                                    } else {
+                                        // Create a TestResult from the JSON value
+                                        let _test_id = item
+                                            .get("test_id")
+                                            .and_then(|v| v.as_str())
+                                            .unwrap_or("unknown");
+                                        let name = item
+                                            .get("name")
+                                            .and_then(|v| v.as_str())
+                                            .unwrap_or("Unknown Test");
+                                        let status = item
+                                            .get("status")
+                                            .and_then(|v| v.as_str())
+                                            .unwrap_or("unknown");
+                                        let duration = item
+                                            .get("duration_ms")
+                                            .and_then(|v| v.as_f64())
+                                            .unwrap_or(0.0)
+                                            / 1000.0;
+                                        let timestamp = item
+                                            .get("timestamp")
+                                            .and_then(|v| v.as_str())
+                                            .unwrap_or("");
+
+                                        let test_result = qitops::common::TestResult {
+                                            name: name.to_string(),
+                                            status: status.to_string(),
+                                            duration,
+                                            timestamp: timestamp.to_string(),
+                                            details: Some(item.clone()),
+                                        };
+
+                                        loaded_results.push(test_result);
+                                    }
+                                }
+                            }
+                            Ok(value) => {
+                                // Try to parse as a single TestResult
+                                if let Ok(test_result) =
+                                    serde_json::from_value::<qitops::common::TestResult>(
+                                        value.clone(),
+                                    )
+                                {
+                                    loaded_results.push(test_result);
+                                } else {
+                                    return Err(Error::ConfigError(
+                                        "Could not parse test results as TestResult or convert from JSON".to_string()
+                                    ));
+                                }
+                            }
+                            Err(e) => return Err(Error::JsonError(e)),
+                        }
+                    }
                 }
             }
 

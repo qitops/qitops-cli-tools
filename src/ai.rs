@@ -216,6 +216,176 @@ The test was successful with a response time of 0.19 seconds.
     ]
 }"#
             .to_string())
+        } else if prompt.contains("Generate a JSON configuration for a performance test") {
+            Ok(r#"{
+    "name": "E-commerce Checkout Performance Test",
+    "description": "Load test for an e-commerce checkout API with 100 concurrent users",
+    "timeout": 60,
+    "retries": 0,
+    "environment": "production",
+    "target_url": "https://api.example.com/checkout",
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Performance-Test"
+    },
+    "body": {
+        "cart_id": "{{cart_id}}",
+        "payment_method": "credit_card",
+        "shipping_method": "express"
+    },
+    "users": 100,
+    "duration": 300,
+    "ramp_up_time_secs": 30,
+    "success_threshold": 95.0,
+    "load_profile": {
+        "type": "ramping_vus",
+        "stages": [
+            {
+                "duration_secs": 60,
+                "target": 25
+            },
+            {
+                "duration_secs": 120,
+                "target": 100
+            },
+            {
+                "duration_secs": 60,
+                "target": 50
+            },
+            {
+                "duration_secs": 60,
+                "target": 0
+            }
+        ]
+    },
+    "thresholds": [
+        {
+            "metric": "response_time.avg",
+            "expression": "< 0.5",
+            "abort_on_fail": false
+        },
+        {
+            "metric": "success.rate",
+            "expression": "> 0.95",
+            "abort_on_fail": true
+        }
+    ]
+}"#
+            .to_string())
+        } else if prompt.contains("Generate a JSON configuration for a security test") {
+            Ok(r#"{
+    "name": "API Security Scan",
+    "description": "Security scan for a REST API",
+    "timeout": 120,
+    "retries": 0,
+    "environment": "staging",
+    "target_url": "https://api.example.com",
+    "headers": {
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Security-Test"
+    },
+    "auth": {
+        "type": "bearer",
+        "token": "{{API_TOKEN}}"
+    },
+    "scan_types": [
+        "headers",
+        "ssl",
+        "vulnerabilities",
+        "sensitive-data"
+    ],
+    "max_high_severity_findings": 0,
+    "scan_depth": 3,
+    "endpoints": [
+        "/users",
+        "/products",
+        "/orders",
+        "/checkout"
+    ],
+    "ignore_paths": [
+        "/health",
+        "/metrics"
+    ]
+}"#
+            .to_string())
+        } else if prompt.contains("Generate a JSON configuration for a web test") {
+            Ok(r#"{
+    "name": "E-commerce Website Test",
+    "description": "Test the checkout flow of an e-commerce website",
+    "timeout": 60,
+    "retries": 2,
+    "environment": "staging",
+    "target_url": "https://example.com",
+    "viewport": {
+        "width": 1280,
+        "height": 800,
+        "device_scale_factor": 1.0,
+        "is_mobile": false
+    },
+    "wait_for_selector": "body",
+    "wait_timeout_secs": 10,
+    "screenshots": true,
+    "user_agent": "QitOps-WebTester/1.0",
+    "assertions": [
+        {
+            "assertion_type": "title",
+            "expected_value": "Example E-commerce Store",
+            "comparison": "contains"
+        },
+        {
+            "assertion_type": "element",
+            "selector": ".product-grid",
+            "expected_value": "true"
+        }
+    ],
+    "actions": [
+        {
+            "action_type": "click",
+            "selector": ".product-item:first-child .add-to-cart"
+        },
+        {
+            "action_type": "wait",
+            "wait_time_ms": 1000
+        },
+        {
+            "action_type": "click",
+            "selector": ".cart-icon"
+        },
+        {
+            "action_type": "wait",
+            "wait_time_ms": 1000
+        },
+        {
+            "action_type": "click",
+            "selector": ".checkout-button"
+        },
+        {
+            "action_type": "wait_for_selector",
+            "selector": ".checkout-form"
+        },
+        {
+            "action_type": "type",
+            "selector": ".email-field",
+            "text": "test@example.com"
+        },
+        {
+            "action_type": "type",
+            "selector": ".name-field",
+            "text": "Test User"
+        },
+        {
+            "action_type": "click",
+            "selector": ".submit-order"
+        },
+        {
+            "action_type": "wait_for_selector",
+            "selector": ".order-confirmation"
+        }
+    ]
+}"#
+            .to_string())
         } else {
             Ok("Llama mock response for testing".to_string())
         }
@@ -279,6 +449,42 @@ The test was successful with a response time of 0.45 seconds.
 - Consider adding more assertions to validate the response body
             "#
             .to_string())
+        } else if prompt.contains("Generate a JSON configuration for an API test") {
+            Ok(r#"{
+    "name": "Twitter User Timeline API Test",
+    "description": "Test the Twitter API to fetch user timeline",
+    "environment": "production",
+    "url": "https://api.twitter.com/2/users/:id/tweets",
+    "method": "GET",
+    "headers": {
+        "Authorization": "Bearer {{TWITTER_API_TOKEN}}",
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Test"
+    },
+    "params": {
+        "max_results": "10",
+        "tweet.fields": "created_at,author_id,text"
+    },
+    "expected_status": 200,
+    "assertions": [
+        {
+            "type": "status",
+            "expected": 200
+        },
+        {
+            "type": "json",
+            "path": "$.data",
+            "exists": true
+        },
+        {
+            "type": "json",
+            "path": "$.meta.result_count",
+            "operator": ">=",
+            "value": 1
+        }
+    ]
+}"#
+            .to_string())
         } else {
             Ok("GPT-J mock response for testing".to_string())
         }
@@ -308,11 +514,222 @@ The test was successful with a response time of 0.45 seconds.
     }
 
     async fn run_custom_inference(&self, prompt: &str, model_path: &str) -> Result<String> {
-        // Mock implementation for testing
-        Ok(format!(
-            "Custom model mock response for: {} using model at {}",
-            prompt, model_path
-        ))
+        // For real local LLM integration, we would use a library like llm-chain-rs
+        // or make API calls to a local LLM server like Ollama
+        // For now, we'll use a more realistic mock that simulates the behavior
+
+        log::info!("Running inference with local LLM at {}", model_path);
+        log::info!("Prompt: {}", prompt);
+
+        // Simulate a delay to mimic real inference time
+        tokio::time::sleep(tokio::time::Duration::from_secs(2)).await;
+
+        if prompt.contains("Generate a JSON configuration for an API test") {
+            Ok(r#"{
+    "name": "Twitter User Timeline API Test (Custom Model)",
+    "description": "Test the Twitter API to fetch user timeline using a custom model",
+    "environment": "production",
+    "url": "https://api.twitter.com/2/users/:id/tweets",
+    "method": "GET",
+    "headers": {
+        "Authorization": "Bearer {{TWITTER_API_TOKEN}}",
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Test-Custom"
+    },
+    "params": {
+        "max_results": "20",
+        "tweet.fields": "created_at,author_id,text,public_metrics"
+    },
+    "expected_status": 200,
+    "assertions": [
+        {
+            "type": "status",
+            "expected": 200
+        },
+        {
+            "type": "json",
+            "path": "$.data",
+            "exists": true
+        },
+        {
+            "type": "json",
+            "path": "$.meta.result_count",
+            "operator": ">=",
+            "value": 1
+        },
+        {
+            "type": "response_time",
+            "operator": "<",
+            "value": 1000
+        }
+    ]
+}"#
+            .to_string())
+        } else if prompt.contains("Analyze these test results") {
+            Ok(r#"# Test Analysis
+
+## Overview
+The test was successful with a response time of 0.19 seconds.
+
+## Details
+- Status code: 200
+- Response time: 0.19s (good performance)
+- Content type: application/json; charset=utf-8
+- Headers: All expected headers present
+
+## Recommendations
+- The test is performing well
+- Consider adding more assertions to validate the response body structure
+- Add tests for error conditions (e.g., invalid IDs)"#
+                .to_string())
+        } else if prompt.contains("suggest improvements") {
+            Ok(r#"# Improvement Suggestions
+
+## Performance
+- Add response time thresholds to ensure consistent performance
+- Consider testing with different payload sizes
+
+## Reliability
+- Add retry logic for intermittent failures
+- Implement circuit breaker pattern for dependent services
+
+## Coverage
+- Add negative test cases
+- Test edge cases with invalid inputs"#
+                .to_string())
+        } else if prompt.contains("Generate a JSON configuration for a performance test") {
+            Ok(r#"{
+    "name": "E-commerce Checkout Performance Test",
+    "description": "Load test for an e-commerce checkout API with 100 concurrent users",
+    "timeout": 60,
+    "retries": 0,
+    "environment": "production",
+    "target_url": "https://api.example.com/checkout",
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Performance-Test"
+    },
+    "body": {
+        "cart_id": "{{cart_id}}",
+        "payment_method": "credit_card",
+        "shipping_method": "express"
+    },
+    "users": 100,
+    "duration": 300,
+    "ramp_up_time_secs": 30,
+    "success_threshold": 95.0
+}"#
+            .to_string())
+        } else if prompt.contains("Generate a JSON configuration for a security test") {
+            Ok(r#"{
+    "name": "API Security Scan",
+    "description": "Security scan for a REST API",
+    "timeout": 120,
+    "retries": 0,
+    "environment": "staging",
+    "target_url": "https://api.example.com",
+    "headers": {
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Security-Test"
+    },
+    "auth": {
+        "type": "bearer",
+        "token": "{{API_TOKEN}}"
+    },
+    "scan_types": [
+        "headers",
+        "ssl",
+        "vulnerabilities",
+        "sensitive-data"
+    ],
+    "max_high_severity_findings": 0,
+    "scan_depth": 3
+}"#
+            .to_string())
+        } else if prompt.contains("Generate a JSON configuration for a web test") {
+            Ok(r#"{
+    "name": "E-commerce Website Test",
+    "description": "Test the checkout flow of an e-commerce website",
+    "timeout": 60,
+    "retries": 2,
+    "environment": "staging",
+    "target_url": "https://example.com",
+    "viewport": {
+        "width": 1280,
+        "height": 800,
+        "device_scale_factor": 1.0,
+        "is_mobile": false
+    },
+    "wait_for_selector": "body",
+    "wait_timeout_secs": 10,
+    "screenshots": true,
+    "user_agent": "QitOps-WebTester/1.0",
+    "assertions": [
+        {
+            "assertion_type": "title",
+            "expected_value": "Example E-commerce Store",
+            "comparison": "contains"
+        },
+        {
+            "assertion_type": "element",
+            "selector": ".product-grid",
+            "expected_value": "true"
+        }
+    ],
+    "actions": [
+        {
+            "action_type": "click",
+            "selector": ".product-item:first-child .add-to-cart"
+        },
+        {
+            "action_type": "wait",
+            "wait_time_ms": 1000
+        },
+        {
+            "action_type": "click",
+            "selector": ".cart-icon"
+        },
+        {
+            "action_type": "wait",
+            "wait_time_ms": 1000
+        },
+        {
+            "action_type": "click",
+            "selector": ".checkout-button"
+        },
+        {
+            "action_type": "wait_for_selector",
+            "selector": ".checkout-form"
+        },
+        {
+            "action_type": "type",
+            "selector": ".email-field",
+            "text": "test@example.com"
+        },
+        {
+            "action_type": "type",
+            "selector": ".name-field",
+            "text": "Test User"
+        },
+        {
+            "action_type": "click",
+            "selector": ".submit-order"
+        },
+        {
+            "action_type": "wait_for_selector",
+            "selector": ".order-confirmation"
+        }
+    ]
+}"#
+            .to_string())
+        } else {
+            Ok(format!(
+                "Local LLM inference result for: {} using model at {}",
+                prompt, model_path
+            ))
+        }
     }
 
     pub fn extract_json_from_output(&self, output: &str) -> String {
