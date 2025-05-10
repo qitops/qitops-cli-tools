@@ -2,9 +2,26 @@
 /target/
 **/*.rs.bk
 *.pdb
+*.rlib
+*.rmeta
+*.d
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
 
 # Cargo.lock is typically not committed for libraries, but is for binaries
 # Cargo.lock
+
+# Rust profiling and benchmarking
+flamegraph.svg
+perf.data
+perf.data.old
+callgrind.out.*
+cachegrind.out.*
 
 # IDE and editor files
 .idea/
@@ -38,6 +55,15 @@
 .env.test.local
 .env.production.local
 
+# AI model files
+*.gguf
+*.bin
+*.onnx
+*.pt
+*.pth
+models/
+weights/
+
 # Log files
 *.log
 logs/
@@ -63,8 +89,32 @@ report.html
 report.xml
 report.csv
 
+# Test files generated during development
+test_*.json
+*_test.json
+*_result.json
+analysis.md
+improvements.md
+
 # OS specific files
+# Windows
 Thumbs.db
 ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
+
+# Linux
+.directory
+.Trash-*
+*~
+.fuse_hidden*
+.nfs*
+
+# Pop OS / Ubuntu specific
+.bash_history
+.cache/
+.config/
+.local/
+.mozilla/
+.gnupg/
+.ssh/

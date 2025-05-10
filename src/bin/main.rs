@@ -146,7 +146,7 @@ enum Commands {
         model: String,
 
         /// Path to model weights (required for custom models)
-        #[arg(short, long)]
+        #[arg(short = 'p', long)]
         model_path: Option<String>,
     },
     /// Run data-driven tests
@@ -190,7 +190,7 @@ enum Commands {
         model: String,
 
         /// Path to model weights (required for custom models)
-        #[arg(short, long)]
+        #[arg(short = 'p', long)]
         model_path: Option<String>,
     },
     /// Suggest improvements based on test results using AI
@@ -208,7 +208,7 @@ enum Commands {
         model: String,
 
         /// Path to model weights (required for custom models)
-        #[arg(short, long)]
+        #[arg(short = 'p', long)]
         model_path: Option<String>,
     },
 }
@@ -623,8 +623,17 @@ async fn main() -> Result<()> {
             let mut loaded_results = Vec::new();
             for result_path in results {
                 let content = std::fs::read_to_string(result_path)?;
-                let result: qitops::common::TestResult = serde_json::from_str(&content)?;
-                loaded_results.push(result);
+                // Try to parse as an array first
+                let parse_result = serde_json::from_str::<Vec<qitops::common::TestResult>>(&content);
+
+                if let Ok(results_array) = parse_result {
+                    // If it's an array, add all results
+                    loaded_results.extend(results_array);
+                } else {
+                    // If it's not an array, try to parse as a single result
+                    let result: qitops::common::TestResult = serde_json::from_str(&content)?;
+                    loaded_results.push(result);
+                }
             }
 
             let generator = AiTestGenerator::new(ai_config);
@@ -681,8 +690,17 @@ async fn main() -> Result<()> {
             let mut loaded_results = Vec::new();
             for result_path in results {
                 let content = std::fs::read_to_string(result_path)?;
-                let result: qitops::common::TestResult = serde_json::from_str(&content)?;
-                loaded_results.push(result);
+                // Try to parse as an array first
+                let parse_result = serde_json::from_str::<Vec<qitops::common::TestResult>>(&content);
+
+                if let Ok(results_array) = parse_result {
+                    // If it's an array, add all results
+                    loaded_results.extend(results_array);
+                } else {
+                    // If it's not an array, try to parse as a single result
+                    let result: qitops::common::TestResult = serde_json::from_str(&content)?;
+                    loaded_results.push(result);
+                }
             }
 
             let generator = AiTestGenerator::new(ai_config);
