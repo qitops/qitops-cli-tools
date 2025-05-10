@@ -4,7 +4,7 @@
 [![CI](https://github.com/qitops/qitops-cli-tools/actions/workflows/ci.yml/badge.svg)](https://github.com/qitops/qitops-cli-tools/actions/workflows/ci.yml)
 [![Crates.io](https://img.shields.io/crates/v/qitops)](https://crates.io/crates/qitops)
 [![Rust Version](https://img.shields.io/badge/rust-1.70%2B-blue.svg)](https://www.rust-lang.org/)
-[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://qitops.github.io/qitops-cli-tools/index.html)
+[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen.svg)](https://github.com/qitops/qitops-cli-tools/tree/master/docs)
 
 QitOps is a comprehensive Software Quality Assurance CLI tool for API, Performance, Security, and Web Testing. It provides a unified command-line interface with minimal dependencies and maximum flexibility.
 
