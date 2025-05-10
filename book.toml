@@ -1,0 +1,11 @@
+[book]
+authors = ["Jonathan Opperman"]
+language = "en"
+multilingual = false
+src = "."
+title = "QitOps Documentation"
+
+[output.html]
+git-repository-url = "https://github.com/qitops/qitops-cli-tools"
+git-repository-icon = "fa-github"
+edit-url-template = "https://github.com/qitops/qitops-cli-tools/edit/master/docs/{path}"
