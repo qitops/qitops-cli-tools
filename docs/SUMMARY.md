@@ -31,7 +31,7 @@
 - [Configuration](configuration.md)
 - [Best Practices](best-practices.md)
 - [CI/CD Integration](index.md#cicd-integration)
-- [Data-Driven Testing](index.md#data-driven-testing)
+- [Data-Driven Testing](data-driven-testing.md)
 
 # Project Information
 
