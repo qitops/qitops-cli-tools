@@ -1712,14 +1712,74 @@ cargo install qitops --features ai
 cargo build --features ai
 </code></pre>
 <h2 id="supported-llm-models"><a class="header" href="#supported-llm-models">Supported LLM Models</a></h2>
-<p>QitOps supports a variety of local LLM models:</p>
+<p>QitOps supports a variety of local LLM models for its AI features. These models run entirely on your local machine, ensuring privacy and offline operation.</p>
+<h3 id="llama-models"><a class="header" href="#llama-models">LLaMA Models</a></h3>
 <ul>
-<li><strong>LLaMA</strong>: Versions 1, 2, and 3</li>
-<li><strong>Mistral</strong>: 7B and 8x7B models</li>
-<li><strong>GPT-J</strong>: All versions</li>
-<li><strong>Phi</strong>: Versions 1, 2, and 3</li>
-<li><strong>Any GGUF-compatible model</strong>: Models in GGUF format</li>
+<li><strong>LLaMA 1</strong>: The original Meta AI model (7B, 13B, 33B, 65B parameters)</li>
+<li><strong>LLaMA 2</strong>: Improved version with longer context (7B, 13B, 70B parameters)</li>
+<li><strong>LLaMA 3</strong>: Latest version with enhanced capabilities (8B, 70B parameters)</li>
+<li><strong>Code LLaMA</strong>: Specialized for code generation and analysis</li>
 </ul>
+<h3 id="mistral-models"><a class="header" href="#mistral-models">Mistral Models</a></h3>
+<ul>
+<li><strong>Mistral 7B</strong>: Efficient base model with strong performance</li>
+<li><strong>Mixtral 8x7B</strong>: Mixture-of-experts model with enhanced capabilities</li>
+<li><strong>Mistral Instruct</strong>: Fine-tuned for instruction following</li>
+<li><strong>Mistral Small</strong>: Smaller, faster models for resource-constrained environments</li>
+</ul>
+<h3 id="phi-models"><a class="header" href="#phi-models">Phi Models</a></h3>
+<ul>
+<li><strong>Phi-1</strong>: Microsoft’s small but capable model (1.3B parameters)</li>
+<li><strong>Phi-2</strong>: Improved version with enhanced reasoning (2.7B parameters)</li>
+<li><strong>Phi-3</strong>: Latest version with advanced capabilities (3.8B, 14B parameters)</li>
+</ul>
+<h3 id="other-supported-models"><a class="header" href="#other-supported-models">Other Supported Models</a></h3>
+<ul>
+<li><strong>GPT-J</strong>: EleutherAI’s open-source GPT model (6B parameters)</li>
+<li><strong>GPT4All</strong>: Locally running assistant models</li>
+<li><strong>Falcon</strong>: Technology Innovation Institute’s models</li>
+<li><strong>MPT</strong>: MosaicML’s Pretrained Transformer models</li>
+<li><strong>RWKV</strong>: RNN with transformer-like capabilities</li>
+<li><strong>Qwen</strong>: Alibaba’s series of multilingual models</li>
+</ul>
+<h3 id="model-format-support"><a class="header" href="#model-format-support">Model Format Support</a></h3>
+<ul>
+<li><strong>GGUF</strong>: Primary supported format for efficient inference</li>
+<li><strong>GGML</strong>: Legacy format (automatically converted to GGUF)</li>
+<li><strong>ONNX</strong>: Support via external runtime</li>
+</ul>
+<h3 id="recommended-models-for-different-use-cases"><a class="header" href="#recommended-models-for-different-use-cases">Recommended Models for Different Use Cases</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Use Case</th><th>Recommended Model</th><th>Size</th><th>Performance</th></tr></thead><tbody>
+<tr><td>Test Generation</td><td>Phi-2</td><td>2.7GB</td><td>Good balance of size and quality</td></tr>
+<tr><td>Results Analysis</td><td>Mistral 7B</td><td>4.1GB</td><td>Strong reasoning capabilities</td></tr>
+<tr><td>Improvement Suggestions</td><td>LLaMA 2 13B</td><td>8.2GB</td><td>Detailed, high-quality suggestions</td></tr>
+<tr><td>Resource-Constrained</td><td>Phi-1</td><td>1.5GB</td><td>Works on machines with limited RAM</td></tr>
+<tr><td>Best Quality</td><td>Mixtral 8x7B</td><td>26GB</td><td>Highest quality results (requires 32GB+ RAM)</td></tr>
+</tbody></table>
+</div>
+<h3 id="where-to-download-models"><a class="header" href="#where-to-download-models">Where to Download Models</a></h3>
+<p>Models can be downloaded from:</p>
+<ul>
+<li><a href="https://huggingface.co/models">Hugging Face</a> - Search for GGUF versions</li>
+<li><a href="https://huggingface.co/TheBloke">TheBloke’s repositories</a> - Pre-converted GGUF models</li>
+<li><a href="https://ollama.com/library">Ollama Library</a> - Easy model management</li>
+</ul>
+<h3 id="model-quantization-options"><a class="header" href="#model-quantization-options">Model Quantization Options</a></h3>
+<p>QitOps supports various quantization levels to balance quality and resource usage:</p>
+<div class="table-wrapper"><table><thead><tr><th>Quantization</th><th>File Size</th><th>RAM Usage</th><th>Quality</th><th>Speed</th></tr></thead><tbody>
+<tr><td>Q4_K_M</td><td>Smallest</td><td>Lowest</td><td>Good</td><td>Fastest</td></tr>
+<tr><td>Q5_K_M</td><td>Small</td><td>Low</td><td>Better</td><td>Fast</td></tr>
+<tr><td>Q6_K</td><td>Medium</td><td>Medium</td><td>Very Good</td><td>Medium</td></tr>
+<tr><td>Q8_0</td><td>Large</td><td>High</td><td>Excellent</td><td>Slower</td></tr>
+</tbody></table>
+</div>
+<p>Example model selection with quantization:</p>
+<pre><code class="language-bash"># Use a smaller, faster model
+qitops generate --test-type api --description "Test the login API" --model phi --model-path models/phi-2.Q4_K_M.gguf
+
+# Use a higher quality model
+qitops analyze --results test_results.json --output analysis.md --model mistral --model-path models/mistral-7b.Q8_0.gguf
+</code></pre>
 <h2 id="local-llm-integration-options"><a class="header" href="#local-llm-integration-options">Local LLM Integration Options</a></h2>
 <p>QitOps provides several ways to integrate with local LLMs:</p>
 <h3 id="1-direct-model-loading"><a class="header" href="#1-direct-model-loading">1. Direct Model Loading</a></h3>
@@ -1753,7 +1813,15 @@ qitops analyze --results test_results.json --output analysis.md
 </code></pre>
 <h2 id="ai-features-2"><a class="header" href="#ai-features-2">AI Features</a></h2>
 <h2 id="test-configuration-generation"><a class="header" href="#test-configuration-generation">Test Configuration Generation</a></h2>
-<p>Generate test configurations from natural language descriptions:</p>
+<p>QitOps can automatically generate test configurations from natural language descriptions, saving you time and effort in creating test files manually. This feature leverages local LLMs to understand your testing requirements and produce appropriate JSON configurations.</p>
+<h3 id="how-it-works"><a class="header" href="#how-it-works">How It Works</a></h3>
+<ol>
+<li>You provide a natural language description of the test you want to create</li>
+<li>QitOps processes this description using a local LLM</li>
+<li>The LLM generates a complete JSON configuration file based on your description</li>
+<li>The configuration is saved to the specified output file</li>
+</ol>
+<h3 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h3>
 <pre><code class="language-bash"># Generate an API test configuration
 qitops generate --test-type api --description "Test the GitHub API to fetch user information" --output github_test.json
 
@@ -1766,35 +1834,526 @@ qitops generate --test-type security --description "Security scan for a banking 
 # Generate a web test configuration
 qitops generate --test-type web --description "Test the checkout flow of an e-commerce website" --output web_test.json
 </code></pre>
+<h3 id="command-line-options-1"><a class="header" href="#command-line-options-1">Command-Line Options</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>--test-type &lt;TYPE&gt;</code></td><td>Type of test to generate (api, performance, security, web)</td></tr>
+<tr><td><code>--description &lt;TEXT&gt;</code></td><td>Natural language description of the test</td></tr>
+<tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the generated configuration</td></tr>
+<tr><td><code>--model &lt;MODEL&gt;</code></td><td>LLM model to use (default: auto)</td></tr>
+<tr><td><code>--model-path &lt;PATH&gt;</code></td><td>Path to the model file</td></tr>
+<tr><td><code>--temperature &lt;FLOAT&gt;</code></td><td>Temperature for generation (0.0-1.0)</td></tr>
+<tr><td><code>--context-size &lt;INT&gt;</code></td><td>Context size in tokens</td></tr>
+<tr><td><code>--max-tokens &lt;INT&gt;</code></td><td>Maximum tokens for generation</td></tr>
+<tr><td><code>--system-prompt &lt;TEXT&gt;</code></td><td>Custom system prompt for the model</td></tr>
+</tbody></table>
+</div>
+<h3 id="writing-effective-descriptions"><a class="header" href="#writing-effective-descriptions">Writing Effective Descriptions</a></h3>
+<p>The quality of the generated configuration depends on the clarity and specificity of your description. Here are some tips for writing effective descriptions:</p>
+<h4 id="for-api-tests"><a class="header" href="#for-api-tests">For API Tests:</a></h4>
+<ul>
+<li>Specify the endpoint URL and HTTP method</li>
+<li>Mention any required headers or authentication</li>
+<li>Describe the expected response status and content</li>
+<li>Include any specific validation requirements</li>
+</ul>
+<p>Example: “Test the GitHub API to fetch user information for ‘octocat’ using GET request to /users/octocat endpoint. Verify that the response status is 200 and the response contains the correct login name and user type.”</p>
+<h4 id="for-performance-tests"><a class="header" href="#for-performance-tests">For Performance Tests:</a></h4>
+<ul>
+<li>Specify the target URL and HTTP method</li>
+<li>Mention the number of concurrent users</li>
+<li>Describe the test duration and ramp-up time</li>
+<li>Include any performance thresholds</li>
+</ul>
+<p>Example: “Load test the checkout API at https://api.example.com/checkout with 100 concurrent users for 5 minutes. Use a 30-second ramp-up time. The API should handle at least 50 requests per second with a response time under 200ms.”</p>
+<h4 id="for-security-tests"><a class="header" href="#for-security-tests">For Security Tests:</a></h4>
+<ul>
+<li>Specify the target URL or application</li>
+<li>Mention the types of security checks to perform</li>
+<li>Describe any authentication requirements</li>
+<li>Include any specific vulnerability concerns</li>
+</ul>
+<p>Example: “Security scan the banking API at https://api.bank.com/v1 focusing on SQL injection, XSS, and authentication vulnerabilities. Use Bearer token authentication and check for sensitive data exposure in responses.”</p>
+<h4 id="for-web-tests"><a class="header" href="#for-web-tests">For Web Tests:</a></h4>
+<ul>
+<li>Specify the target website URL</li>
+<li>Describe the user journey or actions to test</li>
+<li>Mention any specific elements to interact with</li>
+<li>Include validation criteria</li>
+</ul>
+<p>Example: “Test the checkout flow of an e-commerce website at https://shop.example.com. Add a product to the cart, proceed to checkout, fill in shipping and payment information, and complete the purchase. Verify that the order confirmation page shows the correct order details.”</p>
+<h3 id="example-generated-configurations"><a class="header" href="#example-generated-configurations">Example Generated Configurations</a></h3>
+<h4 id="api-test-configuration-2"><a class="header" href="#api-test-configuration-2">API Test Configuration</a></h4>
+<pre><code class="language-json">{
+  "name": "GitHub User API Test",
+  "description": "Test the GitHub API to fetch user information",
+  "url": "https://api.github.com/users/octocat",
+  "method": "GET",
+  "headers": {
+    "Accept": "application/vnd.github.v3+json",
+    "User-Agent": "QitOps-Test"
+  },
+  "expected_status": 200,
+  "expected_body": {
+    "login": "octocat",
+    "type": "User"
+  },
+  "timeout": 30,
+  "retries": 3
+}
+</code></pre>
+<h4 id="performance-test-configuration-2"><a class="header" href="#performance-test-configuration-2">Performance Test Configuration</a></h4>
+<pre><code class="language-json">{
+  "name": "E-commerce Checkout API Load Test",
+  "description": "Load test for an e-commerce checkout API with 100 concurrent users",
+  "target_url": "https://api.example.com/checkout",
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  "body": {
+    "cart_id": "{{cart_id}}",
+    "payment_method": "credit_card",
+    "shipping_method": "standard"
+  },
+  "concurrent_users": 100,
+  "duration_secs": 300,
+  "ramp_up_time_secs": 30,
+  "success_threshold": 95.0,
+  "max_response_time_ms": 200,
+  "requests_per_second_threshold": 50
+}
+</code></pre>
+<h3 id="customizing-generation"><a class="header" href="#customizing-generation">Customizing Generation</a></h3>
+<p>You can customize the generation process by adjusting the model parameters:</p>
+<pre><code class="language-bash"># Use a specific model with custom parameters
+qitops generate --test-type api \
+  --description "Test the login API with different credentials" \
+  --output login_test.json \
+  --model llama \
+  --model-path models/llama-2-7b.gguf \
+  --temperature 0.8 \
+  --context-size 4096 \
+  --max-tokens 2048
+</code></pre>
+<h3 id="post-generation-editing"><a class="header" href="#post-generation-editing">Post-Generation Editing</a></h3>
+<p>Generated configurations are meant to be starting points. You may want to:</p>
+<ol>
+<li>Review and edit the generated configuration</li>
+<li>Add or modify specific fields</li>
+<li>Adjust validation criteria</li>
+<li>Add environment-specific variables</li>
+</ol>
+<h3 id="best-practices-1"><a class="header" href="#best-practices-1">Best Practices</a></h3>
+<ul>
+<li>Start with detailed, specific descriptions</li>
+<li>Review generated configurations before using them</li>
+<li>Use lower temperature (0.3-0.5) for more deterministic results</li>
+<li>Use higher temperature (0.7-0.9) for more creative variations</li>
+<li>Keep descriptions focused on one test scenario at a time</li>
+<li>Specify concrete details like URLs, methods, and expected responses</li>
+<li>Use the generated configurations as starting points, not final products</li>
+</ul>
 <h2 id="test-results-analysis"><a class="header" href="#test-results-analysis">Test Results Analysis</a></h2>
-<p>Analyze test results to identify patterns and issues:</p>
+<p>QitOps can analyze your test results using AI to identify patterns, issues, and insights that might not be immediately obvious. This feature helps you understand test outcomes and make data-driven decisions about your testing strategy.</p>
+<h3 id="how-it-works-1"><a class="header" href="#how-it-works-1">How It Works</a></h3>
+<ol>
+<li>You provide a JSON file containing test results</li>
+<li>QitOps processes these results using a local LLM</li>
+<li>The LLM generates a comprehensive analysis report</li>
+<li>The analysis is saved to the specified output file (typically in Markdown format)</li>
+</ol>
+<h3 id="basic-usage-1"><a class="header" href="#basic-usage-1">Basic Usage</a></h3>
 <pre><code class="language-bash"># Analyze test results
 qitops analyze --results test_results.json --output analysis.md
 
 # Analyze with a specific model
 qitops analyze --results test_results.json --output analysis.md --model llama --model-path /path/to/model.gguf
 </code></pre>
-<p>The analysis includes:</p>
+<h3 id="command-line-options-2"><a class="header" href="#command-line-options-2">Command-Line Options</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>--results &lt;FILE&gt;</code></td><td>JSON file containing test results</td></tr>
+<tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the analysis report</td></tr>
+<tr><td><code>--model &lt;MODEL&gt;</code></td><td>LLM model to use (default: auto)</td></tr>
+<tr><td><code>--model-path &lt;PATH&gt;</code></td><td>Path to the model file</td></tr>
+<tr><td><code>--format &lt;FORMAT&gt;</code></td><td>Output format (markdown, html, json)</td></tr>
+<tr><td><code>--temperature &lt;FLOAT&gt;</code></td><td>Temperature for generation (0.0-1.0)</td></tr>
+<tr><td><code>--context-size &lt;INT&gt;</code></td><td>Context size in tokens</td></tr>
+<tr><td><code>--max-tokens &lt;INT&gt;</code></td><td>Maximum tokens for generation</td></tr>
+<tr><td><code>--system-prompt &lt;TEXT&gt;</code></td><td>Custom system prompt for the model</td></tr>
+</tbody></table>
+</div>
+<h3 id="analysis-content"><a class="header" href="#analysis-content">Analysis Content</a></h3>
+<p>The generated analysis report typically includes:</p>
+<h4 id="1-executive-summary"><a class="header" href="#1-executive-summary">1. Executive Summary</a></h4>
 <ul>
-<li>Overview of test results</li>
-<li>Detailed breakdown of successes and failures</li>
-<li>Performance metrics</li>
-<li>Recommendations for improvement</li>
+<li>Overall success rate</li>
+<li>Number of tests run</li>
+<li>Key findings and insights</li>
+<li>Critical issues identified</li>
+</ul>
+<h4 id="2-test-results-overview"><a class="header" href="#2-test-results-overview">2. Test Results Overview</a></h4>
+<ul>
+<li>Distribution of test statuses (success, failure, error)</li>
+<li>Average response times</li>
+<li>Success rates by test type</li>
+<li>Temporal patterns (if timestamps are available)</li>
+</ul>
+<h4 id="3-detailed-breakdown"><a class="header" href="#3-detailed-breakdown">3. Detailed Breakdown</a></h4>
+<ul>
+<li>Analysis of each failed test</li>
+<li>Common failure patterns</li>
+<li>Root cause analysis</li>
+<li>Error categorization</li>
+</ul>
+<h4 id="4-performance-analysis"><a class="header" href="#4-performance-analysis">4. Performance Analysis</a></h4>
+<ul>
+<li>Response time statistics</li>
+<li>Performance bottlenecks</li>
+<li>Throughput analysis</li>
+<li>Resource utilization patterns</li>
+</ul>
+<h4 id="5-recommendations"><a class="header" href="#5-recommendations">5. Recommendations</a></h4>
+<ul>
+<li>Suggestions for fixing failed tests</li>
+<li>Performance optimization opportunities</li>
+<li>Test coverage improvements</li>
+<li>Testing strategy recommendations</li>
+</ul>
+<h3 id="example-analysis-report"><a class="header" href="#example-analysis-report">Example Analysis Report</a></h3>
+<pre><code class="language-markdown"># Test Results Analysis
+
+## Executive Summary
+
+Analyzed 25 test results with an overall success rate of 84% (21/25 tests passed).
+The average response time was 187ms, with 3 tests exceeding the 500ms threshold.
+The main issues were related to authentication failures and timeout errors.
+
+## Test Results Overview
+
+| Status | Count | Percentage |
+|--------|-------|------------|
+| Success | 21 | 84% |
+| Failure | 3 | 12% |
+| Error | 1 | 4% |
+
+### Success Rate by Test Type
+- API Tests: 90% (18/20)
+- Performance Tests: 75% (3/4)
+- Security Tests: 0% (0/1)
+
+## Detailed Breakdown
+
+### Failed Tests Analysis
+
+1. **API-Test-003**: Authentication failure
+   - Error: "Unauthorized (401)"
+   - Possible cause: Expired API token or incorrect credentials
+   - Recommendation: Verify and update the authentication token
+
+2. **API-Test-012**: Unexpected response format
+   - Error: "Expected field 'user_id' not found in response"
+   - Possible cause: API response structure has changed
+   - Recommendation: Update the expected response structure in the test configuration
+
+3. **Perf-Test-002**: Timeout error
+   - Error: "Request timed out after 30 seconds"
+   - Possible cause: Server under heavy load or network issues
+   - Recommendation: Increase the timeout threshold or investigate server performance
+
+## Performance Analysis
+
+- 90th percentile response time: 342ms
+- Slowest endpoint: /api/users/search (avg: 412ms)
+- Fastest endpoint: /api/health (avg: 42ms)
+- 3 tests exceeded the 500ms threshold
+
+## Recommendations
+
+1. **Fix Authentication Issues**
+   - Implement token refresh mechanism
+   - Add pre-test validation of authentication credentials
+
+2. **Improve Error Handling**
+   - Add more specific assertions for response structure
+   - Implement retry logic for transient failures
+
+3. **Performance Optimization**
+   - Review the /api/users/search endpoint for optimization opportunities
+   - Consider caching frequently accessed resources
+   - Implement pagination for large result sets
+
+4. **Test Coverage Improvements**
+   - Add more security tests (currently only 1)
+   - Increase test coverage for error conditions
+   - Add tests for edge cases identified in this analysis
+</code></pre>
+<h3 id="input-format-requirements"><a class="header" href="#input-format-requirements">Input Format Requirements</a></h3>
+<p>The analysis feature expects test results in a specific JSON format:</p>
+<pre><code class="language-json">[
+  {
+    "test_id": "api-test-001",
+    "name": "User API Test",
+    "description": "Test the user API endpoint",
+    "timestamp": "2025-05-10T12:34:56Z",
+    "duration_ms": 156,
+    "status": "success",
+    "url": "https://api.example.com/users/123",
+    "method": "GET",
+    "request_headers": {
+      "Accept": "application/json",
+      "Authorization": "Bearer token123"
+    },
+    "response_status": 200,
+    "response_headers": {
+      "content-type": "application/json"
+    },
+    "assertions": [
+      {
+        "type": "status",
+        "expected": 200,
+        "actual": 200,
+        "result": "pass"
+      },
+      {
+        "type": "json",
+        "path": "$.id",
+        "expected": 123,
+        "actual": 123,
+        "result": "pass"
+      }
+    ]
+  },
+  {
+    "test_id": "api-test-002",
+    "name": "Invalid User API Test",
+    "description": "Test the user API with invalid ID",
+    "timestamp": "2025-05-10T12:35:12Z",
+    "duration_ms": 134,
+    "status": "failure",
+    "url": "https://api.example.com/users/999",
+    "method": "GET",
+    "request_headers": {
+      "Accept": "application/json",
+      "Authorization": "Bearer token123"
+    },
+    "response_status": 404,
+    "response_headers": {
+      "content-type": "application/json"
+    },
+    "assertions": [
+      {
+        "type": "status",
+        "expected": 200,
+        "actual": 404,
+        "result": "fail"
+      }
+    ],
+    "error": "Expected status 200 but got 404"
+  }
+]
+</code></pre>
+<h3 id="best-practices-2"><a class="header" href="#best-practices-2">Best Practices</a></h3>
+<ul>
+<li>Include as much detail as possible in your test results</li>
+<li>Run analysis after each test suite execution</li>
+<li>Compare analyses over time to identify trends</li>
+<li>Use the analysis to prioritize test improvements</li>
+<li>Share analysis reports with your team for collaborative debugging</li>
+<li>Customize the analysis by adjusting the temperature parameter</li>
+<li>Use lower temperatures (0.3-0.5) for more factual, concise analyses</li>
+<li>Use higher temperatures (0.7-0.9) for more creative, detailed analyses</li>
 </ul>
 <h2 id="improvement-suggestions"><a class="header" href="#improvement-suggestions">Improvement Suggestions</a></h2>
-<p>Get actionable suggestions to improve your tests:</p>
+<p>QitOps can generate actionable suggestions to improve your tests based on test results and industry best practices. This feature helps you continuously enhance your testing strategy and address issues before they become critical problems.</p>
+<h3 id="how-it-works-2"><a class="header" href="#how-it-works-2">How It Works</a></h3>
+<ol>
+<li>You provide a JSON file containing test results</li>
+<li>QitOps analyzes these results using a local LLM</li>
+<li>The LLM generates specific, actionable improvement suggestions</li>
+<li>The suggestions are saved to the specified output file</li>
+</ol>
+<h3 id="basic-usage-2"><a class="header" href="#basic-usage-2">Basic Usage</a></h3>
 <pre><code class="language-bash"># Generate improvement suggestions
 qitops improve --results test_results.json --output improvements.md
 
 # Generate suggestions with a specific model
 qitops improve --results test_results.json --output improvements.md --model llama --model-path /path/to/model.gguf
 </code></pre>
-<p>Improvement suggestions cover:</p>
+<h3 id="command-line-options-3"><a class="header" href="#command-line-options-3">Command-Line Options</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>--results &lt;FILE&gt;</code></td><td>JSON file containing test results</td></tr>
+<tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the improvement suggestions</td></tr>
+<tr><td><code>--model &lt;MODEL&gt;</code></td><td>LLM model to use (default: auto)</td></tr>
+<tr><td><code>--model-path &lt;PATH&gt;</code></td><td>Path to the model file</td></tr>
+<tr><td><code>--format &lt;FORMAT&gt;</code></td><td>Output format (markdown, html, json)</td></tr>
+<tr><td><code>--focus &lt;AREA&gt;</code></td><td>Focus area for suggestions (performance, reliability, coverage, all)</td></tr>
+<tr><td><code>--temperature &lt;FLOAT&gt;</code></td><td>Temperature for generation (0.0-1.0)</td></tr>
+<tr><td><code>--context-size &lt;INT&gt;</code></td><td>Context size in tokens</td></tr>
+<tr><td><code>--max-tokens &lt;INT&gt;</code></td><td>Maximum tokens for generation</td></tr>
+<tr><td><code>--system-prompt &lt;TEXT&gt;</code></td><td>Custom system prompt for the model</td></tr>
+</tbody></table>
+</div>
+<h3 id="improvement-categories"><a class="header" href="#improvement-categories">Improvement Categories</a></h3>
+<p>The generated suggestions typically cover the following areas:</p>
+<h4 id="1-performance-optimizations"><a class="header" href="#1-performance-optimizations">1. Performance Optimizations</a></h4>
 <ul>
-<li>Performance optimizations</li>
-<li>Reliability enhancements</li>
-<li>Coverage improvements</li>
-<li>Best practices</li>
+<li>Response time improvements</li>
+<li>Resource utilization efficiency</li>
+<li>Concurrency and parallelism recommendations</li>
+<li>Caching strategies</li>
+<li>Database query optimizations</li>
+<li>Network latency reduction</li>
+</ul>
+<h4 id="2-reliability-enhancements"><a class="header" href="#2-reliability-enhancements">2. Reliability Enhancements</a></h4>
+<ul>
+<li>Error handling improvements</li>
+<li>Retry mechanisms</li>
+<li>Timeout configurations</li>
+<li>Fault tolerance strategies</li>
+<li>Resilience patterns</li>
+<li>Circuit breaker implementations</li>
+</ul>
+<h4 id="3-coverage-improvements"><a class="header" href="#3-coverage-improvements">3. Coverage Improvements</a></h4>
+<ul>
+<li>Missing test scenarios</li>
+<li>Edge case coverage</li>
+<li>Error condition testing</li>
+<li>Boundary value testing</li>
+<li>Security vulnerability testing</li>
+<li>Cross-functional testing</li>
+</ul>
+<h4 id="4-best-practices"><a class="header" href="#4-best-practices">4. Best Practices</a></h4>
+<ul>
+<li>Test organization and structure</li>
+<li>Naming conventions</li>
+<li>Documentation improvements</li>
+<li>Assertion strategies</li>
+<li>Test data management</li>
+<li>CI/CD integration</li>
+</ul>
+<h3 id="example-improvement-suggestions"><a class="header" href="#example-improvement-suggestions">Example Improvement Suggestions</a></h3>
+<pre><code class="language-markdown"># Test Improvement Suggestions
+
+## Executive Summary
+
+Based on the analysis of 25 test results, we've identified several opportunities for improvement across performance, reliability, coverage, and best practices. Implementing these suggestions will help enhance the effectiveness and efficiency of your testing suite.
+
+## Performance Optimizations
+
+1. **Optimize Slow Endpoints**
+   - The `/api/users/search` endpoint has an average response time of 412ms, which is significantly higher than other endpoints.
+   - Suggestion: Review the implementation of this endpoint, focusing on database query optimization and potential caching.
+   - Implementation: Add query indexing for frequently searched fields and implement a Redis cache for common search queries.
+
+2. **Implement Connection Pooling**
+   - Multiple tests show connection establishment overhead.
+   - Suggestion: Implement connection pooling to reuse connections across tests.
+   - Implementation: Configure a connection pool with appropriate min/max settings based on your concurrency requirements.
+
+3. **Reduce Payload Sizes**
+   - Several API responses exceed 100KB in size.
+   - Suggestion: Implement pagination and field filtering to reduce payload sizes.
+   - Implementation: Add `limit`, `offset`, and `fields` query parameters to your API endpoints.
+
+## Reliability Enhancements
+
+1. **Improve Authentication Handling**
+   - 3 tests failed due to authentication issues.
+   - Suggestion: Implement token refresh and pre-test authentication validation.
+   - Implementation: Add a token refresh mechanism that automatically renews expired tokens before test execution.
+
+2. **Add Retry Logic for Transient Failures**
+   - Several timeout errors appear to be transient.
+   - Suggestion: Implement exponential backoff retry logic for network-related failures.
+   - Implementation: Add a retry decorator/wrapper that retries failed requests with increasing delays.
+
+3. **Enhance Error Handling**
+   - Error messages are inconsistent and sometimes not actionable.
+   - Suggestion: Standardize error handling and improve error messages.
+   - Implementation: Create a centralized error handler that provides consistent, detailed error information.
+
+## Coverage Improvements
+
+1. **Add Security Testing**
+   - Only 1 security test was found in the results.
+   - Suggestion: Expand security testing to cover authentication, authorization, input validation, and data protection.
+   - Implementation: Add tests for OWASP Top 10 vulnerabilities relevant to your application.
+
+2. **Increase Edge Case Coverage**
+   - Most tests focus on happy paths with valid inputs.
+   - Suggestion: Add tests for boundary conditions, invalid inputs, and error scenarios.
+   - Implementation: For each API endpoint, add tests with empty values, extremely large values, special characters, and malformed requests.
+
+3. **Add Load and Stress Testing**
+   - Current performance tests use relatively low concurrency (max 100 users).
+   - Suggestion: Add high-concurrency load tests and stress tests to identify breaking points.
+   - Implementation: Create load test scenarios with gradually increasing concurrency until performance degrades.
+
+## Best Practices
+
+1. **Improve Test Organization**
+   - Tests are not consistently organized by feature or functionality.
+   - Suggestion: Reorganize tests into logical groups based on functionality.
+   - Implementation: Create a directory structure that mirrors your application's architecture.
+
+2. **Enhance Test Data Management**
+   - Test data is hardcoded in many tests.
+   - Suggestion: Implement a test data management strategy with fixtures or factories.
+   - Implementation: Create a test data generator that produces consistent, realistic test data.
+
+3. **Add Documentation**
+   - Many tests lack clear documentation about their purpose and expected behavior.
+   - Suggestion: Add descriptive comments and documentation to all tests.
+   - Implementation: Standardize on a documentation format that includes purpose, prerequisites, and expected outcomes.
+
+## Implementation Roadmap
+
+We recommend implementing these improvements in the following order:
+
+1. **Immediate (1-2 weeks)**
+   - Fix authentication handling issues
+   - Add retry logic for transient failures
+   - Improve error messages
+
+2. **Short-term (2-4 weeks)**
+   - Optimize slow endpoints
+   - Enhance test organization
+   - Add basic security tests
+
+3. **Medium-term (1-3 months)**
+   - Implement connection pooling
+   - Add edge case coverage
+   - Improve test data management
+
+4. **Long-term (3+ months)**
+   - Reduce payload sizes
+   - Add comprehensive load and stress testing
+   - Enhance documentation
+</code></pre>
+<h3 id="integration-with-cicd"><a class="header" href="#integration-with-cicd">Integration with CI/CD</a></h3>
+<p>You can integrate the improvement suggestions feature into your CI/CD pipeline to automatically generate suggestions after test runs:</p>
+<pre><code class="language-yaml"># Example GitHub Actions workflow step
+- name: Generate Test Improvement Suggestions
+  run: |
+    qitops improve --results test-results.json --output improvements.md
+
+- name: Upload Improvement Suggestions
+  uses: actions/upload-artifact@v2
+  with:
+    name: test-improvements
+    path: improvements.md
+</code></pre>
+<h3 id="best-practices-3"><a class="header" href="#best-practices-3">Best Practices</a></h3>
+<ul>
+<li>Run the improvement suggestions tool regularly (weekly or after major test runs)</li>
+<li>Prioritize suggestions based on their impact and implementation effort</li>
+<li>Create tickets or tasks for implementing high-priority suggestions</li>
+<li>Track the implementation of suggestions over time</li>
+<li>Re-run the tool after implementing suggestions to measure progress</li>
+<li>Customize the focus area based on your current priorities</li>
+<li>Use the suggestions as input for sprint planning and technical debt discussions</li>
+<li>Share the suggestions with your team to foster a culture of continuous improvement</li>
 </ul>
 <h2 id="model-parameter-customization"><a class="header" href="#model-parameter-customization">Model Parameter Customization</a></h2>
 <p>Customize model parameters to fine-tune the AI behavior:</p>
@@ -2250,7 +2809,7 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
 </tbody></table>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-reference-1"><a class="header" href="#configuration-reference-1">Configuration Reference</a></h1>
 <p>This page provides detailed information on configuring QitOps for different test types.</p>
-<h2 id="api-test-configuration-2"><a class="header" href="#api-test-configuration-2">API Test Configuration</a></h2>
+<h2 id="api-test-configuration-3"><a class="header" href="#api-test-configuration-3">API Test Configuration</a></h2>
 <pre><code class="language-json">{
     "name": "Example API Test",
     "description": "Test description",
@@ -2365,7 +2924,7 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
     }
 }
 </code></pre>
-<h2 id="performance-test-configuration-2"><a class="header" href="#performance-test-configuration-2">Performance Test Configuration</a></h2>
+<h2 id="performance-test-configuration-3"><a class="header" href="#performance-test-configuration-3">Performance Test Configuration</a></h2>
 <pre><code class="language-json">{
     "name": "Sample Performance Test",
     "description": "Load testing a public API endpoint",
@@ -2457,7 +3016,7 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
     "system_prompt": "You are an AI assistant specialized in software testing. Your task is to help generate test configurations, analyze test results, and suggest improvements."
 }
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="best-practices-1"><a class="header" href="#best-practices-1">Best Practices</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="best-practices-4"><a class="header" href="#best-practices-4">Best Practices</a></h1>
 <p>This page provides recommendations on how to use QitOps effectively.</p>
 <h2 id="general-best-practices"><a class="header" href="#general-best-practices">General Best Practices</a></h2>
 <h3 id="configuration-management"><a class="header" href="#configuration-management">Configuration Management</a></h3>
@@ -2598,14 +3157,14 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
 <li>Web testing with different user journeys</li>
 </ul>
 <h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
-<h3 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h3>
+<h3 id="basic-usage-3"><a class="header" href="#basic-usage-3">Basic Usage</a></h3>
 <pre><code class="language-bash"># Run data-driven tests with CSV data
 qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv
 
 # Run data-driven tests with JSON data
 qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/products.json -t json
 </code></pre>
-<h3 id="command-line-options-1"><a class="header" href="#command-line-options-1">Command-Line Options</a></h3>
+<h3 id="command-line-options-4"><a class="header" href="#command-line-options-4">Command-Line Options</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>-c, --config &lt;FILE&gt;</code></td><td>Test configuration file</td></tr>
 <tr><td><code>-d, --data &lt;FILE&gt;</code></td><td>Data source file (CSV or JSON)</td></tr>
@@ -2787,7 +3346,7 @@ qitops data-driven -c config.json -d data.csv -t csv -r csv -o results.csv
 <li>Error messages for failed iterations</li>
 <li>Captured values</li>
 </ul>
-<h2 id="best-practices-2"><a class="header" href="#best-practices-2">Best Practices</a></h2>
+<h2 id="best-practices-5"><a class="header" href="#best-practices-5">Best Practices</a></h2>
 <h3 id="organizing-data-files"><a class="header" href="#organizing-data-files">Organizing Data Files</a></h3>
 <ul>
 <li>Keep data files in a dedicated directory (e.g., <code>tests/data/</code>)</li>
