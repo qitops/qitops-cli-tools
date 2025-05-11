@@ -21,7 +21,7 @@
 - [AI Features Overview](ai-features.md)
 - [Test Generation](ai-features.md#test-configuration-generation)
 - [Results Analysis](ai-features.md#test-results-analysis)
-- [Improvement Suggestions](ai-features.md#improvement-suggestions)
+- [Improvement Suggestions](improvement-suggestions.md)
 - [Local LLM Support](ai-features.md#supported-llm-models)
 - [Testing AI Features](testing-ai-features.md)
 
