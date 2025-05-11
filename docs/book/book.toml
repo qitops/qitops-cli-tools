@@ -9,13 +9,14 @@ title = "QitOps Documentation"
 git-repository-url = "https://github.com/qitops/qitops-cli-tools"
 git-repository-icon = "fa-github"
 edit-url-template = "https://github.com/qitops/qitops-cli-tools/edit/master/docs/{path}"
+site-url = "/qitops-cli-tools/"
 additional-css = ["custom.css"]
 additional-js = ["custom.js"]
 mathjax-support = false
 copy-fonts = true
 no-section-label = false
 preferred-dark-theme = "navy"
-curly-quotes = true
+smart-punctuation = true
 search-enabled = true
 search-js = true
 

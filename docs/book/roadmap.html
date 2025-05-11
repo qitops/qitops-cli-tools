@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Data-Driven Testing - QitOps Documentation</title>
+        <title>Roadmap - QitOps Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -133,7 +133,7 @@
                         <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./index.md#data-driven-testing" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./roadmap.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -162,7 +162,141 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="data-driven-testing"><a class="header" href="#data-driven-testing">Data-Driven Testing</a></h1>
+                        <h1 id="qitops-roadmap"><a class="header" href="#qitops-roadmap">QitOps Roadmap</a></h1>
+<p>This document outlines the development roadmap for QitOps, positioning it as a compelling alternative to established testing tools like Postman and k6.</p>
+<h2 id="vision"><a class="header" href="#vision">Vision</a></h2>
+<p>QitOps aims to be the premier CLI-first testing tool for developers and QA professionals, offering a unified interface for API, performance, security, and web testing with minimal dependencies and maximum flexibility.</p>
+<h2 id="-phase-0-lock-the-core-current"><a class="header" href="#-phase-0-lock-the-core-current">🔁 Phase 0: Lock the Core (Current)</a></h2>
+<p>Before pursuing feature parity with other tools, we’re focusing on making the current implementation rock-solid:</p>
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+Implement basic API testing module</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Implement basic performance testing module</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Implement basic security testing module</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Implement basic web testing module</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Finalize and stabilize all core modules</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Implement JSON config schema validation in common.rs</li>
+<li><input disabled="" type="checkbox"/>
+Clean CLI output with –format options (JSON, human)</li>
+<li><input disabled="" type="checkbox"/>
+Ensure cargo build –release produces a static binary</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Document the config format for each testing mode</li>
+</ul>
+<p><strong>Milestone</strong>: CLI MVP — the “Postman/k6 replacement for power users”</p>
+<h2 id="-phase-1-parity-foundation-0-2-months"><a class="header" href="#-phase-1-parity-foundation-0-2-months">📦 Phase 1: Parity Foundation (0-2 months)</a></h2>
+<h3 id="-api-testing-postman-lite"><a class="header" href="#-api-testing-postman-lite">🧪 API Testing: Postman Lite</a></h3>
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+Implement Collections (array of requests in one config)</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Add Variable &amp; Environment interpolation</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Add Request chaining via captured outputs</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Expand Auth to support OAuth2, JWT, API Key</li>
+<li><input disabled="" type="checkbox"/>
+Add optional –history logging to a local SQLite file</li>
+</ul>
+<h3 id="-performance-testing-k6-core"><a class="header" href="#-performance-testing-k6-core">⚙️ Performance Testing: k6 Core</a></h3>
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+Implement load profiles (constant, ramp-up, spike)</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Support scenarios in one file (multiple endpoints)</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Track custom metrics (via tags)</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Add thresholds for pass/fail criteria</li>
+<li><input disabled="" type="checkbox" checked=""/>
+CLI streaming metrics (real-time bar/line output)</li>
+</ul>
+<p><strong>Milestone</strong>: “Parity with a Purpose”</p>
+<h2 id="-phase-2-differentiators-2-4-months"><a class="header" href="#-phase-2-differentiators-2-4-months">🧑‍💻 Phase 2: Differentiators (2-4 months)</a></h2>
+<h3 id="-integrations"><a class="header" href="#-integrations">🔧 Integrations</a></h3>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Git sync for test configs (qitops sync)</li>
+<li><input disabled="" type="checkbox" checked=""/>
+GitHub Actions example template</li>
+<li><input disabled="" type="checkbox"/>
+Dockerfile for CLI-only image</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Native CI support: –ci-mode</li>
+</ul>
+<h3 id="-reporting"><a class="header" href="#-reporting">📊 Reporting</a></h3>
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+JSON + HTML reporters (extend with templates)</li>
+<li><input disabled="" type="checkbox"/>
+Markdown summary logs (for commits)</li>
+<li><input disabled="" type="checkbox" checked=""/>
+CSV export for audit logs</li>
+</ul>
+<h3 id="-data-driven-testing"><a class="header" href="#-data-driven-testing">🧪 Data-Driven Testing</a></h3>
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+Parametrize tests with CSV/JSON datasets</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Support template placeholders: {{user_id}}</li>
+</ul>
+<p><strong>Milestone</strong>: “Beyond Parity”</p>
+<h2 id="-phase-3-ai--ecosystem-4-6-months"><a class="header" href="#-phase-3-ai--ecosystem-4-6-months">🧠 Phase 3: AI &amp; Ecosystem (4-6 months)</a></h2>
+<h3 id="-plugin-architecture-cli-first"><a class="header" href="#-plugin-architecture-cli-first">🔌 Plugin Architecture (CLI-first)</a></h3>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Define QitOpsPlugin trait</li>
+<li><input disabled="" type="checkbox"/>
+Implement dynamic plugin loader (optional shared lib .so or .dll)</li>
+</ul>
+<h3 id="-ai-integration"><a class="header" href="#-ai-integration">🧠 AI Integration</a></h3>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Generate tests from OpenAPI files</li>
+<li><input disabled="" type="checkbox"/>
+Record &amp; replay traffic (CLI proxy + storage)</li>
+<li><input disabled="" type="checkbox"/>
+Recommend missing edge cases or optimization via LLM</li>
+</ul>
+<h3 id="-ui-optional"><a class="header" href="#-ui-optional">🖥️ UI (Optional)</a></h3>
+<ul>
+<li><input disabled="" type="checkbox"/>
+Add TUI with textual or ratatui</li>
+<li><input disabled="" type="checkbox"/>
+Optional Web UI (if CLI usage + community demand)</li>
+</ul>
+<p><strong>Milestone</strong>: “Next-Generation Testing Platform”</p>
+<h2 id="-strategic-advantages"><a class="header" href="#-strategic-advantages">📈 Strategic Advantages</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Feature</th><th>Why It Wins</th></tr></thead><tbody>
+<tr><td>Unified Tool</td><td>One CLI for API, performance, security, and (later) AI</td></tr>
+<tr><td>Rust Static Binary</td><td>No runtime, no nonsense — fast and portable</td></tr>
+<tr><td>Open Source CLI-first</td><td>Speaks devops, CI, Git</td></tr>
+<tr><td>TestOps as Code</td><td>Config-driven testing becomes auditable, repeatable</td></tr>
+<tr><td>QitOps OS-ready</td><td>Tightest vertical integration possible — CLI + OS</td></tr>
+</tbody></table>
+</div>
+<h2 id="contributing"><a class="header" href="#contributing">Contributing</a></h2>
+<p>We welcome contributions to help realize this roadmap! See our <a href="CONTRIBUTING.html">CONTRIBUTING.md</a> for guidelines on how to get involved.</p>
+<h2 id="prioritization"><a class="header" href="#prioritization">Prioritization</a></h2>
+<p>This roadmap is subject to change based on community feedback and evolving requirements. The core team will prioritize features based on:</p>
+<ol>
+<li>Core stability and reliability</li>
+<li>Features that enable CI/CD integration</li>
+<li>Features that differentiate QitOps from competitors</li>
+<li>Features that expand the ecosystem</li>
+</ol>
+<h2 id="immediate-next-steps"><a class="header" href="#immediate-next-steps">Immediate Next Steps</a></h2>
+<ul>
+<li>Finalize the README and document config structure per test type</li>
+<li>Create a qitops-collections.json sample and scaffold the feature</li>
+<li>Start with simple chaining: response.body.token → next.headers.Authorization</li>
+<li>Prep plugin.rs with trait + registration model (even before loading logic)</li>
+</ul>
 
                     </main>
 
@@ -172,7 +306,7 @@
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="roadmap.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="changelog.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -186,7 +320,7 @@
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="roadmap.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="changelog.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
