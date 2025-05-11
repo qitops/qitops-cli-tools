@@ -74,98 +74,94 @@ jobs:
 
           # Create SUMMARY.md if it doesn't exist
           if [ ! -f docs/SUMMARY.md ]; then
-            cat > docs/SUMMARY.md << EOF
-# Summary
-
-[QitOps: The Ultimate QA CLI Tool](index.md)
-
-# User Guide
-
-- [Why QitOps?](index.md#why-qitops)
-- [Installation](index.md#installation)
-- [Quick Start](index.md#quick-start)
-
-# Core Features
-
-- [API Testing](index.md#api-testing)
-- [API Collections](index.md#api-collections)
-- [Performance Testing](index.md#performance-testing)
-- [Security Testing](index.md#security-testing)
-- [Web Testing](index.md#web-testing)
-
-# AI-Powered Testing
-
-- [AI Features Overview](ai-features.md)
-- [Test Generation](ai-features.md#test-configuration-generation)
-- [Results Analysis](ai-features.md#test-results-analysis)
-- [Improvement Suggestions](ai-features.md#improvement-suggestions)
-- [Local LLM Support](ai-features.md#supported-llm-models)
-- [Testing AI Features](testing-ai-features.md)
-
-# Using QitOps
-
-- [Usage Guide](usage.md)
-- [Configuration](configuration.md)
-- [Best Practices](best-practices.md)
-- [CI/CD Integration](index.md#cicd-integration)
-- [Data-Driven Testing](index.md#data-driven-testing)
-
-# Project Information
-
-- [Roadmap](roadmap.md)
-- [Changelog](changelog.md)
-- [Contributing](contributing.md)
-- [License](LICENSE.md)
-
----
-
-[Documentation Setup](GITHUB_PAGES.md)
-EOF
+            echo '# Summary' > docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '[QitOps: The Ultimate QA CLI Tool](index.md)' >> docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '# User Guide' >> docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '- [Why QitOps?](index.md#why-qitops)' >> docs/SUMMARY.md
+            echo '- [Installation](index.md#installation)' >> docs/SUMMARY.md
+            echo '- [Quick Start](index.md#quick-start)' >> docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '# Core Features' >> docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '- [API Testing](index.md#api-testing)' >> docs/SUMMARY.md
+            echo '- [API Collections](index.md#api-collections)' >> docs/SUMMARY.md
+            echo '- [Performance Testing](index.md#performance-testing)' >> docs/SUMMARY.md
+            echo '- [Security Testing](index.md#security-testing)' >> docs/SUMMARY.md
+            echo '- [Web Testing](index.md#web-testing)' >> docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '# AI-Powered Testing' >> docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '- [AI Features Overview](ai-features.md)' >> docs/SUMMARY.md
+            echo '- [Test Generation](ai-features.md#test-configuration-generation)' >> docs/SUMMARY.md
+            echo '- [Results Analysis](ai-features.md#test-results-analysis)' >> docs/SUMMARY.md
+            echo '- [Improvement Suggestions](ai-features.md#improvement-suggestions)' >> docs/SUMMARY.md
+            echo '- [Local LLM Support](ai-features.md#supported-llm-models)' >> docs/SUMMARY.md
+            echo '- [Testing AI Features](testing-ai-features.md)' >> docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '# Using QitOps' >> docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '- [Usage Guide](usage.md)' >> docs/SUMMARY.md
+            echo '- [Configuration](configuration.md)' >> docs/SUMMARY.md
+            echo '- [Best Practices](best-practices.md)' >> docs/SUMMARY.md
+            echo '- [CI/CD Integration](index.md#cicd-integration)' >> docs/SUMMARY.md
+            echo '- [Data-Driven Testing](index.md#data-driven-testing)' >> docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '# Project Information' >> docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '- [Roadmap](roadmap.md)' >> docs/SUMMARY.md
+            echo '- [Changelog](changelog.md)' >> docs/SUMMARY.md
+            echo '- [Contributing](contributing.md)' >> docs/SUMMARY.md
+            echo '- [License](LICENSE.md)' >> docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '---' >> docs/SUMMARY.md
+            echo '' >> docs/SUMMARY.md
+            echo '[Documentation Setup](GITHUB_PAGES.md)' >> docs/SUMMARY.md
           fi
 
           # Update book.toml
-          cat > docs/book.toml << EOF
-[book]
-authors = ["Jonathan Opperman"]
-language = "en"
-multilingual = false
-src = "."
-title = "QitOps Documentation"
-
-[output.html]
-git-repository-url = "https://github.com/qitops/qitops-cli-tools"
-git-repository-icon = "fa-github"
-edit-url-template = "https://github.com/qitops/qitops-cli-tools/edit/master/docs/{path}"
-site-url = "/qitops-cli-tools/"
-additional-css = ["custom.css"]
-additional-js = ["custom.js"]
-mathjax-support = false
-copy-fonts = true
-no-section-label = false
-preferred-dark-theme = "navy"
-smart-punctuation = true
-search-enabled = true
-search-js = true
-
-[output.html.fold]
-enable = true
-level = 0
-
-[output.html.playground]
-editable = true
-line-numbers = true
-runnable = false
-
-[output.html.search]
-limit-results = 20
-use-boolean-and = true
-boost-title = 2
-boost-hierarchy = 2
-boost-paragraph = 1
-expand = true
-heading-split-level = 3
-copy-js = true
-EOF
+          echo '[book]' > docs/book.toml
+          echo 'authors = ["Jonathan Opperman"]' >> docs/book.toml
+          echo 'language = "en"' >> docs/book.toml
+          echo 'multilingual = false' >> docs/book.toml
+          echo 'src = "."' >> docs/book.toml
+          echo 'title = "QitOps Documentation"' >> docs/book.toml
+          echo '' >> docs/book.toml
+          echo '[output.html]' >> docs/book.toml
+          echo 'git-repository-url = "https://github.com/qitops/qitops-cli-tools"' >> docs/book.toml
+          echo 'git-repository-icon = "fa-github"' >> docs/book.toml
+          echo 'edit-url-template = "https://github.com/qitops/qitops-cli-tools/edit/master/docs/{path}"' >> docs/book.toml
+          echo 'site-url = "/qitops-cli-tools/"' >> docs/book.toml
+          echo 'additional-css = ["custom.css"]' >> docs/book.toml
+          echo 'additional-js = ["custom.js"]' >> docs/book.toml
+          echo 'mathjax-support = false' >> docs/book.toml
+          echo 'copy-fonts = true' >> docs/book.toml
+          echo 'no-section-label = false' >> docs/book.toml
+          echo 'preferred-dark-theme = "navy"' >> docs/book.toml
+          echo 'smart-punctuation = true' >> docs/book.toml
+          echo 'search-enabled = true' >> docs/book.toml
+          echo 'search-js = true' >> docs/book.toml
+          echo '' >> docs/book.toml
+          echo '[output.html.fold]' >> docs/book.toml
+          echo 'enable = true' >> docs/book.toml
+          echo 'level = 0' >> docs/book.toml
+          echo '' >> docs/book.toml
+          echo '[output.html.playground]' >> docs/book.toml
+          echo 'editable = true' >> docs/book.toml
+          echo 'line-numbers = true' >> docs/book.toml
+          echo 'runnable = false' >> docs/book.toml
+          echo '' >> docs/book.toml
+          echo '[output.html.search]' >> docs/book.toml
+          echo 'limit-results = 20' >> docs/book.toml
+          echo 'use-boolean-and = true' >> docs/book.toml
+          echo 'boost-title = 2' >> docs/book.toml
+          echo 'boost-hierarchy = 2' >> docs/book.toml
+          echo 'boost-paragraph = 1' >> docs/book.toml
+          echo 'expand = true' >> docs/book.toml
+          echo 'heading-split-level = 3' >> docs/book.toml
+          echo 'copy-js = true' >> docs/book.toml
 
           # Ensure custom CSS and JS files exist
           if [ ! -f docs/custom.css ]; then
