@@ -8,7 +8,7 @@
 
 QitOps is a comprehensive Software Quality Assurance CLI tool for API, Performance, Security, and Web Testing. It provides a unified command-line interface with minimal dependencies and maximum flexibility.
 
-## Why QitOps?
+## Why QitOps? {#why-qitops}
 
 QitOps stands out from other testing tools with its unique combination of features:
 
@@ -55,7 +55,7 @@ QitOps combines the best features of multiple tools into a single, unified CLI t
 - **Test Generation**: Use AI to quickly generate test configurations from descriptions
 - **Test Analysis**: Get AI-powered insights and improvement suggestions for your tests
 
-## Installation
+## Installation {#installation}
 
 ### From crates.io (Recommended)
 
@@ -139,7 +139,7 @@ export QITOPS_MODEL_PATH="/path/to/model.gguf"
 qitops analyze --results results.json --output analysis.md
 ```
 
-## Quick Start
+## Quick Start {#quick-start}
 
 ```bash
 # Install QitOps
@@ -175,7 +175,7 @@ qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/pr
 
 ## Features
 
-### API Testing
+### API Testing {#api-testing}
 - HTTP method support (GET, POST, PUT, DELETE, etc.)
 - URL configuration with environment-specific settings
 - Custom headers and request body support
@@ -183,28 +183,28 @@ qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/pr
 - Response time monitoring
 - Configurable timeouts and retries
 
-### API Collections
+### API Collections {#api-collections}
 - Group related API requests in a single configuration
 - Define dependencies between requests
 - Capture and use data from previous responses using JSONPath
 - Variable interpolation with {{variable}} syntax
 - Environment variables and environment-specific configurations
 
-### Performance Testing
+### Performance Testing {#performance-testing}
 - Load testing with configurable concurrent users
 - Response time analysis
 - Success rate monitoring
 - Ramp-up time configuration
 - Detailed performance metrics
 
-### Security Testing
+### Security Testing {#security-testing}
 - Comprehensive security scanning
 - Multiple scan types (headers, SSL, vulnerabilities, sensitive data)
 - Severity-based reporting
 - Authentication testing
 - Common vulnerability checks
 
-### Web Testing
+### Web Testing {#web-testing}
 - Headless browser automation
 - Viewport configuration
 - Screenshot capture
@@ -244,6 +244,47 @@ qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/pr
   export QITOPS_MODEL_PATH="/path/to/model.gguf"
   qitops analyze --results test_results.json --output analysis.md
   ```
+
+### CI/CD Integration {#cicd-integration}
+- Seamless integration with CI/CD pipelines
+- JSON, XML, HTML, and CSV report formats
+- Exit codes based on test results
+- Environment variable support
+- Reduced output in CI mode
+- Artifact generation for historical analysis
+
+```bash
+# Run in CI mode with JSON report
+qitops --ci-mode -r json -o results.json api -c tests/configs/api_test.json
+
+# Run in CI mode with XML report (JUnit format)
+qitops --ci-mode -r xml -o test-results.xml api -c tests/configs/api_test.json
+
+# Run in CI mode with HTML report
+qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
+```
+
+### Data-Driven Testing {#data-driven-testing}
+- Parameterize tests with CSV and JSON datasets
+- Run the same test with multiple data sets
+- Capture and report results for each iteration
+- Configure stop-on-failure behavior
+- Set iteration limits
+- Generate detailed reports for each iteration
+
+```bash
+# Run data-driven tests with CSV data
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv
+
+# Run data-driven tests with JSON data
+qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/products.json -t json
+
+# Run with a limit on iterations
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv --limit 10
+
+# Run with stop-on-failure
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv --stop-on-failure
+```
 
 ## Configuration
 
