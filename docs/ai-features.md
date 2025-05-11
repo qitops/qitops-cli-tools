@@ -14,7 +14,7 @@ cargo install qitops --features ai
 cargo build --features ai
 ```
 
-## Supported LLM Models
+## Supported LLM Models {#supported-llm-models}
 
 QitOps supports a variety of local LLM models:
 
@@ -75,7 +75,7 @@ qitops analyze --results test_results.json --output analysis.md
 
 ## AI Features
 
-### Test Configuration Generation
+## Test Configuration Generation {#test-configuration-generation}
 
 Generate test configurations from natural language descriptions:
 
@@ -93,7 +93,7 @@ qitops generate --test-type security --description "Security scan for a banking 
 qitops generate --test-type web --description "Test the checkout flow of an e-commerce website" --output web_test.json
 ```
 
-### Test Results Analysis
+## Test Results Analysis {#test-results-analysis}
 
 Analyze test results to identify patterns and issues:
 
@@ -111,7 +111,7 @@ The analysis includes:
 - Performance metrics
 - Recommendations for improvement
 
-### Improvement Suggestions
+## Improvement Suggestions {#improvement-suggestions}
 
 Get actionable suggestions to improve your tests:
 
