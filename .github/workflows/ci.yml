@@ -53,3 +53,133 @@ jobs:
         run: |
           chmod +x test_ai_features.sh
           ./test_ai_features.sh
+
+      # Documentation build steps
+      - name: Setup mdBook
+        uses: peaceiris/actions-mdbook@v1
+        with:
+          mdbook-version: 'latest'
+
+      - name: Prepare docs directory
+        run: |
+          # Clean up specific problematic files
+          rm -rf docs/*.html docs/index.md#*
+
+          # Copy main files if they don't exist in docs
+          [ -f docs/index.md ] || cp README.md docs/index.md
+          [ -f docs/changelog.md ] || cp CHANGELOG.md docs/changelog.md 2>/dev/null || echo "# Changelog" > docs/changelog.md
+          [ -f docs/roadmap.md ] || cp ROADMAP.md docs/roadmap.md 2>/dev/null || echo "# Roadmap" > docs/roadmap.md
+          [ -f docs/contributing.md ] || cp CONTRIBUTING.md docs/contributing.md 2>/dev/null || echo "# Contributing" > docs/contributing.md
+          [ -f docs/LICENSE.md ] || cp LICENSE docs/LICENSE.md 2>/dev/null || echo "# License" > docs/LICENSE.md
+
+          # Create SUMMARY.md if it doesn't exist
+          if [ ! -f docs/SUMMARY.md ]; then
+            cat > docs/SUMMARY.md << EOF
+# Summary
+
+[QitOps: The Ultimate QA CLI Tool](index.md)
+
+# User Guide
+
+- [Why QitOps?](index.md#why-qitops)
+- [Installation](index.md#installation)
+- [Quick Start](index.md#quick-start)
+
+# Core Features
+
+- [API Testing](index.md#api-testing)
+- [API Collections](index.md#api-collections)
+- [Performance Testing](index.md#performance-testing)
+- [Security Testing](index.md#security-testing)
+- [Web Testing](index.md#web-testing)
+
+# AI-Powered Testing
+
+- [AI Features Overview](ai-features.md)
+- [Test Generation](ai-features.md#test-configuration-generation)
+- [Results Analysis](ai-features.md#test-results-analysis)
+- [Improvement Suggestions](ai-features.md#improvement-suggestions)
+- [Local LLM Support](ai-features.md#supported-llm-models)
+- [Testing AI Features](testing-ai-features.md)
+
+# Using QitOps
+
+- [Usage Guide](usage.md)
+- [Configuration](configuration.md)
+- [Best Practices](best-practices.md)
+- [CI/CD Integration](index.md#cicd-integration)
+- [Data-Driven Testing](index.md#data-driven-testing)
+
+# Project Information
+
+- [Roadmap](roadmap.md)
+- [Changelog](changelog.md)
+- [Contributing](contributing.md)
+- [License](LICENSE.md)
+
+---
+
+[Documentation Setup](GITHUB_PAGES.md)
+EOF
+          fi
+
+          # Update book.toml
+          cat > docs/book.toml << EOF
+[book]
+authors = ["Jonathan Opperman"]
+language = "en"
+multilingual = false
+src = "."
+title = "QitOps Documentation"
+
+[output.html]
+git-repository-url = "https://github.com/qitops/qitops-cli-tools"
+git-repository-icon = "fa-github"
+edit-url-template = "https://github.com/qitops/qitops-cli-tools/edit/master/docs/{path}"
+site-url = "/qitops-cli-tools/"
+additional-css = ["custom.css"]
+additional-js = ["custom.js"]
+mathjax-support = false
+copy-fonts = true
+no-section-label = false
+preferred-dark-theme = "navy"
+smart-punctuation = true
+search-enabled = true
+search-js = true
+
+[output.html.fold]
+enable = true
+level = 0
+
+[output.html.playground]
+editable = true
+line-numbers = true
+runnable = false
+
+[output.html.search]
+limit-results = 20
+use-boolean-and = true
+boost-title = 2
+boost-hierarchy = 2
+boost-paragraph = 1
+expand = true
+heading-split-level = 3
+copy-js = true
+EOF
+
+          # Ensure custom CSS and JS files exist
+          if [ ! -f docs/custom.css ]; then
+            touch docs/custom.css
+          fi
+          if [ ! -f docs/custom.js ]; then
+            touch docs/custom.js
+          fi
+
+          # List all files in docs directory for debugging
+          echo "Files in docs directory:"
+          ls -la docs/
+
+      - name: Build documentation
+        run: |
+          cd docs
+          mdbook build
