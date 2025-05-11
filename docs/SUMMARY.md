@@ -10,11 +10,11 @@
 
 # Core Features
 
-- [API Testing](index.md#api-testing)
+- [API Testing](api-testing.md)
 - [API Collections](index.md#api-collections)
 - [Performance Testing](index.md#performance-testing)
 - [Security Testing](index.md#security-testing)
-- [Web Testing](index.md#web-testing)
+- [Web Testing](web-testing.md)
 
 # AI-Powered Testing
 
