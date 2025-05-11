@@ -1694,8 +1694,455 @@ cargo build --release --target x86_64-unknown-linux-musl
 <h2 id="license"><a class="header" href="#license">License</a></h2>
 <p>This project is licensed under the MIT License - see the LICENSE file for details.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="why-qitops"><a class="header" href="#why-qitops">Why QitOps?</a></h1>
+<p>QitOps is a comprehensive CLI testing tool designed to address the limitations of existing testing solutions while providing a modern, efficient, and developer-friendly approach to quality assurance.</p>
+<h2 id="key-benefits"><a class="header" href="#key-benefits">Key Benefits</a></h2>
+<h3 id="1-unified-testing-platform"><a class="header" href="#1-unified-testing-platform">1. Unified Testing Platform</a></h3>
+<p>QitOps provides a single tool for multiple testing needs:</p>
+<ul>
+<li><strong>API Testing</strong>: Test individual endpoints and complex API workflows</li>
+<li><strong>Performance Testing</strong>: Measure and validate system performance under load</li>
+<li><strong>Security Testing</strong>: Identify vulnerabilities and ensure compliance</li>
+<li><strong>Web Testing</strong>: Automate browser interactions and validate web applications</li>
+<li><strong>Data-Driven Testing</strong>: Run tests with multiple data sets</li>
+</ul>
+<p>This unified approach eliminates the need for multiple tools and simplifies your testing workflow.</p>
+<h3 id="2-cli-first-design"><a class="header" href="#2-cli-first-design">2. CLI-First Design</a></h3>
+<p>QitOps is built with a CLI-first philosophy:</p>
+<ul>
+<li><strong>Developer-Friendly</strong>: Integrates seamlessly with developer workflows</li>
+<li><strong>Scriptable</strong>: Easy to automate and integrate with CI/CD pipelines</li>
+<li><strong>Lightweight</strong>: No heavy GUI or browser dependencies</li>
+<li><strong>Resource-Efficient</strong>: Minimal system requirements</li>
+<li><strong>Cross-Platform</strong>: Works on Linux, macOS, and Windows</li>
+</ul>
+<p>The CLI-first approach makes QitOps ideal for modern development practices like GitOps and DevOps.</p>
+<h3 id="3-ai-powered-testing"><a class="header" href="#3-ai-powered-testing">3. AI-Powered Testing</a></h3>
+<p>QitOps leverages AI to enhance testing capabilities:</p>
+<ul>
+<li><strong>Test Generation</strong>: Create test configurations from natural language descriptions</li>
+<li><strong>Results Analysis</strong>: Get intelligent insights from test results</li>
+<li><strong>Improvement Suggestions</strong>: Receive actionable recommendations to enhance tests</li>
+<li><strong>Local LLM Support</strong>: Run AI features completely offline with local models</li>
+</ul>
+<p>These AI capabilities help you create better tests, understand results more deeply, and continuously improve your testing strategy.</p>
+<h3 id="4-git-integration"><a class="header" href="#4-git-integration">4. Git Integration</a></h3>
+<p>QitOps is designed to work seamlessly with Git:</p>
+<ul>
+<li><strong>Version Control</strong>: Store test configurations in Git alongside code</li>
+<li><strong>Diff Support</strong>: See changes to test configurations in Git diffs</li>
+<li><strong>Branch-Based Testing</strong>: Run different tests on different branches</li>
+<li><strong>PR Validation</strong>: Validate changes before merging</li>
+</ul>
+<p>This Git-centric approach ensures your tests evolve alongside your codebase.</p>
+<h3 id="5-comprehensive-reporting"><a class="header" href="#5-comprehensive-reporting">5. Comprehensive Reporting</a></h3>
+<p>QitOps provides detailed, actionable reports:</p>
+<ul>
+<li><strong>Multiple Formats</strong>: Generate reports in JSON, HTML, XML, and CSV</li>
+<li><strong>Visual Dashboards</strong>: View test results in interactive dashboards</li>
+<li><strong>Trend Analysis</strong>: Track performance and reliability over time</li>
+<li><strong>CI/CD Integration</strong>: Seamlessly integrate with CI/CD reporting systems</li>
+</ul>
+<p>These reporting capabilities help you understand test results and make informed decisions.</p>
+<h2 id="comparison-with-other-tools"><a class="header" href="#comparison-with-other-tools">Comparison with Other Tools</a></h2>
+<h3 id="qitops-vs-postman"><a class="header" href="#qitops-vs-postman">QitOps vs. Postman</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Feature</th><th>QitOps</th><th>Postman</th></tr></thead><tbody>
+<tr><td>CLI-First</td><td>✅</td><td>❌ (CLI is secondary)</td></tr>
+<tr><td>Resource Usage</td><td>✅ Lightweight</td><td>❌ Heavy Electron app</td></tr>
+<tr><td>Git Integration</td><td>✅ Native</td><td>⚠️ Limited</td></tr>
+<tr><td>AI Features</td><td>✅ Local &amp; private</td><td>⚠️ Cloud-based only</td></tr>
+<tr><td>Performance Testing</td><td>✅ Built-in</td><td>⚠️ Limited</td></tr>
+<tr><td>Security Testing</td><td>✅ Built-in</td><td>❌ Requires add-ons</td></tr>
+<tr><td>Web Testing</td><td>✅ Built-in</td><td>❌ Not available</td></tr>
+<tr><td>Open Source</td><td>✅ MIT License</td><td>❌ Proprietary</td></tr>
+</tbody></table>
+</div>
+<h3 id="qitops-vs-k6"><a class="header" href="#qitops-vs-k6">QitOps vs. k6</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Feature</th><th>QitOps</th><th>k6</th></tr></thead><tbody>
+<tr><td>API Testing</td><td>✅ Comprehensive</td><td>⚠️ Basic</td></tr>
+<tr><td>Performance Testing</td><td>✅ Built-in</td><td>✅ Specialized</td></tr>
+<tr><td>Security Testing</td><td>✅ Built-in</td><td>❌ Not available</td></tr>
+<tr><td>Web Testing</td><td>✅ Built-in</td><td>⚠️ Limited</td></tr>
+<tr><td>AI Features</td><td>✅ Local &amp; private</td><td>❌ Not available</td></tr>
+<tr><td>Configuration Format</td><td>✅ JSON (no coding)</td><td>⚠️ JavaScript</td></tr>
+<tr><td>Learning Curve</td><td>✅ Low</td><td>⚠️ Moderate</td></tr>
+<tr><td>Open Source</td><td>✅ MIT License</td><td>✅ AGPL License</td></tr>
+</tbody></table>
+</div>
+<h2 id="use-cases"><a class="header" href="#use-cases">Use Cases</a></h2>
+<h3 id="devops-and-cicd-integration"><a class="header" href="#devops-and-cicd-integration">DevOps and CI/CD Integration</a></h3>
+<p>QitOps is ideal for DevOps workflows:</p>
+<ul>
+<li>Run automated tests as part of CI/CD pipelines</li>
+<li>Validate API changes before deployment</li>
+<li>Ensure performance meets requirements</li>
+<li>Identify security vulnerabilities early</li>
+<li>Generate test reports for review</li>
+</ul>
+<h3 id="api-development-and-testing"><a class="header" href="#api-development-and-testing">API Development and Testing</a></h3>
+<p>QitOps provides comprehensive API testing capabilities:</p>
+<ul>
+<li>Test individual endpoints and complex workflows</li>
+<li>Validate response status, headers, and body</li>
+<li>Measure and validate performance</li>
+<li>Identify security vulnerabilities</li>
+<li>Generate documentation from tests</li>
+</ul>
+<h3 id="quality-assurance"><a class="header" href="#quality-assurance">Quality Assurance</a></h3>
+<p>QitOps helps QA teams ensure software quality:</p>
+<ul>
+<li>Create and run comprehensive test suites</li>
+<li>Automate repetitive testing tasks</li>
+<li>Generate detailed test reports</li>
+<li>Track quality metrics over time</li>
+<li>Identify and address issues early</li>
+</ul>
+<h3 id="security-validation"><a class="header" href="#security-validation">Security Validation</a></h3>
+<p>QitOps includes security testing features:</p>
+<ul>
+<li>Scan for common vulnerabilities (OWASP Top 10)</li>
+<li>Check for secure headers and SSL/TLS configuration</li>
+<li>Detect sensitive data exposure</li>
+<li>Validate authentication and authorization mechanisms</li>
+<li>Generate security compliance reports</li>
+</ul>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<p>Ready to try QitOps? Check out the <a href="installation.html">Installation</a> guide and <a href="quick-start.html">Quick Start</a> tutorial to begin your journey with QitOps.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installation-1"><a class="header" href="#installation-1">Installation</a></h1>
+<p>QitOps is available for Linux, macOS, and Windows. This guide covers various installation methods to help you get started quickly.</p>
+<h2 id="system-requirements"><a class="header" href="#system-requirements">System Requirements</a></h2>
+<ul>
+<li><strong>Operating System</strong>: Linux, macOS, or Windows</li>
+<li><strong>Disk Space</strong>: 50MB minimum</li>
+<li><strong>Memory</strong>: 256MB minimum (2GB+ recommended for AI features)</li>
+<li><strong>Dependencies</strong>: None (self-contained binary)</li>
+</ul>
+<h2 id="quick-installation"><a class="header" href="#quick-installation">Quick Installation</a></h2>
+<h3 id="using-the-install-script-linuxmacos"><a class="header" href="#using-the-install-script-linuxmacos">Using the Install Script (Linux/macOS)</a></h3>
+<p>The easiest way to install QitOps is using our install script:</p>
+<pre><code class="language-bash">curl -sSL https://get.qitops.dev | bash
+</code></pre>
+<p>This script will download the latest version of QitOps and install it to <code>/usr/local/bin/qitops</code>.</p>
+<h3 id="manual-installation"><a class="header" href="#manual-installation">Manual Installation</a></h3>
+<h4 id="linux"><a class="header" href="#linux">Linux</a></h4>
+<pre><code class="language-bash"># Download the latest release
+curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-linux-x86_64 -o qitops
+
+# Make it executable
+chmod +x qitops
+
+# Move to a directory in your PATH
+sudo mv qitops /usr/local/bin/
+</code></pre>
+<h4 id="macos"><a class="header" href="#macos">macOS</a></h4>
+<pre><code class="language-bash"># Download the latest release
+curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-macos-x86_64 -o qitops
+
+# Make it executable
+chmod +x qitops
+
+# Move to a directory in your PATH
+sudo mv qitops /usr/local/bin/
+</code></pre>
+<h4 id="windows"><a class="header" href="#windows">Windows</a></h4>
+<pre><code class="language-powershell"># Download the latest release
+Invoke-WebRequest -Uri https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-windows-x86_64.exe -OutFile qitops.exe
+
+# Move to a directory in your PATH
+Move-Item -Path qitops.exe -Destination "$env:USERPROFILE\AppData\Local\Microsoft\WindowsApps\"
+</code></pre>
+<h2 id="package-managers"><a class="header" href="#package-managers">Package Managers</a></h2>
+<h3 id="homebrew-macoslinux"><a class="header" href="#homebrew-macoslinux">Homebrew (macOS/Linux)</a></h3>
+<pre><code class="language-bash">brew tap qitops/qitops
+brew install qitops
+</code></pre>
+<h3 id="scoop-windows"><a class="header" href="#scoop-windows">Scoop (Windows)</a></h3>
+<pre><code class="language-powershell">scoop bucket add qitops https://github.com/qitops/scoop-bucket.git
+scoop install qitops
+</code></pre>
+<h3 id="apt-debianubuntu"><a class="header" href="#apt-debianubuntu">APT (Debian/Ubuntu)</a></h3>
+<pre><code class="language-bash"># Add the QitOps repository
+echo "deb [trusted=yes] https://apt.qitops.dev/ stable main" | sudo tee /etc/apt/sources.list.d/qitops.list
+
+# Update package list
+sudo apt update
+
+# Install QitOps
+sudo apt install qitops
+</code></pre>
+<h3 id="yumdnf-rhelfedoracentos"><a class="header" href="#yumdnf-rhelfedoracentos">YUM/DNF (RHEL/Fedora/CentOS)</a></h3>
+<pre><code class="language-bash"># Add the QitOps repository
+sudo tee /etc/yum.repos.d/qitops.repo &lt;&lt; EOF
+[qitops]
+name=QitOps Repository
+baseurl=https://yum.qitops.dev/
+enabled=1
+gpgcheck=0
+EOF
+
+# Install QitOps
+sudo yum install qitops
+</code></pre>
+<h3 id="npm-cross-platform"><a class="header" href="#npm-cross-platform">NPM (Cross-platform)</a></h3>
+<pre><code class="language-bash">npm install -g qitops
+</code></pre>
+<h2 id="docker"><a class="header" href="#docker">Docker</a></h2>
+<p>QitOps is also available as a Docker image:</p>
+<pre><code class="language-bash"># Pull the latest image
+docker pull qitops/qitops:latest
+
+# Run QitOps
+docker run --rm qitops/qitops:latest --version
+
+# Run QitOps with mounted configuration
+docker run --rm -v $(pwd)/tests:/tests qitops/qitops:latest api -c /tests/configs/api_test.json
+</code></pre>
+<h2 id="building-from-source-1"><a class="header" href="#building-from-source-1">Building from Source</a></h2>
+<p>If you prefer to build QitOps from source:</p>
+<pre><code class="language-bash"># Clone the repository
+git clone https://github.com/qitops/qitops-cli-tools.git
+cd qitops-cli-tools
+
+# Build the binary
+make build
+
+# Install the binary
+make install
+</code></pre>
+<h2 id="verifying-the-installation"><a class="header" href="#verifying-the-installation">Verifying the Installation</a></h2>
+<p>After installation, verify that QitOps is installed correctly:</p>
+<pre><code class="language-bash">qitops --version
+</code></pre>
+<p>You should see output similar to:</p>
+<pre><code>QitOps CLI v1.0.0
+</code></pre>
+<h2 id="updating-qitops"><a class="header" href="#updating-qitops">Updating QitOps</a></h2>
+<h3 id="using-the-update-command"><a class="header" href="#using-the-update-command">Using the Update Command</a></h3>
+<p>QitOps includes a self-update feature:</p>
+<pre><code class="language-bash">qitops update
+</code></pre>
+<h3 id="manual-update"><a class="header" href="#manual-update">Manual Update</a></h3>
+<p>To update manually, simply download and install the latest version using the same method you used for the initial installation.</p>
+<h2 id="uninstalling-qitops"><a class="header" href="#uninstalling-qitops">Uninstalling QitOps</a></h2>
+<h3 id="linuxmacos"><a class="header" href="#linuxmacos">Linux/macOS</a></h3>
+<pre><code class="language-bash">sudo rm /usr/local/bin/qitops
+</code></pre>
+<h3 id="windows-1"><a class="header" href="#windows-1">Windows</a></h3>
+<pre><code class="language-powershell">Remove-Item "$env:USERPROFILE\AppData\Local\Microsoft\WindowsApps\qitops.exe"
+</code></pre>
+<h3 id="package-managers-1"><a class="header" href="#package-managers-1">Package Managers</a></h3>
+<h4 id="homebrew"><a class="header" href="#homebrew">Homebrew</a></h4>
+<pre><code class="language-bash">brew uninstall qitops
+</code></pre>
+<h4 id="scoop"><a class="header" href="#scoop">Scoop</a></h4>
+<pre><code class="language-powershell">scoop uninstall qitops
+</code></pre>
+<h4 id="apt"><a class="header" href="#apt">APT</a></h4>
+<pre><code class="language-bash">sudo apt remove qitops
+</code></pre>
+<h4 id="yumdnf"><a class="header" href="#yumdnf">YUM/DNF</a></h4>
+<pre><code class="language-bash">sudo yum remove qitops
+</code></pre>
+<h4 id="npm"><a class="header" href="#npm">NPM</a></h4>
+<pre><code class="language-bash">npm uninstall -g qitops
+</code></pre>
+<h2 id="troubleshooting-1"><a class="header" href="#troubleshooting-1">Troubleshooting</a></h2>
+<h3 id="common-issues-1"><a class="header" href="#common-issues-1">Common Issues</a></h3>
+<h4 id="permission-denied"><a class="header" href="#permission-denied">Permission Denied</a></h4>
+<p>If you see a “permission denied” error when running QitOps:</p>
+<pre><code class="language-bash">chmod +x /path/to/qitops
+</code></pre>
+<h4 id="command-not-found"><a class="header" href="#command-not-found">Command Not Found</a></h4>
+<p>If you see a “command not found” error:</p>
+<ol>
+<li>Make sure QitOps is installed in a directory in your PATH</li>
+<li>Try using the full path to the binary: <code>/usr/local/bin/qitops</code></li>
+</ol>
+<h4 id="ssl-certificate-errors"><a class="header" href="#ssl-certificate-errors">SSL Certificate Errors</a></h4>
+<p>If you see SSL certificate errors when downloading:</p>
+<pre><code class="language-bash">curl -sSL --insecure https://get.qitops.dev | bash
+</code></pre>
+<h4 id="proxy-issues"><a class="header" href="#proxy-issues">Proxy Issues</a></h4>
+<p>If you’re behind a proxy:</p>
+<pre><code class="language-bash">export HTTP_PROXY=http://proxy.example.com:8080
+export HTTPS_PROXY=http://proxy.example.com:8080
+curl -sSL https://get.qitops.dev | bash
+</code></pre>
+<h3 id="getting-help"><a class="header" href="#getting-help">Getting Help</a></h3>
+<p>If you encounter any issues during installation:</p>
+<ul>
+<li>Check the <a href="https://docs.qitops.dev/troubleshooting">Troubleshooting Guide</a></li>
+<li>Join our <a href="https://discord.gg/qitops">Discord Community</a></li>
+<li>Open an issue on <a href="https://github.com/qitops/qitops-cli-tools/issues">GitHub</a></li>
+</ul>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<p>Now that you have QitOps installed, check out the <a href="quick-start.html">Quick Start</a> guide to learn how to use it.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="quick-start-1"><a class="header" href="#quick-start-1">Quick Start</a></h1>
+<p>This guide will help you get started with QitOps quickly. You’ll learn how to run your first tests and understand the basic workflow.</p>
+<h2 id="prerequisites-1"><a class="header" href="#prerequisites-1">Prerequisites</a></h2>
+<p>Before you begin, make sure you have:</p>
+<ul>
+<li>QitOps installed (see <a href="installation.html">Installation</a>)</li>
+<li>A target API or web application to test</li>
+<li>Basic understanding of HTTP requests and responses</li>
+</ul>
+<h2 id="your-first-api-test"><a class="header" href="#your-first-api-test">Your First API Test</a></h2>
+<p>Let’s start with a simple API test to verify that a public API is working correctly.</p>
+<h3 id="1-create-a-test-configuration"><a class="header" href="#1-create-a-test-configuration">1. Create a Test Configuration</a></h3>
+<p>Create a file named <code>github_api_test.json</code> with the following content:</p>
+<pre><code class="language-json">{
+  "name": "GitHub API Test",
+  "description": "Test the GitHub API to fetch user information",
+  "url": "https://api.github.com/users/octocat",
+  "method": "GET",
+  "headers": {
+    "Accept": "application/vnd.github.v3+json",
+    "User-Agent": "QitOps-Test"
+  },
+  "expected_status": 200,
+  "expected_body": {
+    "login": "octocat",
+    "type": "User"
+  }
+}
+</code></pre>
+<p>This configuration defines a test that:</p>
+<ul>
+<li>Makes a GET request to the GitHub API</li>
+<li>Expects a 200 status code</li>
+<li>Validates that the response contains specific fields</li>
+</ul>
+<h3 id="2-run-the-test"><a class="header" href="#2-run-the-test">2. Run the Test</a></h3>
+<p>Run the test using the QitOps CLI:</p>
+<pre><code class="language-bash">qitops api -c github_api_test.json
+</code></pre>
+<p>You should see output similar to:</p>
+<pre><code>Running API test: GitHub API Test
+✓ Status code is 200
+✓ Response body contains expected fields
+✓ Test completed successfully in 0.324s
+</code></pre>
+<h3 id="3-generate-a-report"><a class="header" href="#3-generate-a-report">3. Generate a Report</a></h3>
+<p>Generate a detailed report of the test results:</p>
+<pre><code class="language-bash">qitops api -c github_api_test.json -r html -o github_test_report.html
+</code></pre>
+<p>This command runs the test and generates an HTML report with detailed information about the request, response, and validation results.</p>
+<h2 id="testing-an-api-collection"><a class="header" href="#testing-an-api-collection">Testing an API Collection</a></h2>
+<p>Now let’s create a collection of related API tests.</p>
+<h3 id="1-create-a-collection-configuration"><a class="header" href="#1-create-a-collection-configuration">1. Create a Collection Configuration</a></h3>
+<p>Create a file named <code>github_api_collection.json</code> with the following content:</p>
+<pre><code class="language-json">{
+  "name": "GitHub API Collection",
+  "description": "A collection of GitHub API tests",
+  "variables": {
+    "base_url": "https://api.github.com",
+    "username": "octocat"
+  },
+  "defaults": {
+    "headers": {
+      "Accept": "application/vnd.github.v3+json",
+      "User-Agent": "QitOps-Test"
+    }
+  },
+  "requests": [
+    {
+      "name": "Get User",
+      "id": "get-user",
+      "url": "{{base_url}}/users/{{username}}",
+      "method": "GET",
+      "expected_status": 200,
+      "capture": {
+        "repos_url": "$.repos_url"
+      }
+    },
+    {
+      "name": "Get User Repos",
+      "id": "get-repos",
+      "url": "{{repos_url}}",
+      "method": "GET",
+      "depends_on": ["get-user"],
+      "expected_status": 200
+    }
+  ]
+}
+</code></pre>
+<p>This collection defines:</p>
+<ul>
+<li>Variables that can be reused across requests</li>
+<li>Default headers for all requests</li>
+<li>Two related requests, where the second depends on the first</li>
+<li>Data capture from the first request to use in the second</li>
+</ul>
+<h3 id="2-run-the-collection"><a class="header" href="#2-run-the-collection">2. Run the Collection</a></h3>
+<p>Run the collection using the QitOps CLI:</p>
+<pre><code class="language-bash">qitops collection -c github_api_collection.json
+</code></pre>
+<p>You should see output showing the execution of each request in the collection.</p>
+<h2 id="running-a-performance-test"><a class="header" href="#running-a-performance-test">Running a Performance Test</a></h2>
+<p>Let’s run a simple performance test to measure the response time of an API.</p>
+<h3 id="1-create-a-performance-test-configuration"><a class="header" href="#1-create-a-performance-test-configuration">1. Create a Performance Test Configuration</a></h3>
+<p>Create a file named <code>performance_test.json</code> with the following content:</p>
+<pre><code class="language-json">{
+  "name": "GitHub API Performance Test",
+  "description": "Test the performance of the GitHub API",
+  "target_url": "https://api.github.com/users/octocat",
+  "method": "GET",
+  "headers": {
+    "Accept": "application/vnd.github.v3+json",
+    "User-Agent": "QitOps-Test"
+  },
+  "concurrent_users": 10,
+  "duration_secs": 30,
+  "ramp_up_time_secs": 5,
+  "success_threshold": 95.0,
+  "max_response_time_ms": 500
+}
+</code></pre>
+<p>This configuration defines a performance test that:</p>
+<ul>
+<li>Simulates 10 concurrent users</li>
+<li>Runs for 30 seconds</li>
+<li>Gradually ramps up to full load over 5 seconds</li>
+<li>Expects a 95% success rate</li>
+<li>Expects a maximum response time of 500ms</li>
+</ul>
+<h3 id="2-run-the-performance-test"><a class="header" href="#2-run-the-performance-test">2. Run the Performance Test</a></h3>
+<p>Run the performance test using the QitOps CLI:</p>
+<pre><code class="language-bash">qitops performance -c performance_test.json
+</code></pre>
+<p>You should see output showing real-time metrics during the test and a summary at the end.</p>
+<h2 id="using-ai-features"><a class="header" href="#using-ai-features">Using AI Features</a></h2>
+<p>QitOps includes AI features that can help you create and improve tests.</p>
+<h3 id="1-generate-a-test-configuration"><a class="header" href="#1-generate-a-test-configuration">1. Generate a Test Configuration</a></h3>
+<p>Generate a test configuration from a natural language description:</p>
+<pre><code class="language-bash">qitops generate --test-type api --description "Test the GitHub API to fetch user information for 'octocat' and verify the response contains the correct login name and user type" --output generated_test.json
+</code></pre>
+<p>This command uses AI to generate a test configuration based on your description.</p>
+<h3 id="2-analyze-test-results"><a class="header" href="#2-analyze-test-results">2. Analyze Test Results</a></h3>
+<p>Run a test and analyze the results:</p>
+<pre><code class="language-bash"># Run a test and save the results
+qitops api -c github_api_test.json -r json -o test_results.json
+
+# Analyze the results
+qitops analyze --results test_results.json --output analysis.md
+</code></pre>
+<p>The analysis will provide insights into the test results and identify any patterns or issues.</p>
+<h3 id="3-get-improvement-suggestions"><a class="header" href="#3-get-improvement-suggestions">3. Get Improvement Suggestions</a></h3>
+<p>Get suggestions for improving your tests:</p>
+<pre><code class="language-bash">qitops improve --results test_results.json --output improvements.md
+</code></pre>
+<p>The suggestions will help you enhance your tests for better coverage and reliability.</p>
+<h2 id="next-steps-1"><a class="header" href="#next-steps-1">Next Steps</a></h2>
+<p>Now that you’ve run your first tests with QitOps, you can explore more advanced features:</p>
+<ul>
+<li><a href="api-testing.html">API Testing</a>: Learn more about API testing capabilities</li>
+<li><a href="api-collections.html">API Collections</a>: Create complex API test workflows</li>
+<li><a href="performance-testing.html">Performance Testing</a>: Measure and validate system performance</li>
+<li><a href="security-testing.html">Security Testing</a>: Identify vulnerabilities and ensure compliance</li>
+<li><a href="web-testing.html">Web Testing</a>: Automate browser interactions and validate web applications</li>
+<li><a href="data-driven-testing.html">Data-Driven Testing</a>: Run tests with multiple data sets</li>
+<li><a href="ai-features.html">AI Features</a>: Leverage AI to enhance your testing workflow</li>
+</ul>
+<p>For a complete reference of all QitOps commands and options, see the <a href="usage.html">Usage Guide</a>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="api-testing-5"><a class="header" href="#api-testing-5">API Testing</a></h1>
 <p>QitOps provides comprehensive API testing capabilities that allow you to validate REST APIs, ensure correct functionality, and verify performance and reliability.</p>
 <h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
@@ -1708,7 +2155,7 @@ cargo build --release --target x86_64-unknown-linux-musl
 <li>Configure timeouts and retries for reliability</li>
 <li>Chain requests with data from previous responses</li>
 </ul>
-<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<h2 id="getting-started-1"><a class="header" href="#getting-started-1">Getting Started</a></h2>
 <h3 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h3>
 <pre><code class="language-bash"># Run a single API test
 qitops api -c tests/configs/api_test.json
@@ -2035,8 +2482,8 @@ qitops api -c tests/configs/api_test.json -v base_url=https://api.example.com -v
     name: api-test-results
     path: api-test-results.json
 </code></pre>
-<h2 id="troubleshooting-1"><a class="header" href="#troubleshooting-1">Troubleshooting</a></h2>
-<h3 id="common-issues-1"><a class="header" href="#common-issues-1">Common Issues</a></h3>
+<h2 id="troubleshooting-2"><a class="header" href="#troubleshooting-2">Troubleshooting</a></h2>
+<h3 id="common-issues-2"><a class="header" href="#common-issues-2">Common Issues</a></h3>
 <ul>
 <li><strong>Connection Refused</strong>: Check if the API server is running and accessible</li>
 <li><strong>Timeout Errors</strong>: Increase the timeout value or check server performance</li>
@@ -2053,11 +2500,373 @@ qitops api -c tests/configs/api_test.json -v base_url=https://api.example.com -v
 <li>Check for environment-specific issues</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="api-collections-5"><a class="header" href="#api-collections-5">API Collections</a></h1>
+<p>QitOps provides powerful API collection capabilities that allow you to group related API requests, chain them together, and create complex test workflows.</p>
+<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<p>API collections in QitOps allow you to:</p>
+<ul>
+<li>Group related API requests into a single collection</li>
+<li>Share variables and authentication across requests</li>
+<li>Capture data from responses to use in subsequent requests</li>
+<li>Define dependencies between requests</li>
+<li>Set up pre-request and post-request scripts</li>
+<li>Configure environment-specific variables</li>
+<li>Run collections sequentially or in parallel</li>
+</ul>
+<h2 id="getting-started-2"><a class="header" href="#getting-started-2">Getting Started</a></h2>
+<h3 id="basic-usage-1"><a class="header" href="#basic-usage-1">Basic Usage</a></h3>
+<pre><code class="language-bash"># Run an API collection
+qitops collection -c tests/configs/api_collection.json
+
+# Run with environment variables
+qitops collection -c tests/configs/api_collection.json -v API_KEY=your-api-key
+
+# Run with a specific environment
+qitops collection -c tests/configs/api_collection.json -e staging
+</code></pre>
+<h3 id="command-line-options-2"><a class="header" href="#command-line-options-2">Command-Line Options</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>-c, --config &lt;FILE&gt;</code></td><td>API collection configuration file</td></tr>
+<tr><td><code>-e, --environment &lt;ENV&gt;</code></td><td>Environment to use (default: production)</td></tr>
+<tr><td><code>-v, --variable &lt;KEY=VALUE&gt;</code></td><td>Set a variable for the collection</td></tr>
+<tr><td><code>--sequential</code></td><td>Run requests sequentially (default)</td></tr>
+<tr><td><code>--parallel</code></td><td>Run requests in parallel where possible</td></tr>
+<tr><td><code>--stop-on-failure</code></td><td>Stop execution after the first failure</td></tr>
+<tr><td><code>--delay &lt;MILLISECONDS&gt;</code></td><td>Delay between requests in milliseconds</td></tr>
+<tr><td><code>-r, --report &lt;FORMAT&gt;</code></td><td>Report format (json, html, xml, csv)</td></tr>
+<tr><td><code>-o, --output &lt;FILE&gt;</code></td><td>Output file for the report</td></tr>
+</tbody></table>
+</div>
+<h2 id="configuration-2"><a class="header" href="#configuration-2">Configuration</a></h2>
+<p>API collections are defined in JSON configuration files that specify the requests, variables, and execution options.</p>
+<h3 id="basic-configuration-structure-1"><a class="header" href="#basic-configuration-structure-1">Basic Configuration Structure</a></h3>
+<pre><code class="language-json">{
+  "name": "GitHub API Collection",
+  "description": "A collection of GitHub API tests",
+  "version": "1.0.0",
+  "variables": {
+    "base_url": "https://api.github.com",
+    "username": "octocat",
+    "repo": "Hello-World"
+  },
+  "auth": {
+    "type": "bearer",
+    "token": "{{GITHUB_TOKEN}}"
+  },
+  "defaults": {
+    "headers": {
+      "Accept": "application/vnd.github.v3+json",
+      "User-Agent": "QitOps-Test"
+    },
+    "timeout": 30,
+    "retries": 3
+  },
+  "requests": [
+    {
+      "name": "Get User",
+      "description": "Get a GitHub user",
+      "id": "get-user",
+      "url": "{{base_url}}/users/{{username}}",
+      "method": "GET",
+      "expected_status": 200,
+      "expected_body": {
+        "login": "{{username}}",
+        "type": "User"
+      },
+      "capture": {
+        "user_id": "$.id",
+        "user_url": "$.url"
+      }
+    },
+    {
+      "name": "Get User Repos",
+      "description": "Get repositories for a user",
+      "id": "get-user-repos",
+      "url": "{{user_url}}/repos",
+      "method": "GET",
+      "depends_on": ["get-user"],
+      "expected_status": 200
+    }
+  ],
+  "environments": {
+    "production": {
+      "base_url": "https://api.github.com"
+    },
+    "staging": {
+      "base_url": "https://api.staging.github.com"
+    }
+  },
+  "run_options": {
+    "sequential": true,
+    "stop_on_failure": true,
+    "delay_between_requests_ms": 500
+  }
+}
+</code></pre>
+<h3 id="configuration-fields-1"><a class="header" href="#configuration-fields-1">Configuration Fields</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody>
+<tr><td>name</td><td>string</td><td>Yes</td><td>Name of the collection</td></tr>
+<tr><td>description</td><td>string</td><td>No</td><td>Description of the collection</td></tr>
+<tr><td>version</td><td>string</td><td>No</td><td>Version of the collection</td></tr>
+<tr><td>variables</td><td>object</td><td>No</td><td>Variables to use in the collection</td></tr>
+<tr><td>auth</td><td>object</td><td>No</td><td>Authentication configuration</td></tr>
+<tr><td>defaults</td><td>object</td><td>No</td><td>Default values for all requests</td></tr>
+<tr><td>requests</td><td>array</td><td>Yes</td><td>Array of request objects</td></tr>
+<tr><td>environments</td><td>object</td><td>No</td><td>Environment-specific variables</td></tr>
+<tr><td>run_options</td><td>object</td><td>No</td><td>Options for running the collection</td></tr>
+</tbody></table>
+</div>
+<h3 id="request-configuration"><a class="header" href="#request-configuration">Request Configuration</a></h3>
+<p>Each request in a collection has the following structure:</p>
+<pre><code class="language-json">{
+  "name": "Get User",
+  "description": "Get a GitHub user",
+  "id": "get-user",
+  "url": "{{base_url}}/users/{{username}}",
+  "method": "GET",
+  "headers": {
+    "Accept": "application/json"
+  },
+  "body": {
+    "param1": "value1",
+    "param2": "value2"
+  },
+  "expected_status": 200,
+  "expected_body": {
+    "login": "{{username}}",
+    "type": "User"
+  },
+  "expected_headers": {
+    "content-type": "application/json"
+  },
+  "capture": {
+    "user_id": "$.id",
+    "user_url": "$.url"
+  },
+  "depends_on": ["another-request-id"],
+  "skip_if": "{{condition}}",
+  "pre_request_script": "// JavaScript code to run before the request",
+  "post_request_script": "// JavaScript code to run after the request"
+}
+</code></pre>
+<h3 id="variable-interpolation"><a class="header" href="#variable-interpolation">Variable Interpolation</a></h3>
+<p>QitOps supports variable interpolation in collection configurations:</p>
+<ul>
+<li><strong>Collection Variables</strong>: <code>{{variable_name}}</code></li>
+<li><strong>Environment Variables</strong>: <code>{{ENV_VARIABLE}}</code></li>
+<li><strong>Captured Variables</strong>: <code>{{captured_variable}}</code></li>
+<li><strong>System Variables</strong>: <code>{{$timestamp}}</code>, <code>{{$random}}</code></li>
+</ul>
+<h3 id="data-capture"><a class="header" href="#data-capture">Data Capture</a></h3>
+<p>You can capture data from responses to use in subsequent requests:</p>
+<pre><code class="language-json">"capture": {
+  "user_id": "$.id",
+  "user_url": "$.url",
+  "token": "$.headers.authorization",
+  "status": "$.status"
+}
+</code></pre>
+<p>QitOps uses JSONPath expressions to extract data from responses.</p>
+<h3 id="request-dependencies"><a class="header" href="#request-dependencies">Request Dependencies</a></h3>
+<p>You can define dependencies between requests:</p>
+<pre><code class="language-json">"depends_on": ["get-user", "get-auth-token"]
+</code></pre>
+<p>Dependent requests will only run if all their dependencies have succeeded.</p>
+<h2 id="examples-1"><a class="header" href="#examples-1">Examples</a></h2>
+<h3 id="github-api-collection"><a class="header" href="#github-api-collection">GitHub API Collection</a></h3>
+<pre><code class="language-json">{
+  "name": "GitHub API Collection",
+  "description": "A collection of GitHub API tests",
+  "variables": {
+    "base_url": "https://api.github.com",
+    "username": "octocat"
+  },
+  "auth": {
+    "type": "bearer",
+    "token": "{{GITHUB_TOKEN}}"
+  },
+  "defaults": {
+    "headers": {
+      "Accept": "application/vnd.github.v3+json",
+      "User-Agent": "QitOps-Test"
+    }
+  },
+  "requests": [
+    {
+      "name": "Get User",
+      "id": "get-user",
+      "url": "{{base_url}}/users/{{username}}",
+      "method": "GET",
+      "expected_status": 200,
+      "capture": {
+        "user_id": "$.id",
+        "repos_url": "$.repos_url"
+      }
+    },
+    {
+      "name": "Get User Repos",
+      "id": "get-repos",
+      "url": "{{repos_url}}",
+      "method": "GET",
+      "depends_on": ["get-user"],
+      "expected_status": 200,
+      "capture": {
+        "first_repo_name": "$.0.name",
+        "first_repo_url": "$.0.url"
+      }
+    },
+    {
+      "name": "Get First Repo Details",
+      "id": "get-repo-details",
+      "url": "{{first_repo_url}}",
+      "method": "GET",
+      "depends_on": ["get-repos"],
+      "expected_status": 200
+    }
+  ]
+}
+</code></pre>
+<h3 id="e-commerce-api-collection"><a class="header" href="#e-commerce-api-collection">E-commerce API Collection</a></h3>
+<pre><code class="language-json">{
+  "name": "E-commerce API Collection",
+  "description": "Test e-commerce API workflow",
+  "variables": {
+    "base_url": "https://api.example.com",
+    "product_id": "12345",
+    "user_id": "user123"
+  },
+  "auth": {
+    "type": "apikey",
+    "key": "X-API-Key",
+    "value": "{{API_KEY}}",
+    "in": "header"
+  },
+  "requests": [
+    {
+      "name": "Get Product",
+      "id": "get-product",
+      "url": "{{base_url}}/products/{{product_id}}",
+      "method": "GET",
+      "expected_status": 200,
+      "capture": {
+        "product_price": "$.price",
+        "product_name": "$.name"
+      }
+    },
+    {
+      "name": "Add to Cart",
+      "id": "add-to-cart",
+      "url": "{{base_url}}/users/{{user_id}}/cart",
+      "method": "POST",
+      "body": {
+        "product_id": "{{product_id}}",
+        "quantity": 1
+      },
+      "depends_on": ["get-product"],
+      "expected_status": 201,
+      "capture": {
+        "cart_id": "$.cart_id"
+      }
+    },
+    {
+      "name": "Get Cart",
+      "id": "get-cart",
+      "url": "{{base_url}}/users/{{user_id}}/cart/{{cart_id}}",
+      "method": "GET",
+      "depends_on": ["add-to-cart"],
+      "expected_status": 200,
+      "expected_body": {
+        "items": [
+          {
+            "product_id": "{{product_id}}",
+            "quantity": 1,
+            "price": "{{product_price}}"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Checkout",
+      "id": "checkout",
+      "url": "{{base_url}}/users/{{user_id}}/cart/{{cart_id}}/checkout",
+      "method": "POST",
+      "body": {
+        "payment_method": "credit_card",
+        "shipping_address": {
+          "street": "123 Main St",
+          "city": "Anytown",
+          "zip": "12345"
+        }
+      },
+      "depends_on": ["get-cart"],
+      "expected_status": 201,
+      "capture": {
+        "order_id": "$.order_id"
+      }
+    },
+    {
+      "name": "Get Order",
+      "id": "get-order",
+      "url": "{{base_url}}/users/{{user_id}}/orders/{{order_id}}",
+      "method": "GET",
+      "depends_on": ["checkout"],
+      "expected_status": 200,
+      "expected_body": {
+        "status": "processing",
+        "total": "{{product_price}}"
+      }
+    }
+  ]
+}
+</code></pre>
+<h2 id="best-practices-2"><a class="header" href="#best-practices-2">Best Practices</a></h2>
+<h3 id="collection-organization"><a class="header" href="#collection-organization">Collection Organization</a></h3>
+<ul>
+<li><strong>Group Related Requests</strong>: Group related requests in a single collection</li>
+<li><strong>Use Descriptive Names</strong>: Use descriptive names for collections and requests</li>
+<li><strong>Include Descriptions</strong>: Include descriptions for collections and requests</li>
+<li><strong>Organize by Workflow</strong>: Organize collections by business workflow or feature</li>
+</ul>
+<h3 id="variables-and-environments-1"><a class="header" href="#variables-and-environments-1">Variables and Environments</a></h3>
+<ul>
+<li><strong>Use Variables</strong>: Use variables for values that change between environments</li>
+<li><strong>Define Environments</strong>: Define environment-specific configurations</li>
+<li><strong>Avoid Hardcoding</strong>: Avoid hardcoding sensitive information</li>
+<li><strong>Use Variable Interpolation</strong>: Use variable interpolation for dynamic values</li>
+</ul>
+<h3 id="dependencies-and-data-flow"><a class="header" href="#dependencies-and-data-flow">Dependencies and Data Flow</a></h3>
+<ul>
+<li><strong>Define Dependencies</strong>: Define clear dependencies between requests</li>
+<li><strong>Capture Data</strong>: Capture data from responses to use in subsequent requests</li>
+<li><strong>Handle Errors</strong>: Configure how to handle errors in dependent requests</li>
+<li><strong>Use Pre/Post Scripts</strong>: Use pre-request and post-request scripts for complex logic</li>
+</ul>
+<h2 id="integration-with-cicd-1"><a class="header" href="#integration-with-cicd-1">Integration with CI/CD</a></h2>
+<p>API collections can be integrated into CI/CD pipelines:</p>
+<pre><code class="language-yaml"># Example GitHub Actions workflow step
+- name: Run API Collection
+  run: |
+    qitops collection -c tests/configs/api_collection.json -e staging --report json --output collection-results.json
+    
+- name: Upload Collection Results
+  uses: actions/upload-artifact@v2
+  with:
+    name: collection-results
+    path: collection-results.json
+</code></pre>
+<h2 id="troubleshooting-3"><a class="header" href="#troubleshooting-3">Troubleshooting</a></h2>
+<h3 id="common-issues-3"><a class="header" href="#common-issues-3">Common Issues</a></h3>
+<ul>
+<li><strong>Variable Not Found</strong>: Check that all variables are defined</li>
+<li><strong>Dependency Failure</strong>: Check that dependent requests are successful</li>
+<li><strong>Capture Failure</strong>: Check that JSONPath expressions are correct</li>
+<li><strong>Authentication Issues</strong>: Verify authentication credentials</li>
+<li><strong>Environment Mismatch</strong>: Check that environment-specific variables are correct</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="performance-testing-5"><a class="header" href="#performance-testing-5">Performance Testing</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="security-testing-5"><a class="header" href="#security-testing-5">Security Testing</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="web-testing-5"><a class="header" href="#web-testing-5">Web Testing</a></h1>
 <p>QitOps provides powerful web testing capabilities that allow you to automate browser interactions, validate web applications, and ensure your websites function correctly across different scenarios.</p>
-<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<h2 id="overview-2"><a class="header" href="#overview-2">Overview</a></h2>
 <p>Web testing in QitOps uses headless browser automation to interact with web pages, perform actions, and validate expected behaviors. This approach allows you to:</p>
 <ul>
 <li>Test complete user journeys through your web application</li>
@@ -2067,8 +2876,8 @@ qitops api -c tests/configs/api_test.json -v base_url=https://api.example.com -v
 <li>Verify page content, titles, and URLs</li>
 <li>Automate form submissions and user interactions</li>
 </ul>
-<h2 id="getting-started-1"><a class="header" href="#getting-started-1">Getting Started</a></h2>
-<h3 id="basic-usage-1"><a class="header" href="#basic-usage-1">Basic Usage</a></h3>
+<h2 id="getting-started-3"><a class="header" href="#getting-started-3">Getting Started</a></h2>
+<h3 id="basic-usage-2"><a class="header" href="#basic-usage-2">Basic Usage</a></h3>
 <pre><code class="language-bash"># Run a web test
 qitops web -c tests/configs/web_test.json
 
@@ -2081,7 +2890,7 @@ qitops web -c tests/configs/web_test.json --no-headless
 # Run with custom viewport
 qitops web -c tests/configs/web_test.json --width 1920 --height 1080
 </code></pre>
-<h3 id="command-line-options-2"><a class="header" href="#command-line-options-2">Command-Line Options</a></h3>
+<h3 id="command-line-options-3"><a class="header" href="#command-line-options-3">Command-Line Options</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>-c, --config &lt;FILE&gt;</code></td><td>Web test configuration file</td></tr>
 <tr><td><code>--headless</code></td><td>Run in headless mode (default: true)</td></tr>
@@ -2096,9 +2905,9 @@ qitops web -c tests/configs/web_test.json --width 1920 --height 1080
 <tr><td><code>-o, --output &lt;FILE&gt;</code></td><td>Output file for the report</td></tr>
 </tbody></table>
 </div>
-<h2 id="configuration-2"><a class="header" href="#configuration-2">Configuration</a></h2>
+<h2 id="configuration-3"><a class="header" href="#configuration-3">Configuration</a></h2>
 <p>Web tests are defined in JSON configuration files that specify the target URL, actions to perform, and assertions to validate.</p>
-<h3 id="basic-configuration-structure-1"><a class="header" href="#basic-configuration-structure-1">Basic Configuration Structure</a></h3>
+<h3 id="basic-configuration-structure-2"><a class="header" href="#basic-configuration-structure-2">Basic Configuration Structure</a></h3>
 <pre><code class="language-json">{
   "name": "Sample Web Test",
   "description": "Testing a public website",
@@ -2139,7 +2948,7 @@ qitops web -c tests/configs/web_test.json --width 1920 --height 1080
   ]
 }
 </code></pre>
-<h3 id="configuration-fields-1"><a class="header" href="#configuration-fields-1">Configuration Fields</a></h3>
+<h3 id="configuration-fields-2"><a class="header" href="#configuration-fields-2">Configuration Fields</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody>
 <tr><td>name</td><td>string</td><td>Yes</td><td>Name of the test</td></tr>
 <tr><td>description</td><td>string</td><td>No</td><td>Description of the test</td></tr>
@@ -2317,7 +3126,7 @@ qitops web -c tests/configs/web_test.json --width 1920 --height 1080
 <tr><td>less_than_or_equal</td><td>Numeric less than or equal</td></tr>
 </tbody></table>
 </div>
-<h2 id="examples-1"><a class="header" href="#examples-1">Examples</a></h2>
+<h2 id="examples-2"><a class="header" href="#examples-2">Examples</a></h2>
 <h3 id="login-form-test"><a class="header" href="#login-form-test">Login Form Test</a></h3>
 <pre><code class="language-json">{
   "name": "Login Form Test",
@@ -2430,7 +3239,7 @@ qitops web -c tests/configs/web_test.json --width 1920 --height 1080
   ]
 }
 </code></pre>
-<h2 id="best-practices-2"><a class="header" href="#best-practices-2">Best Practices</a></h2>
+<h2 id="best-practices-3"><a class="header" href="#best-practices-3">Best Practices</a></h2>
 <h3 id="selector-strategy"><a class="header" href="#selector-strategy">Selector Strategy</a></h3>
 <ul>
 <li>Use stable selectors that are less likely to change</li>
@@ -2459,7 +3268,7 @@ qitops web -c tests/configs/web_test.json --width 1920 --height 1080
 <li>Capture screenshots at failure points</li>
 <li>Add detailed assertions to pinpoint issues</li>
 </ul>
-<h2 id="integration-with-cicd-1"><a class="header" href="#integration-with-cicd-1">Integration with CI/CD</a></h2>
+<h2 id="integration-with-cicd-2"><a class="header" href="#integration-with-cicd-2">Integration with CI/CD</a></h2>
 <p>Web tests can be integrated into CI/CD pipelines:</p>
 <pre><code class="language-yaml"># Example GitHub Actions workflow step
 - name: Run Web Tests
@@ -2598,7 +3407,7 @@ qitops analyze --results test_results.json --output analysis.md
 <li>The LLM generates a complete JSON configuration file based on your description</li>
 <li>The configuration is saved to the specified output file</li>
 </ol>
-<h3 id="basic-usage-2"><a class="header" href="#basic-usage-2">Basic Usage</a></h3>
+<h3 id="basic-usage-3"><a class="header" href="#basic-usage-3">Basic Usage</a></h3>
 <pre><code class="language-bash"># Generate an API test configuration
 qitops generate --test-type api --description "Test the GitHub API to fetch user information" --output github_test.json
 
@@ -2611,7 +3420,7 @@ qitops generate --test-type security --description "Security scan for a banking 
 # Generate a web test configuration
 qitops generate --test-type web --description "Test the checkout flow of an e-commerce website" --output web_test.json
 </code></pre>
-<h3 id="command-line-options-3"><a class="header" href="#command-line-options-3">Command-Line Options</a></h3>
+<h3 id="command-line-options-4"><a class="header" href="#command-line-options-4">Command-Line Options</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>--test-type &lt;TYPE&gt;</code></td><td>Type of test to generate (api, performance, security, web)</td></tr>
 <tr><td><code>--description &lt;TEXT&gt;</code></td><td>Natural language description of the test</td></tr>
@@ -2721,7 +3530,7 @@ qitops generate --test-type api \
 <li>Adjust validation criteria</li>
 <li>Add environment-specific variables</li>
 </ol>
-<h3 id="best-practices-3"><a class="header" href="#best-practices-3">Best Practices</a></h3>
+<h3 id="best-practices-4"><a class="header" href="#best-practices-4">Best Practices</a></h3>
 <ul>
 <li>Start with detailed, specific descriptions</li>
 <li>Review generated configurations before using them</li>
@@ -2740,14 +3549,14 @@ qitops generate --test-type api \
 <li>The LLM generates a comprehensive analysis report</li>
 <li>The analysis is saved to the specified output file (typically in Markdown format)</li>
 </ol>
-<h3 id="basic-usage-3"><a class="header" href="#basic-usage-3">Basic Usage</a></h3>
+<h3 id="basic-usage-4"><a class="header" href="#basic-usage-4">Basic Usage</a></h3>
 <pre><code class="language-bash"># Analyze test results
 qitops analyze --results test_results.json --output analysis.md
 
 # Analyze with a specific model
 qitops analyze --results test_results.json --output analysis.md --model llama --model-path /path/to/model.gguf
 </code></pre>
-<h3 id="command-line-options-4"><a class="header" href="#command-line-options-4">Command-Line Options</a></h3>
+<h3 id="command-line-options-5"><a class="header" href="#command-line-options-5">Command-Line Options</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>--results &lt;FILE&gt;</code></td><td>JSON file containing test results</td></tr>
 <tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the analysis report</td></tr>
@@ -2930,7 +3739,7 @@ The main issues were related to authentication failures and timeout errors.
   }
 ]
 </code></pre>
-<h3 id="best-practices-4"><a class="header" href="#best-practices-4">Best Practices</a></h3>
+<h3 id="best-practices-5"><a class="header" href="#best-practices-5">Best Practices</a></h3>
 <ul>
 <li>Include as much detail as possible in your test results</li>
 <li>Run analysis after each test suite execution</li>
@@ -2950,14 +3759,14 @@ The main issues were related to authentication failures and timeout errors.
 <li>The LLM generates specific, actionable improvement suggestions</li>
 <li>The suggestions are saved to the specified output file</li>
 </ol>
-<h3 id="basic-usage-4"><a class="header" href="#basic-usage-4">Basic Usage</a></h3>
+<h3 id="basic-usage-5"><a class="header" href="#basic-usage-5">Basic Usage</a></h3>
 <pre><code class="language-bash"># Generate improvement suggestions
 qitops improve --results test_results.json --output improvements.md
 
 # Generate suggestions with a specific model
 qitops improve --results test_results.json --output improvements.md --model llama --model-path /path/to/model.gguf
 </code></pre>
-<h3 id="command-line-options-5"><a class="header" href="#command-line-options-5">Command-Line Options</a></h3>
+<h3 id="command-line-options-6"><a class="header" href="#command-line-options-6">Command-Line Options</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>--results &lt;FILE&gt;</code></td><td>JSON file containing test results</td></tr>
 <tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the improvement suggestions</td></tr>
@@ -3108,7 +3917,7 @@ We recommend implementing these improvements in the following order:
    - Add comprehensive load and stress testing
    - Enhance documentation
 </code></pre>
-<h3 id="integration-with-cicd-2"><a class="header" href="#integration-with-cicd-2">Integration with CI/CD</a></h3>
+<h3 id="integration-with-cicd-3"><a class="header" href="#integration-with-cicd-3">Integration with CI/CD</a></h3>
 <p>You can integrate the improvement suggestions feature into your CI/CD pipeline to automatically generate suggestions after test runs:</p>
 <pre><code class="language-yaml"># Example GitHub Actions workflow step
 - name: Generate Test Improvement Suggestions
@@ -3121,7 +3930,7 @@ We recommend implementing these improvements in the following order:
     name: test-improvements
     path: improvements.md
 </code></pre>
-<h3 id="best-practices-5"><a class="header" href="#best-practices-5">Best Practices</a></h3>
+<h3 id="best-practices-6"><a class="header" href="#best-practices-6">Best Practices</a></h3>
 <ul>
 <li>Run the improvement suggestions tool regularly (weekly or after major test runs)</li>
 <li>Prioritize suggestions based on their impact and implementation effort</li>
@@ -3165,7 +3974,7 @@ cargo build --features ai
 <li>Test all AI features (generation, analysis, improvement)</li>
 <li>Show the generated files</li>
 </ol>
-<h2 id="troubleshooting-2"><a class="header" href="#troubleshooting-2">Troubleshooting</a></h2>
+<h2 id="troubleshooting-4"><a class="header" href="#troubleshooting-4">Troubleshooting</a></h2>
 <h3 id="model-loading-issues"><a class="header" href="#model-loading-issues">Model Loading Issues</a></h3>
 <p>If you encounter issues loading a model:</p>
 <pre><code class="language-bash"># Check if the model file exists
@@ -3204,25 +4013,375 @@ qitops generate --test-type api --description "Test description" --context-size 
 <tr><td><code>QITOPS_MAX_TOKENS</code></td><td>Maximum tokens for generation</td><td><code>2048</code></td></tr>
 <tr><td><code>QITOPS_SYSTEM_PROMPT</code></td><td>System prompt for the model</td><td>Default system prompt</td></tr>
 </tbody></table>
-</div><div style="break-before: page; page-break-before: always;"></div><h1 id="test-generation"><a class="header" href="#test-generation">Test Generation</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="results-analysis"><a class="header" href="#results-analysis">Results Analysis</a></h1>
+</div><div style="break-before: page; page-break-before: always;"></div><h1 id="test-configuration-generation"><a class="header" href="#test-configuration-generation">Test Configuration Generation</a></h1>
+<p>QitOps can automatically generate test configurations from natural language descriptions, saving you time and effort in creating test files manually. This feature leverages local LLMs to understand your testing requirements and produce appropriate JSON configurations.</p>
+<h2 id="how-it-works-3"><a class="header" href="#how-it-works-3">How It Works</a></h2>
+<ol>
+<li>You provide a natural language description of the test you want to create</li>
+<li>QitOps processes this description using a local LLM</li>
+<li>The LLM generates a complete JSON configuration file based on your description</li>
+<li>The configuration is saved to the specified output file</li>
+</ol>
+<h2 id="basic-usage-6"><a class="header" href="#basic-usage-6">Basic Usage</a></h2>
+<pre><code class="language-bash"># Generate an API test configuration
+qitops generate --test-type api --description "Test the GitHub API to fetch user information" --output github_test.json
+
+# Generate a performance test configuration
+qitops generate --test-type performance --description "Load test for an e-commerce checkout API with 100 concurrent users" --output perf_test.json
+
+# Generate a security test configuration
+qitops generate --test-type security --description "Security scan for a banking API" --output security_test.json
+
+# Generate a web test configuration
+qitops generate --test-type web --description "Test the checkout flow of an e-commerce website" --output web_test.json
+</code></pre>
+<h2 id="command-line-options-7"><a class="header" href="#command-line-options-7">Command-Line Options</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>--test-type &lt;TYPE&gt;</code></td><td>Type of test to generate (api, performance, security, web)</td></tr>
+<tr><td><code>--description &lt;TEXT&gt;</code></td><td>Natural language description of the test</td></tr>
+<tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the generated configuration</td></tr>
+<tr><td><code>--model &lt;MODEL&gt;</code></td><td>LLM model to use (default: auto)</td></tr>
+<tr><td><code>--model-path &lt;PATH&gt;</code></td><td>Path to the model file</td></tr>
+<tr><td><code>--temperature &lt;FLOAT&gt;</code></td><td>Temperature for generation (0.0-1.0)</td></tr>
+<tr><td><code>--context-size &lt;INT&gt;</code></td><td>Context size in tokens</td></tr>
+<tr><td><code>--max-tokens &lt;INT&gt;</code></td><td>Maximum tokens for generation</td></tr>
+<tr><td><code>--system-prompt &lt;TEXT&gt;</code></td><td>Custom system prompt for the model</td></tr>
+</tbody></table>
+</div>
+<h2 id="writing-effective-descriptions-1"><a class="header" href="#writing-effective-descriptions-1">Writing Effective Descriptions</a></h2>
+<p>The quality of the generated configuration depends on the clarity and specificity of your description. Here are some tips for writing effective descriptions:</p>
+<h3 id="for-api-tests-1"><a class="header" href="#for-api-tests-1">For API Tests:</a></h3>
+<ul>
+<li>Specify the endpoint URL and HTTP method</li>
+<li>Mention any required headers or authentication</li>
+<li>Describe the expected response status and content</li>
+<li>Include any specific validation requirements</li>
+</ul>
+<p>Example: “Test the GitHub API to fetch user information for ‘octocat’ using GET request to /users/octocat endpoint. Verify that the response status is 200 and the response contains the correct login name and user type.”</p>
+<h3 id="for-performance-tests-1"><a class="header" href="#for-performance-tests-1">For Performance Tests:</a></h3>
+<ul>
+<li>Specify the target URL and HTTP method</li>
+<li>Mention the number of concurrent users</li>
+<li>Describe the test duration and ramp-up time</li>
+<li>Include any performance thresholds</li>
+</ul>
+<p>Example: “Load test the checkout API at https://api.example.com/checkout with 100 concurrent users for 5 minutes. Use a 30-second ramp-up time. The API should handle at least 50 requests per second with a response time under 200ms.”</p>
+<h3 id="for-security-tests-1"><a class="header" href="#for-security-tests-1">For Security Tests:</a></h3>
+<ul>
+<li>Specify the target URL or application</li>
+<li>Mention the types of security checks to perform</li>
+<li>Describe any authentication requirements</li>
+<li>Include any specific vulnerability concerns</li>
+</ul>
+<p>Example: “Security scan the banking API at https://api.bank.com/v1 focusing on SQL injection, XSS, and authentication vulnerabilities. Use Bearer token authentication and check for sensitive data exposure in responses.”</p>
+<h3 id="for-web-tests-1"><a class="header" href="#for-web-tests-1">For Web Tests:</a></h3>
+<ul>
+<li>Specify the target website URL</li>
+<li>Describe the user journey or actions to test</li>
+<li>Mention any specific elements to interact with</li>
+<li>Include validation criteria</li>
+</ul>
+<p>Example: “Test the checkout flow of an e-commerce website at https://shop.example.com. Add a product to the cart, proceed to checkout, fill in shipping and payment information, and complete the purchase. Verify that the order confirmation page shows the correct order details.”</p>
+<h2 id="example-generated-configurations-1"><a class="header" href="#example-generated-configurations-1">Example Generated Configurations</a></h2>
+<h3 id="api-test-configuration-3"><a class="header" href="#api-test-configuration-3">API Test Configuration</a></h3>
+<pre><code class="language-json">{
+  "name": "GitHub User API Test",
+  "description": "Test the GitHub API to fetch user information",
+  "url": "https://api.github.com/users/octocat",
+  "method": "GET",
+  "headers": {
+    "Accept": "application/vnd.github.v3+json",
+    "User-Agent": "QitOps-Test"
+  },
+  "expected_status": 200,
+  "expected_body": {
+    "login": "octocat",
+    "type": "User"
+  },
+  "timeout": 30,
+  "retries": 3
+}
+</code></pre>
+<h3 id="performance-test-configuration-3"><a class="header" href="#performance-test-configuration-3">Performance Test Configuration</a></h3>
+<pre><code class="language-json">{
+  "name": "E-commerce Checkout API Load Test",
+  "description": "Load test for an e-commerce checkout API with 100 concurrent users",
+  "target_url": "https://api.example.com/checkout",
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  "body": {
+    "cart_id": "{{cart_id}}",
+    "payment_method": "credit_card",
+    "shipping_method": "standard"
+  },
+  "concurrent_users": 100,
+  "duration_secs": 300,
+  "ramp_up_time_secs": 30,
+  "success_threshold": 95.0,
+  "max_response_time_ms": 200,
+  "requests_per_second_threshold": 50
+}
+</code></pre>
+<h2 id="customizing-generation-1"><a class="header" href="#customizing-generation-1">Customizing Generation</a></h2>
+<p>You can customize the generation process by adjusting the model parameters:</p>
+<pre><code class="language-bash"># Use a specific model with custom parameters
+qitops generate --test-type api \
+  --description "Test the login API with different credentials" \
+  --output login_test.json \
+  --model llama \
+  --model-path models/llama-2-7b.gguf \
+  --temperature 0.8 \
+  --context-size 4096 \
+  --max-tokens 2048
+</code></pre>
+<h2 id="post-generation-editing-1"><a class="header" href="#post-generation-editing-1">Post-Generation Editing</a></h2>
+<p>Generated configurations are meant to be starting points. You may want to:</p>
+<ol>
+<li>Review and edit the generated configuration</li>
+<li>Add or modify specific fields</li>
+<li>Adjust validation criteria</li>
+<li>Add environment-specific variables</li>
+</ol>
+<h2 id="best-practices-7"><a class="header" href="#best-practices-7">Best Practices</a></h2>
+<ul>
+<li>Start with detailed, specific descriptions</li>
+<li>Review generated configurations before using them</li>
+<li>Use lower temperature (0.3-0.5) for more deterministic results</li>
+<li>Use higher temperature (0.7-0.9) for more creative variations</li>
+<li>Keep descriptions focused on one test scenario at a time</li>
+<li>Specify concrete details like URLs, methods, and expected responses</li>
+<li>Use the generated configurations as starting points, not final products</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="test-results-analysis"><a class="header" href="#test-results-analysis">Test Results Analysis</a></h1>
+<p>QitOps can analyze your test results using AI to identify patterns, issues, and insights that might not be immediately obvious. This feature helps you understand test outcomes and make data-driven decisions about your testing strategy.</p>
+<h2 id="how-it-works-4"><a class="header" href="#how-it-works-4">How It Works</a></h2>
+<ol>
+<li>You provide a JSON file containing test results</li>
+<li>QitOps processes these results using a local LLM</li>
+<li>The LLM generates a comprehensive analysis report</li>
+<li>The analysis is saved to the specified output file (typically in Markdown format)</li>
+</ol>
+<h2 id="basic-usage-7"><a class="header" href="#basic-usage-7">Basic Usage</a></h2>
+<pre><code class="language-bash"># Analyze test results
+qitops analyze --results test_results.json --output analysis.md
+
+# Analyze with a specific model
+qitops analyze --results test_results.json --output analysis.md --model llama --model-path /path/to/model.gguf
+</code></pre>
+<h2 id="command-line-options-8"><a class="header" href="#command-line-options-8">Command-Line Options</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>--results &lt;FILE&gt;</code></td><td>JSON file containing test results</td></tr>
+<tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the analysis report</td></tr>
+<tr><td><code>--model &lt;MODEL&gt;</code></td><td>LLM model to use (default: auto)</td></tr>
+<tr><td><code>--model-path &lt;PATH&gt;</code></td><td>Path to the model file</td></tr>
+<tr><td><code>--format &lt;FORMAT&gt;</code></td><td>Output format (markdown, html, json)</td></tr>
+<tr><td><code>--temperature &lt;FLOAT&gt;</code></td><td>Temperature for generation (0.0-1.0)</td></tr>
+<tr><td><code>--context-size &lt;INT&gt;</code></td><td>Context size in tokens</td></tr>
+<tr><td><code>--max-tokens &lt;INT&gt;</code></td><td>Maximum tokens for generation</td></tr>
+<tr><td><code>--system-prompt &lt;TEXT&gt;</code></td><td>Custom system prompt for the model</td></tr>
+</tbody></table>
+</div>
+<h2 id="analysis-content-1"><a class="header" href="#analysis-content-1">Analysis Content</a></h2>
+<p>The generated analysis report typically includes:</p>
+<h3 id="1-executive-summary-1"><a class="header" href="#1-executive-summary-1">1. Executive Summary</a></h3>
+<ul>
+<li>Overall success rate</li>
+<li>Number of tests run</li>
+<li>Key findings and insights</li>
+<li>Critical issues identified</li>
+</ul>
+<h3 id="2-test-results-overview-1"><a class="header" href="#2-test-results-overview-1">2. Test Results Overview</a></h3>
+<ul>
+<li>Distribution of test statuses (success, failure, error)</li>
+<li>Average response times</li>
+<li>Success rates by test type</li>
+<li>Temporal patterns (if timestamps are available)</li>
+</ul>
+<h3 id="3-detailed-breakdown-1"><a class="header" href="#3-detailed-breakdown-1">3. Detailed Breakdown</a></h3>
+<ul>
+<li>Analysis of each failed test</li>
+<li>Common failure patterns</li>
+<li>Root cause analysis</li>
+<li>Error categorization</li>
+</ul>
+<h3 id="4-performance-analysis-1"><a class="header" href="#4-performance-analysis-1">4. Performance Analysis</a></h3>
+<ul>
+<li>Response time statistics</li>
+<li>Performance bottlenecks</li>
+<li>Throughput analysis</li>
+<li>Resource utilization patterns</li>
+</ul>
+<h3 id="5-recommendations-1"><a class="header" href="#5-recommendations-1">5. Recommendations</a></h3>
+<ul>
+<li>Suggestions for fixing failed tests</li>
+<li>Performance optimization opportunities</li>
+<li>Test coverage improvements</li>
+<li>Testing strategy recommendations</li>
+</ul>
+<h2 id="example-analysis-report-1"><a class="header" href="#example-analysis-report-1">Example Analysis Report</a></h2>
+<pre><code class="language-markdown"># Test Results Analysis
+
+## Executive Summary
+
+Analyzed 25 test results with an overall success rate of 84% (21/25 tests passed).
+The average response time was 187ms, with 3 tests exceeding the 500ms threshold.
+The main issues were related to authentication failures and timeout errors.
+
+## Test Results Overview
+
+| Status | Count | Percentage |
+|--------|-------|------------|
+| Success | 21 | 84% |
+| Failure | 3 | 12% |
+| Error | 1 | 4% |
+
+### Success Rate by Test Type
+- API Tests: 90% (18/20)
+- Performance Tests: 75% (3/4)
+- Security Tests: 0% (0/1)
+
+## Detailed Breakdown
+
+### Failed Tests Analysis
+
+1. **API-Test-003**: Authentication failure
+   - Error: "Unauthorized (401)"
+   - Possible cause: Expired API token or incorrect credentials
+   - Recommendation: Verify and update the authentication token
+
+2. **API-Test-012**: Unexpected response format
+   - Error: "Expected field 'user_id' not found in response"
+   - Possible cause: API response structure has changed
+   - Recommendation: Update the expected response structure in the test configuration
+
+3. **Perf-Test-002**: Timeout error
+   - Error: "Request timed out after 30 seconds"
+   - Possible cause: Server under heavy load or network issues
+   - Recommendation: Increase the timeout threshold or investigate server performance
+
+## Performance Analysis
+
+- 90th percentile response time: 342ms
+- Slowest endpoint: /api/users/search (avg: 412ms)
+- Fastest endpoint: /api/health (avg: 42ms)
+- 3 tests exceeded the 500ms threshold
+
+## Recommendations
+
+1. **Fix Authentication Issues**
+   - Implement token refresh mechanism
+   - Add pre-test validation of authentication credentials
+
+2. **Improve Error Handling**
+   - Add more specific assertions for response structure
+   - Implement retry logic for transient failures
+
+3. **Performance Optimization**
+   - Review the /api/users/search endpoint for optimization opportunities
+   - Consider caching frequently accessed resources
+   - Implement pagination for large result sets
+
+4. **Test Coverage Improvements**
+   - Add more security tests (currently only 1)
+   - Increase test coverage for error conditions
+   - Add tests for edge cases identified in this analysis
+</code></pre>
+<h2 id="input-format-requirements-1"><a class="header" href="#input-format-requirements-1">Input Format Requirements</a></h2>
+<p>The analysis feature expects test results in a specific JSON format:</p>
+<pre><code class="language-json">[
+  {
+    "test_id": "api-test-001",
+    "name": "User API Test",
+    "description": "Test the user API endpoint",
+    "timestamp": "2025-05-10T12:34:56Z",
+    "duration_ms": 156,
+    "status": "success",
+    "url": "https://api.example.com/users/123",
+    "method": "GET",
+    "request_headers": {
+      "Accept": "application/json",
+      "Authorization": "Bearer token123"
+    },
+    "response_status": 200,
+    "response_headers": {
+      "content-type": "application/json"
+    },
+    "assertions": [
+      {
+        "type": "status",
+        "expected": 200,
+        "actual": 200,
+        "result": "pass"
+      },
+      {
+        "type": "json",
+        "path": "$.id",
+        "expected": 123,
+        "actual": 123,
+        "result": "pass"
+      }
+    ]
+  },
+  {
+    "test_id": "api-test-002",
+    "name": "Invalid User API Test",
+    "description": "Test the user API with invalid ID",
+    "timestamp": "2025-05-10T12:35:12Z",
+    "duration_ms": 134,
+    "status": "failure",
+    "url": "https://api.example.com/users/999",
+    "method": "GET",
+    "request_headers": {
+      "Accept": "application/json",
+      "Authorization": "Bearer token123"
+    },
+    "response_status": 404,
+    "response_headers": {
+      "content-type": "application/json"
+    },
+    "assertions": [
+      {
+        "type": "status",
+        "expected": 200,
+        "actual": 404,
+        "result": "fail"
+      }
+    ],
+    "error": "Expected status 200 but got 404"
+  }
+]
+</code></pre>
+<h2 id="best-practices-8"><a class="header" href="#best-practices-8">Best Practices</a></h2>
+<ul>
+<li>Include as much detail as possible in your test results</li>
+<li>Run analysis after each test suite execution</li>
+<li>Compare analyses over time to identify trends</li>
+<li>Use the analysis to prioritize test improvements</li>
+<li>Share analysis reports with your team for collaborative debugging</li>
+<li>Customize the analysis by adjusting the temperature parameter</li>
+<li>Use lower temperatures (0.3-0.5) for more factual, concise analyses</li>
+<li>Use higher temperatures (0.7-0.9) for more creative, detailed analyses</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="improvement-suggestions"><a class="header" href="#improvement-suggestions">Improvement Suggestions</a></h1>
 <p>QitOps can generate actionable suggestions to improve your tests based on test results and industry best practices. This feature helps you continuously enhance your testing strategy and address issues before they become critical problems.</p>
-<h2 id="how-it-works-3"><a class="header" href="#how-it-works-3">How It Works</a></h2>
+<h2 id="how-it-works-5"><a class="header" href="#how-it-works-5">How It Works</a></h2>
 <ol>
 <li>You provide a JSON file containing test results</li>
 <li>QitOps analyzes these results using a local LLM</li>
 <li>The LLM generates specific, actionable improvement suggestions</li>
 <li>The suggestions are saved to the specified output file</li>
 </ol>
-<h2 id="basic-usage-5"><a class="header" href="#basic-usage-5">Basic Usage</a></h2>
+<h2 id="basic-usage-8"><a class="header" href="#basic-usage-8">Basic Usage</a></h2>
 <pre><code class="language-bash"># Generate improvement suggestions
 qitops improve --results test_results.json --output improvements.md
 
 # Generate suggestions with a specific model
 qitops improve --results test_results.json --output improvements.md --model llama --model-path /path/to/model.gguf
 </code></pre>
-<h2 id="command-line-options-6"><a class="header" href="#command-line-options-6">Command-Line Options</a></h2>
+<h2 id="command-line-options-9"><a class="header" href="#command-line-options-9">Command-Line Options</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>--results &lt;FILE&gt;</code></td><td>JSON file containing test results</td></tr>
 <tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the improvement suggestions</td></tr>
@@ -3373,7 +4532,7 @@ We recommend implementing these improvements in the following order:
    - Add comprehensive load and stress testing
    - Enhance documentation
 </code></pre>
-<h2 id="integration-with-cicd-3"><a class="header" href="#integration-with-cicd-3">Integration with CI/CD</a></h2>
+<h2 id="integration-with-cicd-4"><a class="header" href="#integration-with-cicd-4">Integration with CI/CD</a></h2>
 <p>You can integrate the improvement suggestions feature into your CI/CD pipeline to automatically generate suggestions after test runs:</p>
 <pre><code class="language-yaml"># Example GitHub Actions workflow step
 - name: Generate Test Improvement Suggestions
@@ -3386,7 +4545,7 @@ We recommend implementing these improvements in the following order:
     name: test-improvements
     path: improvements.md
 </code></pre>
-<h2 id="best-practices-6"><a class="header" href="#best-practices-6">Best Practices</a></h2>
+<h2 id="best-practices-9"><a class="header" href="#best-practices-9">Best Practices</a></h2>
 <ul>
 <li>Run the improvement suggestions tool regularly (weekly or after major test runs)</li>
 <li>Prioritize suggestions based on their impact and implementation effort</li>
@@ -3397,10 +4556,130 @@ We recommend implementing these improvements in the following order:
 <li>Use the suggestions as input for sprint planning and technical debt discussions</li>
 <li>Share the suggestions with your team to foster a culture of continuous improvement</li>
 </ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="local-llm-support"><a class="header" href="#local-llm-support">Local LLM Support</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="supported-llm-models"><a class="header" href="#supported-llm-models">Supported LLM Models</a></h1>
+<p>QitOps supports a variety of local LLM models for its AI features. These models run entirely on your local machine, ensuring privacy and offline operation.</p>
+<h2 id="llama-models-1"><a class="header" href="#llama-models-1">LLaMA Models</a></h2>
+<ul>
+<li><strong>LLaMA 1</strong>: The original Meta AI model (7B, 13B, 33B, 65B parameters)</li>
+<li><strong>LLaMA 2</strong>: Improved version with longer context (7B, 13B, 70B parameters)</li>
+<li><strong>LLaMA 3</strong>: Latest version with enhanced capabilities (8B, 70B parameters)</li>
+<li><strong>Code LLaMA</strong>: Specialized for code generation and analysis</li>
+</ul>
+<h2 id="mistral-models-1"><a class="header" href="#mistral-models-1">Mistral Models</a></h2>
+<ul>
+<li><strong>Mistral 7B</strong>: Efficient base model with strong performance</li>
+<li><strong>Mixtral 8x7B</strong>: Mixture-of-experts model with enhanced capabilities</li>
+<li><strong>Mistral Instruct</strong>: Fine-tuned for instruction following</li>
+<li><strong>Mistral Small</strong>: Smaller, faster models for resource-constrained environments</li>
+</ul>
+<h2 id="phi-models-1"><a class="header" href="#phi-models-1">Phi Models</a></h2>
+<ul>
+<li><strong>Phi-1</strong>: Microsoft’s small but capable model (1.3B parameters)</li>
+<li><strong>Phi-2</strong>: Improved version with enhanced reasoning (2.7B parameters)</li>
+<li><strong>Phi-3</strong>: Latest version with advanced capabilities (3.8B, 14B parameters)</li>
+</ul>
+<h2 id="other-supported-models-1"><a class="header" href="#other-supported-models-1">Other Supported Models</a></h2>
+<ul>
+<li><strong>GPT-J</strong>: EleutherAI’s open-source GPT model (6B parameters)</li>
+<li><strong>GPT4All</strong>: Locally running assistant models</li>
+<li><strong>Falcon</strong>: Technology Innovation Institute’s models</li>
+<li><strong>MPT</strong>: MosaicML’s Pretrained Transformer models</li>
+<li><strong>RWKV</strong>: RNN with transformer-like capabilities</li>
+<li><strong>Qwen</strong>: Alibaba’s series of multilingual models</li>
+</ul>
+<h2 id="model-format-support-1"><a class="header" href="#model-format-support-1">Model Format Support</a></h2>
+<ul>
+<li><strong>GGUF</strong>: Primary supported format for efficient inference</li>
+<li><strong>GGML</strong>: Legacy format (automatically converted to GGUF)</li>
+<li><strong>ONNX</strong>: Support via external runtime</li>
+</ul>
+<h2 id="recommended-models-for-different-use-cases-1"><a class="header" href="#recommended-models-for-different-use-cases-1">Recommended Models for Different Use Cases</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Use Case</th><th>Recommended Model</th><th>Size</th><th>Performance</th></tr></thead><tbody>
+<tr><td>Test Generation</td><td>Phi-2</td><td>2.7GB</td><td>Good balance of size and quality</td></tr>
+<tr><td>Results Analysis</td><td>Mistral 7B</td><td>4.1GB</td><td>Strong reasoning capabilities</td></tr>
+<tr><td>Improvement Suggestions</td><td>LLaMA 2 13B</td><td>8.2GB</td><td>Detailed, high-quality suggestions</td></tr>
+<tr><td>Resource-Constrained</td><td>Phi-1</td><td>1.5GB</td><td>Works on machines with limited RAM</td></tr>
+<tr><td>Best Quality</td><td>Mixtral 8x7B</td><td>26GB</td><td>Highest quality results (requires 32GB+ RAM)</td></tr>
+</tbody></table>
+</div>
+<h2 id="where-to-download-models-1"><a class="header" href="#where-to-download-models-1">Where to Download Models</a></h2>
+<p>Models can be downloaded from:</p>
+<ul>
+<li><a href="https://huggingface.co/models">Hugging Face</a> - Search for GGUF versions</li>
+<li><a href="https://huggingface.co/TheBloke">TheBloke’s repositories</a> - Pre-converted GGUF models</li>
+<li><a href="https://ollama.com/library">Ollama Library</a> - Easy model management</li>
+</ul>
+<h2 id="model-quantization-options-1"><a class="header" href="#model-quantization-options-1">Model Quantization Options</a></h2>
+<p>QitOps supports various quantization levels to balance quality and resource usage:</p>
+<div class="table-wrapper"><table><thead><tr><th>Quantization</th><th>File Size</th><th>RAM Usage</th><th>Quality</th><th>Speed</th></tr></thead><tbody>
+<tr><td>Q4_K_M</td><td>Smallest</td><td>Lowest</td><td>Good</td><td>Fastest</td></tr>
+<tr><td>Q5_K_M</td><td>Small</td><td>Low</td><td>Better</td><td>Fast</td></tr>
+<tr><td>Q6_K</td><td>Medium</td><td>Medium</td><td>Very Good</td><td>Medium</td></tr>
+<tr><td>Q8_0</td><td>Large</td><td>High</td><td>Excellent</td><td>Slower</td></tr>
+</tbody></table>
+</div>
+<p>Example model selection with quantization:</p>
+<pre><code class="language-bash"># Use a smaller, faster model
+qitops generate --test-type api --description "Test the login API" --model phi --model-path models/phi-2.Q4_K_M.gguf
+
+# Use a higher quality model
+qitops analyze --results test_results.json --output analysis.md --model mistral --model-path models/mistral-7b.Q8_0.gguf
+</code></pre>
+<h2 id="model-configuration"><a class="header" href="#model-configuration">Model Configuration</a></h2>
+<p>QitOps allows you to configure various model parameters:</p>
+<pre><code class="language-bash"># Set context size
+qitops generate --test-type api --description "Test the login API" --context-size 8192
+
+# Set temperature
+qitops analyze --results test_results.json --output analysis.md --temperature 0.7
+
+# Set maximum tokens
+qitops improve --results test_results.json --output improvements.md --max-tokens 4096
+</code></pre>
+<h2 id="using-ollama-models"><a class="header" href="#using-ollama-models">Using Ollama Models</a></h2>
+<p>QitOps can use models managed by Ollama:</p>
+<pre><code class="language-bash"># Use an Ollama model
+qitops generate --test-type api --description "Test the login API" --model ollama:phi
+
+# Use a specific Ollama model version
+qitops analyze --results test_results.json --output analysis.md --model ollama:mistral:7b-instruct
+</code></pre>
+<h2 id="using-local-model-files"><a class="header" href="#using-local-model-files">Using Local Model Files</a></h2>
+<p>QitOps can use model files stored locally:</p>
+<pre><code class="language-bash"># Use a local model file
+qitops generate --test-type api --description "Test the login API" --model-path /path/to/models/phi-2.gguf
+
+# Use a local model with specific parameters
+qitops analyze --results test_results.json --output analysis.md --model-path /path/to/models/mistral-7b.gguf --context-size 4096 --temperature 0.5
+</code></pre>
+<h2 id="model-performance-considerations"><a class="header" href="#model-performance-considerations">Model Performance Considerations</a></h2>
+<ul>
+<li><strong>Memory Usage</strong>: Larger models require more RAM</li>
+<li><strong>Disk Space</strong>: Model files can be large (1-30GB)</li>
+<li><strong>CPU vs. GPU</strong>: GPU acceleration significantly improves performance</li>
+<li><strong>Quantization</strong>: Lower quantization reduces quality but improves speed and reduces memory usage</li>
+<li><strong>Context Size</strong>: Larger context sizes require more memory but can improve results for complex tasks</li>
+</ul>
+<h2 id="troubleshooting-5"><a class="header" href="#troubleshooting-5">Troubleshooting</a></h2>
+<h3 id="common-issues-4"><a class="header" href="#common-issues-4">Common Issues</a></h3>
+<ul>
+<li><strong>Out of Memory</strong>: Try a smaller model or lower quantization</li>
+<li><strong>Slow Generation</strong>: Use GPU acceleration or a smaller model</li>
+<li><strong>Poor Quality Results</strong>: Try a larger model or higher quantization</li>
+<li><strong>Model Not Found</strong>: Check the model path and ensure the file exists</li>
+<li><strong>Unsupported Format</strong>: Ensure the model is in GGUF format</li>
+</ul>
+<h3 id="performance-optimization"><a class="header" href="#performance-optimization">Performance Optimization</a></h3>
+<ul>
+<li><strong>GPU Acceleration</strong>: Enable GPU acceleration for faster inference</li>
+<li><strong>Batch Processing</strong>: Process multiple requests in batch for better throughput</li>
+<li><strong>Quantization</strong>: Use appropriate quantization for your hardware</li>
+<li><strong>Context Size</strong>: Use the smallest context size that works for your use case</li>
+<li><strong>Model Selection</strong>: Choose the smallest model that provides acceptable quality</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="testing-ai-features-2"><a class="header" href="#testing-ai-features-2">Testing AI Features</a></h1>
 <p>This guide provides detailed instructions on how to test the AI features of QitOps locally. These features include test configuration generation, test results analysis, and improvement suggestions.</p>
-<h2 id="prerequisites-1"><a class="header" href="#prerequisites-1">Prerequisites</a></h2>
+<h2 id="prerequisites-2"><a class="header" href="#prerequisites-2">Prerequisites</a></h2>
 <p>Before testing the AI features, make sure you have:</p>
 <ol>
 <li>
@@ -3604,7 +4883,7 @@ cat test_improvements.md
 </ul>
 </li>
 </ol>
-<h2 id="troubleshooting-3"><a class="header" href="#troubleshooting-3">Troubleshooting</a></h2>
+<h2 id="troubleshooting-6"><a class="header" href="#troubleshooting-6">Troubleshooting</a></h2>
 <h3 id="model-loading-issues-1"><a class="header" href="#model-loading-issues-1">Model Loading Issues</a></h3>
 <p>If you encounter issues loading a model:</p>
 <pre><code class="language-bash"># Check if the model file exists
@@ -3776,7 +5055,7 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
 </tbody></table>
 </div><div style="break-before: page; page-break-before: always;"></div><h1 id="configuration-reference-1"><a class="header" href="#configuration-reference-1">Configuration Reference</a></h1>
 <p>This page provides detailed information on configuring QitOps for different test types.</p>
-<h2 id="api-test-configuration-3"><a class="header" href="#api-test-configuration-3">API Test Configuration</a></h2>
+<h2 id="api-test-configuration-4"><a class="header" href="#api-test-configuration-4">API Test Configuration</a></h2>
 <pre><code class="language-json">{
     "name": "Example API Test",
     "description": "Test description",
@@ -3891,7 +5170,7 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
     }
 }
 </code></pre>
-<h2 id="performance-test-configuration-3"><a class="header" href="#performance-test-configuration-3">Performance Test Configuration</a></h2>
+<h2 id="performance-test-configuration-4"><a class="header" href="#performance-test-configuration-4">Performance Test Configuration</a></h2>
 <pre><code class="language-json">{
     "name": "Sample Performance Test",
     "description": "Load testing a public API endpoint",
@@ -3983,7 +5262,7 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
     "system_prompt": "You are an AI assistant specialized in software testing. Your task is to help generate test configurations, analyze test results, and suggest improvements."
 }
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="best-practices-7"><a class="header" href="#best-practices-7">Best Practices</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="best-practices-10"><a class="header" href="#best-practices-10">Best Practices</a></h1>
 <p>This page provides recommendations on how to use QitOps effectively.</p>
 <h2 id="general-best-practices"><a class="header" href="#general-best-practices">General Best Practices</a></h2>
 <h3 id="configuration-management"><a class="header" href="#configuration-management">Configuration Management</a></h3>
@@ -4015,7 +5294,7 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
 <li><strong>Test Performance</strong>: Test the performance of your API under different loads.</li>
 <li><strong>Test Security</strong>: Test the security of your API.</li>
 </ul>
-<h3 id="request-configuration"><a class="header" href="#request-configuration">Request Configuration</a></h3>
+<h3 id="request-configuration-1"><a class="header" href="#request-configuration-1">Request Configuration</a></h3>
 <ul>
 <li><strong>Set Timeouts</strong>: Set appropriate timeouts for your requests.</li>
 <li><strong>Configure Retries</strong>: Configure retries for transient failures.</li>
@@ -4075,7 +5354,7 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
 <li><strong>Test User Flows</strong>: Test common user flows to ensure they work as expected.</li>
 </ul>
 <h2 id="ai-features-best-practices"><a class="header" href="#ai-features-best-practices">AI Features Best Practices</a></h2>
-<h3 id="test-generation-1"><a class="header" href="#test-generation-1">Test Generation</a></h3>
+<h3 id="test-generation"><a class="header" href="#test-generation">Test Generation</a></h3>
 <ul>
 <li><strong>Provide Clear Descriptions</strong>: Provide clear descriptions when generating tests.</li>
 <li><strong>Review Generated Tests</strong>: Review generated tests to ensure they meet your requirements.</li>
@@ -4105,9 +5384,332 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
 <li><strong>Analyze Aggregate Results</strong>: Analyze aggregate results to identify patterns and issues.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cicd-integration-6"><a class="header" href="#cicd-integration-6">CI/CD Integration</a></h1>
+<p>QitOps is designed to integrate seamlessly with CI/CD pipelines, allowing you to automate testing as part of your development workflow.</p>
+<h2 id="overview-3"><a class="header" href="#overview-3">Overview</a></h2>
+<p>CI/CD integration with QitOps allows you to:</p>
+<ul>
+<li>Run tests automatically on code changes</li>
+<li>Validate API functionality before deployment</li>
+<li>Ensure performance meets requirements</li>
+<li>Identify security vulnerabilities early</li>
+<li>Generate test reports for review</li>
+<li>Fail builds when tests don’t meet criteria</li>
+</ul>
+<h2 id="getting-started-4"><a class="header" href="#getting-started-4">Getting Started</a></h2>
+<h3 id="basic-usage-9"><a class="header" href="#basic-usage-9">Basic Usage</a></h3>
+<pre><code class="language-bash"># Run in CI mode with JSON report
+qitops --ci-mode -r json -o results.json api -c tests/configs/api_test.json
+
+# Run in CI mode with XML report (JUnit format)
+qitops --ci-mode -r xml -o test-results.xml api -c tests/configs/api_test.json
+
+# Run in CI mode with HTML report
+qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
+</code></pre>
+<h3 id="ci-mode-options"><a class="header" href="#ci-mode-options">CI Mode Options</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>--ci-mode</code></td><td>Run in CI mode (reduced output, exit code based on test results)</td></tr>
+<tr><td><code>-r, --report &lt;FORMAT&gt;</code></td><td>Report format (json, html, xml, csv)</td></tr>
+<tr><td><code>-o, --output &lt;FILE&gt;</code></td><td>Output file for the report</td></tr>
+<tr><td><code>--fail-on-error</code></td><td>Exit with non-zero code on any test failure</td></tr>
+<tr><td><code>--fail-threshold &lt;PERCENT&gt;</code></td><td>Exit with non-zero code if success rate is below threshold</td></tr>
+</tbody></table>
+</div>
+<h2 id="github-actions-integration"><a class="header" href="#github-actions-integration">GitHub Actions Integration</a></h2>
+<p>QitOps can be easily integrated with GitHub Actions workflows.</p>
+<h3 id="basic-workflow"><a class="header" href="#basic-workflow">Basic Workflow</a></h3>
+<pre><code class="language-yaml">name: QitOps Tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install QitOps
+        run: |
+          curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-linux-x86_64 -o /usr/local/bin/qitops
+          chmod +x /usr/local/bin/qitops
+      
+      - name: Run API Tests
+        run: |
+          qitops --ci-mode -r xml -o api-test-results.xml api -c tests/configs/api_test.json
+      
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: api-test-results
+          path: api-test-results.xml
+</code></pre>
+<h3 id="complete-workflow"><a class="header" href="#complete-workflow">Complete Workflow</a></h3>
+<pre><code class="language-yaml">name: QitOps Complete Test Suite
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install QitOps
+        run: |
+          curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-linux-x86_64 -o /usr/local/bin/qitops
+          chmod +x /usr/local/bin/qitops
+      
+      - name: Run API Tests
+        run: |
+          qitops --ci-mode -r xml -o api-test-results.xml api -c tests/configs/api_test.json
+      
+      - name: Run API Collection Tests
+        run: |
+          qitops --ci-mode -r xml -o collection-test-results.xml collection -c tests/configs/api_collection.json
+      
+      - name: Run Performance Tests
+        run: |
+          qitops --ci-mode -r json -o performance-test-results.json performance -c tests/configs/performance_test.json
+      
+      - name: Run Security Tests
+        run: |
+          qitops --ci-mode -r json -o security-test-results.json security -c tests/configs/security_test.json
+      
+      - name: Run Web Tests
+        run: |
+          qitops --ci-mode -r html -o web-test-results.html web -c tests/configs/web_test.json
+      
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: |
+            api-test-results.xml
+            collection-test-results.xml
+            performance-test-results.json
+            security-test-results.json
+            web-test-results.html
+</code></pre>
+<h2 id="gitlab-ci-integration"><a class="header" href="#gitlab-ci-integration">GitLab CI Integration</a></h2>
+<p>QitOps can also be integrated with GitLab CI/CD pipelines.</p>
+<h3 id="basic-pipeline"><a class="header" href="#basic-pipeline">Basic Pipeline</a></h3>
+<pre><code class="language-yaml">stages:
+  - test
+
+api-tests:
+  stage: test
+  image: ubuntu:latest
+  script:
+    - apt-get update &amp;&amp; apt-get install -y curl
+    - curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-linux-x86_64 -o /usr/local/bin/qitops
+    - chmod +x /usr/local/bin/qitops
+    - qitops --ci-mode -r json -o api-test-results.json api -c tests/configs/api_test.json
+  artifacts:
+    paths:
+      - api-test-results.json
+</code></pre>
+<h3 id="complete-pipeline"><a class="header" href="#complete-pipeline">Complete Pipeline</a></h3>
+<pre><code class="language-yaml">stages:
+  - test
+  - performance
+  - security
+
+api-tests:
+  stage: test
+  image: ubuntu:latest
+  script:
+    - apt-get update &amp;&amp; apt-get install -y curl
+    - curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-linux-x86_64 -o /usr/local/bin/qitops
+    - chmod +x /usr/local/bin/qitops
+    - qitops --ci-mode -r json -o api-test-results.json api -c tests/configs/api_test.json
+  artifacts:
+    paths:
+      - api-test-results.json
+
+collection-tests:
+  stage: test
+  image: ubuntu:latest
+  script:
+    - apt-get update &amp;&amp; apt-get install -y curl
+    - curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-linux-x86_64 -o /usr/local/bin/qitops
+    - chmod +x /usr/local/bin/qitops
+    - qitops --ci-mode -r json -o collection-test-results.json collection -c tests/configs/api_collection.json
+  artifacts:
+    paths:
+      - collection-test-results.json
+
+performance-tests:
+  stage: performance
+  image: ubuntu:latest
+  script:
+    - apt-get update &amp;&amp; apt-get install -y curl
+    - curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-linux-x86_64 -o /usr/local/bin/qitops
+    - chmod +x /usr/local/bin/qitops
+    - qitops --ci-mode -r json -o performance-test-results.json performance -c tests/configs/performance_test.json
+  artifacts:
+    paths:
+      - performance-test-results.json
+
+security-tests:
+  stage: security
+  image: ubuntu:latest
+  script:
+    - apt-get update &amp;&amp; apt-get install -y curl
+    - curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-linux-x86_64 -o /usr/local/bin/qitops
+    - chmod +x /usr/local/bin/qitops
+    - qitops --ci-mode -r json -o security-test-results.json security -c tests/configs/security_test.json
+  artifacts:
+    paths:
+      - security-test-results.json
+</code></pre>
+<h2 id="jenkins-integration"><a class="header" href="#jenkins-integration">Jenkins Integration</a></h2>
+<p>QitOps can be integrated with Jenkins pipelines.</p>
+<h3 id="jenkinsfile-example"><a class="header" href="#jenkinsfile-example">Jenkinsfile Example</a></h3>
+<pre><code class="language-groovy">pipeline {
+    agent any
+    
+    stages {
+        stage('Install QitOps') {
+            steps {
+                sh '''
+                curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-linux-x86_64 -o /usr/local/bin/qitops
+                chmod +x /usr/local/bin/qitops
+                '''
+            }
+        }
+        
+        stage('API Tests') {
+            steps {
+                sh 'qitops --ci-mode -r xml -o api-test-results.xml api -c tests/configs/api_test.json'
+            }
+            post {
+                always {
+                    junit 'api-test-results.xml'
+                }
+            }
+        }
+        
+        stage('Performance Tests') {
+            steps {
+                sh 'qitops --ci-mode -r json -o performance-test-results.json performance -c tests/configs/performance_test.json'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'performance-test-results.json', fingerprint: true
+                }
+            }
+        }
+        
+        stage('Security Tests') {
+            steps {
+                sh 'qitops --ci-mode -r json -o security-test-results.json security -c tests/configs/security_test.json'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'security-test-results.json', fingerprint: true
+                }
+            }
+        }
+    }
+}
+</code></pre>
+<h2 id="circleci-integration"><a class="header" href="#circleci-integration">CircleCI Integration</a></h2>
+<p>QitOps can be integrated with CircleCI workflows.</p>
+<h3 id="configyml-example"><a class="header" href="#configyml-example">config.yml Example</a></h3>
+<pre><code class="language-yaml">version: 2.1
+
+jobs:
+  api-tests:
+    docker:
+      - image: cimg/base:2021.04
+    steps:
+      - checkout
+      - run:
+          name: Install QitOps
+          command: |
+            curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-linux-x86_64 -o /usr/local/bin/qitops
+            chmod +x /usr/local/bin/qitops
+      - run:
+          name: Run API Tests
+          command: |
+            qitops --ci-mode -r xml -o api-test-results.xml api -c tests/configs/api_test.json
+      - store_artifacts:
+          path: api-test-results.xml
+      - store_test_results:
+          path: api-test-results.xml
+
+  performance-tests:
+    docker:
+      - image: cimg/base:2021.04
+    steps:
+      - checkout
+      - run:
+          name: Install QitOps
+          command: |
+            curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-linux-x86_64 -o /usr/local/bin/qitops
+            chmod +x /usr/local/bin/qitops
+      - run:
+          name: Run Performance Tests
+          command: |
+            qitops --ci-mode -r json -o performance-test-results.json performance -c tests/configs/performance_test.json
+      - store_artifacts:
+          path: performance-test-results.json
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - api-tests
+      - performance-tests
+</code></pre>
+<h2 id="best-practices-11"><a class="header" href="#best-practices-11">Best Practices</a></h2>
+<h3 id="test-organization-3"><a class="header" href="#test-organization-3">Test Organization</a></h3>
+<ul>
+<li><strong>Group Related Tests</strong>: Group related tests in separate configuration files</li>
+<li><strong>Use Environment Variables</strong>: Use environment variables for sensitive information</li>
+<li><strong>Parameterize Configurations</strong>: Use variables and environment variables to parameterize your configurations</li>
+<li><strong>Use CI-Specific Configurations</strong>: Create CI-specific configurations for different environments</li>
+</ul>
+<h3 id="cicd-integration-7"><a class="header" href="#cicd-integration-7">CI/CD Integration</a></h3>
+<ul>
+<li><strong>Use CI Mode</strong>: Always use the <code>--ci-mode</code> flag when running tests in CI/CD pipelines</li>
+<li><strong>Generate Reports</strong>: Generate reports in a format that can be consumed by your CI/CD system</li>
+<li><strong>Set Exit Codes</strong>: Use exit codes to determine the success or failure of your tests</li>
+<li><strong>Store Artifacts</strong>: Store test results and reports as artifacts for historical analysis</li>
+</ul>
+<h3 id="performance-considerations-1"><a class="header" href="#performance-considerations-1">Performance Considerations</a></h3>
+<ul>
+<li><strong>Optimize Test Execution</strong>: Optimize test execution to reduce CI/CD pipeline time</li>
+<li><strong>Run Tests in Parallel</strong>: Run tests in parallel where possible</li>
+<li><strong>Use Caching</strong>: Use caching to speed up test execution</li>
+<li><strong>Limit Test Scope</strong>: Limit test scope based on changes to reduce execution time</li>
+</ul>
+<h2 id="troubleshooting-7"><a class="header" href="#troubleshooting-7">Troubleshooting</a></h2>
+<h3 id="common-issues-5"><a class="header" href="#common-issues-5">Common Issues</a></h3>
+<ul>
+<li><strong>Exit Codes</strong>: QitOps returns non-zero exit codes on test failures when <code>--ci-mode</code> is used</li>
+<li><strong>Report Formats</strong>: Different CI/CD systems support different report formats</li>
+<li><strong>Environment Variables</strong>: Ensure environment variables are properly set in your CI/CD environment</li>
+<li><strong>Permissions</strong>: Ensure QitOps has the necessary permissions to run tests</li>
+</ul>
+<h3 id="cicd-system-specific-issues"><a class="header" href="#cicd-system-specific-issues">CI/CD System-Specific Issues</a></h3>
+<ul>
+<li><strong>GitHub Actions</strong>: Use the <code>actions/upload-artifact</code> action to store test results</li>
+<li><strong>GitLab CI</strong>: Use the <code>artifacts</code> section to store test results</li>
+<li><strong>Jenkins</strong>: Use the <code>junit</code> step to process XML test results</li>
+<li><strong>CircleCI</strong>: Use the <code>store_test_results</code> step to process test results</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="data-driven-testing-6"><a class="header" href="#data-driven-testing-6">Data-Driven Testing</a></h1>
 <p>Data-driven testing allows you to run the same test with multiple sets of data, making it easy to test different scenarios without duplicating test configurations. QitOps provides robust support for data-driven testing with CSV and JSON data sources.</p>
-<h2 id="overview-2"><a class="header" href="#overview-2">Overview</a></h2>
+<h2 id="overview-4"><a class="header" href="#overview-4">Overview</a></h2>
 <p>Data-driven testing in QitOps works by:</p>
 <ol>
 <li>Creating a test configuration template with placeholders</li>
@@ -4123,15 +5725,15 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
 <li>Security testing with different authentication credentials</li>
 <li>Web testing with different user journeys</li>
 </ul>
-<h2 id="getting-started-2"><a class="header" href="#getting-started-2">Getting Started</a></h2>
-<h3 id="basic-usage-6"><a class="header" href="#basic-usage-6">Basic Usage</a></h3>
+<h2 id="getting-started-5"><a class="header" href="#getting-started-5">Getting Started</a></h2>
+<h3 id="basic-usage-10"><a class="header" href="#basic-usage-10">Basic Usage</a></h3>
 <pre><code class="language-bash"># Run data-driven tests with CSV data
 qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv
 
 # Run data-driven tests with JSON data
 qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/products.json -t json
 </code></pre>
-<h3 id="command-line-options-7"><a class="header" href="#command-line-options-7">Command-Line Options</a></h3>
+<h3 id="command-line-options-10"><a class="header" href="#command-line-options-10">Command-Line Options</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>-c, --config &lt;FILE&gt;</code></td><td>Test configuration file</td></tr>
 <tr><td><code>-d, --data &lt;FILE&gt;</code></td><td>Data source file (CSV or JSON)</td></tr>
@@ -4313,7 +5915,7 @@ qitops data-driven -c config.json -d data.csv -t csv -r csv -o results.csv
 <li>Error messages for failed iterations</li>
 <li>Captured values</li>
 </ul>
-<h2 id="best-practices-8"><a class="header" href="#best-practices-8">Best Practices</a></h2>
+<h2 id="best-practices-12"><a class="header" href="#best-practices-12">Best Practices</a></h2>
 <h3 id="organizing-data-files"><a class="header" href="#organizing-data-files">Organizing Data Files</a></h3>
 <ul>
 <li>Keep data files in a dedicated directory (e.g., <code>tests/data/</code>)</li>
@@ -4329,14 +5931,14 @@ qitops data-driven -c config.json -d data.csv -t csv -r csv -o results.csv
 <li>Use meaningful placeholder names that reflect their purpose</li>
 <li>Group related tests into collections</li>
 </ul>
-<h3 id="performance-considerations-1"><a class="header" href="#performance-considerations-1">Performance Considerations</a></h3>
+<h3 id="performance-considerations-2"><a class="header" href="#performance-considerations-2">Performance Considerations</a></h3>
 <ul>
 <li>For large data sets, consider using the <code>--limit</code> option during development</li>
 <li>Monitor memory usage when testing with very large data sets</li>
 <li>Use the <code>--delay</code> option to prevent overwhelming the system under test</li>
 <li>Consider splitting very large data sets into multiple files</li>
 </ul>
-<h2 id="examples-2"><a class="header" href="#examples-2">Examples</a></h2>
+<h2 id="examples-3"><a class="header" href="#examples-3">Examples</a></h2>
 <h3 id="testing-user-registration"><a class="header" href="#testing-user-registration">Testing User Registration</a></h3>
 <p>Configuration (<code>user_registration.json</code>):</p>
 <pre><code class="language-json">{
@@ -4601,8 +6203,8 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 </ul>
 <h2 id="code-of-conduct"><a class="header" href="#code-of-conduct">Code of Conduct</a></h2>
 <p>By participating in this project, you agree to abide by our Code of Conduct. Please be respectful, inclusive, and considerate in all interactions.</p>
-<h2 id="getting-started-3"><a class="header" href="#getting-started-3">Getting Started</a></h2>
-<h3 id="prerequisites-2"><a class="header" href="#prerequisites-2">Prerequisites</a></h3>
+<h2 id="getting-started-6"><a class="header" href="#getting-started-6">Getting Started</a></h2>
+<h3 id="prerequisites-3"><a class="header" href="#prerequisites-3">Prerequisites</a></h3>
 <ul>
 <li>Rust 1.70 or higher</li>
 <li>Cargo</li>
@@ -4822,7 +6424,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="github-pages-setup"><a class="header" href="#github-pages-setup">GitHub Pages Setup</a></h1>
 <p>This document explains how the QitOps documentation is deployed to GitHub Pages.</p>
-<h2 id="overview-3"><a class="header" href="#overview-3">Overview</a></h2>
+<h2 id="overview-5"><a class="header" href="#overview-5">Overview</a></h2>
 <p>The QitOps documentation is built using <a href="https://rust-lang.github.io/mdBook/">mdBook</a> and automatically deployed to GitHub Pages whenever changes are pushed to the <code>master</code> branch that affect the documentation.</p>
 <p>The deployed documentation is available at: <a href="https://qitops.github.io/qitops-cli-tools/">https://qitops.github.io/qitops-cli-tools/</a></p>
 <h2 id="deployment-workflow"><a class="header" href="#deployment-workflow">Deployment Workflow</a></h2>
@@ -4882,7 +6484,7 @@ SOFTWARE.</p>
   -f source.path=/
 </code></pre>
 <p>This requires a personal access token with the <code>repo</code> scope.</p>
-<h2 id="configuration-3"><a class="header" href="#configuration-3">Configuration</a></h2>
+<h2 id="configuration-4"><a class="header" href="#configuration-4">Configuration</a></h2>
 <p>The documentation is configured in the <code>docs/book.toml</code> file, which includes:</p>
 <ul>
 <li>Book metadata (title, authors, etc.)</li>
@@ -4909,7 +6511,7 @@ site-url = "/qitops-cli-tools/"
 <h2 id="verifying-the-setup"><a class="header" href="#verifying-the-setup">Verifying the Setup</a></h2>
 <p>Once GitHub Pages is enabled, you can verify that the documentation is accessible by visiting:
 https://qitops.github.io/qitops-cli-tools/</p>
-<h2 id="troubleshooting-4"><a class="header" href="#troubleshooting-4">Troubleshooting</a></h2>
+<h2 id="troubleshooting-8"><a class="header" href="#troubleshooting-8">Troubleshooting</a></h2>
 <p>If the documentation is not accessible after enabling GitHub Pages:</p>
 <ol>
 <li>Check that the gh-pages branch exists</li>

@@ -1,0 +1,394 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Installation - QitOps Documentation</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">QitOps Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./installation.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="installation"><a class="header" href="#installation">Installation</a></h1>
+<p>QitOps is available for Linux, macOS, and Windows. This guide covers various installation methods to help you get started quickly.</p>
+<h2 id="system-requirements"><a class="header" href="#system-requirements">System Requirements</a></h2>
+<ul>
+<li><strong>Operating System</strong>: Linux, macOS, or Windows</li>
+<li><strong>Disk Space</strong>: 50MB minimum</li>
+<li><strong>Memory</strong>: 256MB minimum (2GB+ recommended for AI features)</li>
+<li><strong>Dependencies</strong>: None (self-contained binary)</li>
+</ul>
+<h2 id="quick-installation"><a class="header" href="#quick-installation">Quick Installation</a></h2>
+<h3 id="using-the-install-script-linuxmacos"><a class="header" href="#using-the-install-script-linuxmacos">Using the Install Script (Linux/macOS)</a></h3>
+<p>The easiest way to install QitOps is using our install script:</p>
+<pre><code class="language-bash">curl -sSL https://get.qitops.dev | bash
+</code></pre>
+<p>This script will download the latest version of QitOps and install it to <code>/usr/local/bin/qitops</code>.</p>
+<h3 id="manual-installation"><a class="header" href="#manual-installation">Manual Installation</a></h3>
+<h4 id="linux"><a class="header" href="#linux">Linux</a></h4>
+<pre><code class="language-bash"># Download the latest release
+curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-linux-x86_64 -o qitops
+
+# Make it executable
+chmod +x qitops
+
+# Move to a directory in your PATH
+sudo mv qitops /usr/local/bin/
+</code></pre>
+<h4 id="macos"><a class="header" href="#macos">macOS</a></h4>
+<pre><code class="language-bash"># Download the latest release
+curl -sSL https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-macos-x86_64 -o qitops
+
+# Make it executable
+chmod +x qitops
+
+# Move to a directory in your PATH
+sudo mv qitops /usr/local/bin/
+</code></pre>
+<h4 id="windows"><a class="header" href="#windows">Windows</a></h4>
+<pre><code class="language-powershell"># Download the latest release
+Invoke-WebRequest -Uri https://github.com/qitops/qitops-cli-tools/releases/latest/download/qitops-windows-x86_64.exe -OutFile qitops.exe
+
+# Move to a directory in your PATH
+Move-Item -Path qitops.exe -Destination "$env:USERPROFILE\AppData\Local\Microsoft\WindowsApps\"
+</code></pre>
+<h2 id="package-managers"><a class="header" href="#package-managers">Package Managers</a></h2>
+<h3 id="homebrew-macoslinux"><a class="header" href="#homebrew-macoslinux">Homebrew (macOS/Linux)</a></h3>
+<pre><code class="language-bash">brew tap qitops/qitops
+brew install qitops
+</code></pre>
+<h3 id="scoop-windows"><a class="header" href="#scoop-windows">Scoop (Windows)</a></h3>
+<pre><code class="language-powershell">scoop bucket add qitops https://github.com/qitops/scoop-bucket.git
+scoop install qitops
+</code></pre>
+<h3 id="apt-debianubuntu"><a class="header" href="#apt-debianubuntu">APT (Debian/Ubuntu)</a></h3>
+<pre><code class="language-bash"># Add the QitOps repository
+echo "deb [trusted=yes] https://apt.qitops.dev/ stable main" | sudo tee /etc/apt/sources.list.d/qitops.list
+
+# Update package list
+sudo apt update
+
+# Install QitOps
+sudo apt install qitops
+</code></pre>
+<h3 id="yumdnf-rhelfedoracentos"><a class="header" href="#yumdnf-rhelfedoracentos">YUM/DNF (RHEL/Fedora/CentOS)</a></h3>
+<pre><code class="language-bash"># Add the QitOps repository
+sudo tee /etc/yum.repos.d/qitops.repo &lt;&lt; EOF
+[qitops]
+name=QitOps Repository
+baseurl=https://yum.qitops.dev/
+enabled=1
+gpgcheck=0
+EOF
+
+# Install QitOps
+sudo yum install qitops
+</code></pre>
+<h3 id="npm-cross-platform"><a class="header" href="#npm-cross-platform">NPM (Cross-platform)</a></h3>
+<pre><code class="language-bash">npm install -g qitops
+</code></pre>
+<h2 id="docker"><a class="header" href="#docker">Docker</a></h2>
+<p>QitOps is also available as a Docker image:</p>
+<pre><code class="language-bash"># Pull the latest image
+docker pull qitops/qitops:latest
+
+# Run QitOps
+docker run --rm qitops/qitops:latest --version
+
+# Run QitOps with mounted configuration
+docker run --rm -v $(pwd)/tests:/tests qitops/qitops:latest api -c /tests/configs/api_test.json
+</code></pre>
+<h2 id="building-from-source"><a class="header" href="#building-from-source">Building from Source</a></h2>
+<p>If you prefer to build QitOps from source:</p>
+<pre><code class="language-bash"># Clone the repository
+git clone https://github.com/qitops/qitops-cli-tools.git
+cd qitops-cli-tools
+
+# Build the binary
+make build
+
+# Install the binary
+make install
+</code></pre>
+<h2 id="verifying-the-installation"><a class="header" href="#verifying-the-installation">Verifying the Installation</a></h2>
+<p>After installation, verify that QitOps is installed correctly:</p>
+<pre><code class="language-bash">qitops --version
+</code></pre>
+<p>You should see output similar to:</p>
+<pre><code>QitOps CLI v1.0.0
+</code></pre>
+<h2 id="updating-qitops"><a class="header" href="#updating-qitops">Updating QitOps</a></h2>
+<h3 id="using-the-update-command"><a class="header" href="#using-the-update-command">Using the Update Command</a></h3>
+<p>QitOps includes a self-update feature:</p>
+<pre><code class="language-bash">qitops update
+</code></pre>
+<h3 id="manual-update"><a class="header" href="#manual-update">Manual Update</a></h3>
+<p>To update manually, simply download and install the latest version using the same method you used for the initial installation.</p>
+<h2 id="uninstalling-qitops"><a class="header" href="#uninstalling-qitops">Uninstalling QitOps</a></h2>
+<h3 id="linuxmacos"><a class="header" href="#linuxmacos">Linux/macOS</a></h3>
+<pre><code class="language-bash">sudo rm /usr/local/bin/qitops
+</code></pre>
+<h3 id="windows-1"><a class="header" href="#windows-1">Windows</a></h3>
+<pre><code class="language-powershell">Remove-Item "$env:USERPROFILE\AppData\Local\Microsoft\WindowsApps\qitops.exe"
+</code></pre>
+<h3 id="package-managers-1"><a class="header" href="#package-managers-1">Package Managers</a></h3>
+<h4 id="homebrew"><a class="header" href="#homebrew">Homebrew</a></h4>
+<pre><code class="language-bash">brew uninstall qitops
+</code></pre>
+<h4 id="scoop"><a class="header" href="#scoop">Scoop</a></h4>
+<pre><code class="language-powershell">scoop uninstall qitops
+</code></pre>
+<h4 id="apt"><a class="header" href="#apt">APT</a></h4>
+<pre><code class="language-bash">sudo apt remove qitops
+</code></pre>
+<h4 id="yumdnf"><a class="header" href="#yumdnf">YUM/DNF</a></h4>
+<pre><code class="language-bash">sudo yum remove qitops
+</code></pre>
+<h4 id="npm"><a class="header" href="#npm">NPM</a></h4>
+<pre><code class="language-bash">npm uninstall -g qitops
+</code></pre>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<h3 id="common-issues"><a class="header" href="#common-issues">Common Issues</a></h3>
+<h4 id="permission-denied"><a class="header" href="#permission-denied">Permission Denied</a></h4>
+<p>If you see a “permission denied” error when running QitOps:</p>
+<pre><code class="language-bash">chmod +x /path/to/qitops
+</code></pre>
+<h4 id="command-not-found"><a class="header" href="#command-not-found">Command Not Found</a></h4>
+<p>If you see a “command not found” error:</p>
+<ol>
+<li>Make sure QitOps is installed in a directory in your PATH</li>
+<li>Try using the full path to the binary: <code>/usr/local/bin/qitops</code></li>
+</ol>
+<h4 id="ssl-certificate-errors"><a class="header" href="#ssl-certificate-errors">SSL Certificate Errors</a></h4>
+<p>If you see SSL certificate errors when downloading:</p>
+<pre><code class="language-bash">curl -sSL --insecure https://get.qitops.dev | bash
+</code></pre>
+<h4 id="proxy-issues"><a class="header" href="#proxy-issues">Proxy Issues</a></h4>
+<p>If you’re behind a proxy:</p>
+<pre><code class="language-bash">export HTTP_PROXY=http://proxy.example.com:8080
+export HTTPS_PROXY=http://proxy.example.com:8080
+curl -sSL https://get.qitops.dev | bash
+</code></pre>
+<h3 id="getting-help"><a class="header" href="#getting-help">Getting Help</a></h3>
+<p>If you encounter any issues during installation:</p>
+<ul>
+<li>Check the <a href="https://docs.qitops.dev/troubleshooting">Troubleshooting Guide</a></li>
+<li>Join our <a href="https://discord.gg/qitops">Discord Community</a></li>
+<li>Open an issue on <a href="https://github.com/qitops/qitops-cli-tools/issues">GitHub</a></li>
+</ul>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<p>Now that you have QitOps installed, check out the <a href="quick-start.html">Quick Start</a> guide to learn how to use it.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="why-qitops.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="quick-start.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="why-qitops.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="quick-start.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="editor.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

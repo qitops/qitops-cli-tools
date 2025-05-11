@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Improvement Suggestions - QitOps Documentation</title>
+        <title>Results Analysis - QitOps Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -133,7 +133,7 @@
                         <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./improvement-suggestions.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./test-results-analysis.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -162,207 +162,226 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="improvement-suggestions"><a class="header" href="#improvement-suggestions">Improvement Suggestions</a></h1>
-<p>QitOps can generate actionable suggestions to improve your tests based on test results and industry best practices. This feature helps you continuously enhance your testing strategy and address issues before they become critical problems.</p>
+                        <h1 id="test-results-analysis"><a class="header" href="#test-results-analysis">Test Results Analysis</a></h1>
+<p>QitOps can analyze your test results using AI to identify patterns, issues, and insights that might not be immediately obvious. This feature helps you understand test outcomes and make data-driven decisions about your testing strategy.</p>
 <h2 id="how-it-works"><a class="header" href="#how-it-works">How It Works</a></h2>
 <ol>
 <li>You provide a JSON file containing test results</li>
-<li>QitOps analyzes these results using a local LLM</li>
-<li>The LLM generates specific, actionable improvement suggestions</li>
-<li>The suggestions are saved to the specified output file</li>
+<li>QitOps processes these results using a local LLM</li>
+<li>The LLM generates a comprehensive analysis report</li>
+<li>The analysis is saved to the specified output file (typically in Markdown format)</li>
 </ol>
 <h2 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h2>
-<pre><code class="language-bash"># Generate improvement suggestions
-qitops improve --results test_results.json --output improvements.md
+<pre><code class="language-bash"># Analyze test results
+qitops analyze --results test_results.json --output analysis.md
 
-# Generate suggestions with a specific model
-qitops improve --results test_results.json --output improvements.md --model llama --model-path /path/to/model.gguf
+# Analyze with a specific model
+qitops analyze --results test_results.json --output analysis.md --model llama --model-path /path/to/model.gguf
 </code></pre>
 <h2 id="command-line-options"><a class="header" href="#command-line-options">Command-Line Options</a></h2>
 <div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>--results &lt;FILE&gt;</code></td><td>JSON file containing test results</td></tr>
-<tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the improvement suggestions</td></tr>
+<tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the analysis report</td></tr>
 <tr><td><code>--model &lt;MODEL&gt;</code></td><td>LLM model to use (default: auto)</td></tr>
 <tr><td><code>--model-path &lt;PATH&gt;</code></td><td>Path to the model file</td></tr>
 <tr><td><code>--format &lt;FORMAT&gt;</code></td><td>Output format (markdown, html, json)</td></tr>
-<tr><td><code>--focus &lt;AREA&gt;</code></td><td>Focus area for suggestions (performance, reliability, coverage, all)</td></tr>
 <tr><td><code>--temperature &lt;FLOAT&gt;</code></td><td>Temperature for generation (0.0-1.0)</td></tr>
 <tr><td><code>--context-size &lt;INT&gt;</code></td><td>Context size in tokens</td></tr>
 <tr><td><code>--max-tokens &lt;INT&gt;</code></td><td>Maximum tokens for generation</td></tr>
 <tr><td><code>--system-prompt &lt;TEXT&gt;</code></td><td>Custom system prompt for the model</td></tr>
 </tbody></table>
 </div>
-<h2 id="improvement-categories"><a class="header" href="#improvement-categories">Improvement Categories</a></h2>
-<p>The generated suggestions typically cover the following areas:</p>
-<h3 id="1-performance-optimizations"><a class="header" href="#1-performance-optimizations">1. Performance Optimizations</a></h3>
+<h2 id="analysis-content"><a class="header" href="#analysis-content">Analysis Content</a></h2>
+<p>The generated analysis report typically includes:</p>
+<h3 id="1-executive-summary"><a class="header" href="#1-executive-summary">1. Executive Summary</a></h3>
 <ul>
-<li>Response time improvements</li>
-<li>Resource utilization efficiency</li>
-<li>Concurrency and parallelism recommendations</li>
-<li>Caching strategies</li>
-<li>Database query optimizations</li>
-<li>Network latency reduction</li>
+<li>Overall success rate</li>
+<li>Number of tests run</li>
+<li>Key findings and insights</li>
+<li>Critical issues identified</li>
 </ul>
-<h3 id="2-reliability-enhancements"><a class="header" href="#2-reliability-enhancements">2. Reliability Enhancements</a></h3>
+<h3 id="2-test-results-overview"><a class="header" href="#2-test-results-overview">2. Test Results Overview</a></h3>
 <ul>
-<li>Error handling improvements</li>
-<li>Retry mechanisms</li>
-<li>Timeout configurations</li>
-<li>Fault tolerance strategies</li>
-<li>Resilience patterns</li>
-<li>Circuit breaker implementations</li>
+<li>Distribution of test statuses (success, failure, error)</li>
+<li>Average response times</li>
+<li>Success rates by test type</li>
+<li>Temporal patterns (if timestamps are available)</li>
 </ul>
-<h3 id="3-coverage-improvements"><a class="header" href="#3-coverage-improvements">3. Coverage Improvements</a></h3>
+<h3 id="3-detailed-breakdown"><a class="header" href="#3-detailed-breakdown">3. Detailed Breakdown</a></h3>
 <ul>
-<li>Missing test scenarios</li>
-<li>Edge case coverage</li>
-<li>Error condition testing</li>
-<li>Boundary value testing</li>
-<li>Security vulnerability testing</li>
-<li>Cross-functional testing</li>
+<li>Analysis of each failed test</li>
+<li>Common failure patterns</li>
+<li>Root cause analysis</li>
+<li>Error categorization</li>
 </ul>
-<h3 id="4-best-practices"><a class="header" href="#4-best-practices">4. Best Practices</a></h3>
+<h3 id="4-performance-analysis"><a class="header" href="#4-performance-analysis">4. Performance Analysis</a></h3>
 <ul>
-<li>Test organization and structure</li>
-<li>Naming conventions</li>
-<li>Documentation improvements</li>
-<li>Assertion strategies</li>
-<li>Test data management</li>
-<li>CI/CD integration</li>
+<li>Response time statistics</li>
+<li>Performance bottlenecks</li>
+<li>Throughput analysis</li>
+<li>Resource utilization patterns</li>
 </ul>
-<h2 id="example-improvement-suggestions"><a class="header" href="#example-improvement-suggestions">Example Improvement Suggestions</a></h2>
-<pre><code class="language-markdown"># Test Improvement Suggestions
+<h3 id="5-recommendations"><a class="header" href="#5-recommendations">5. Recommendations</a></h3>
+<ul>
+<li>Suggestions for fixing failed tests</li>
+<li>Performance optimization opportunities</li>
+<li>Test coverage improvements</li>
+<li>Testing strategy recommendations</li>
+</ul>
+<h2 id="example-analysis-report"><a class="header" href="#example-analysis-report">Example Analysis Report</a></h2>
+<pre><code class="language-markdown"># Test Results Analysis
 
 ## Executive Summary
 
-Based on the analysis of 25 test results, we've identified several opportunities for improvement across performance, reliability, coverage, and best practices. Implementing these suggestions will help enhance the effectiveness and efficiency of your testing suite.
+Analyzed 25 test results with an overall success rate of 84% (21/25 tests passed).
+The average response time was 187ms, with 3 tests exceeding the 500ms threshold.
+The main issues were related to authentication failures and timeout errors.
 
-## Performance Optimizations
+## Test Results Overview
 
-1. **Optimize Slow Endpoints**
-   - The `/api/users/search` endpoint has an average response time of 412ms, which is significantly higher than other endpoints.
-   - Suggestion: Review the implementation of this endpoint, focusing on database query optimization and potential caching.
-   - Implementation: Add query indexing for frequently searched fields and implement a Redis cache for common search queries.
+| Status | Count | Percentage |
+|--------|-------|------------|
+| Success | 21 | 84% |
+| Failure | 3 | 12% |
+| Error | 1 | 4% |
 
-2. **Implement Connection Pooling**
-   - Multiple tests show connection establishment overhead.
-   - Suggestion: Implement connection pooling to reuse connections across tests.
-   - Implementation: Configure a connection pool with appropriate min/max settings based on your concurrency requirements.
+### Success Rate by Test Type
+- API Tests: 90% (18/20)
+- Performance Tests: 75% (3/4)
+- Security Tests: 0% (0/1)
 
-3. **Reduce Payload Sizes**
-   - Several API responses exceed 100KB in size.
-   - Suggestion: Implement pagination and field filtering to reduce payload sizes.
-   - Implementation: Add `limit`, `offset`, and `fields` query parameters to your API endpoints.
+## Detailed Breakdown
 
-## Reliability Enhancements
+### Failed Tests Analysis
 
-1. **Improve Authentication Handling**
-   - 3 tests failed due to authentication issues.
-   - Suggestion: Implement token refresh and pre-test authentication validation.
-   - Implementation: Add a token refresh mechanism that automatically renews expired tokens before test execution.
+1. **API-Test-003**: Authentication failure
+   - Error: "Unauthorized (401)"
+   - Possible cause: Expired API token or incorrect credentials
+   - Recommendation: Verify and update the authentication token
 
-2. **Add Retry Logic for Transient Failures**
-   - Several timeout errors appear to be transient.
-   - Suggestion: Implement exponential backoff retry logic for network-related failures.
-   - Implementation: Add a retry decorator/wrapper that retries failed requests with increasing delays.
+2. **API-Test-012**: Unexpected response format
+   - Error: "Expected field 'user_id' not found in response"
+   - Possible cause: API response structure has changed
+   - Recommendation: Update the expected response structure in the test configuration
 
-3. **Enhance Error Handling**
-   - Error messages are inconsistent and sometimes not actionable.
-   - Suggestion: Standardize error handling and improve error messages.
-   - Implementation: Create a centralized error handler that provides consistent, detailed error information.
+3. **Perf-Test-002**: Timeout error
+   - Error: "Request timed out after 30 seconds"
+   - Possible cause: Server under heavy load or network issues
+   - Recommendation: Increase the timeout threshold or investigate server performance
 
-## Coverage Improvements
+## Performance Analysis
 
-1. **Add Security Testing**
-   - Only 1 security test was found in the results.
-   - Suggestion: Expand security testing to cover authentication, authorization, input validation, and data protection.
-   - Implementation: Add tests for OWASP Top 10 vulnerabilities relevant to your application.
+- 90th percentile response time: 342ms
+- Slowest endpoint: /api/users/search (avg: 412ms)
+- Fastest endpoint: /api/health (avg: 42ms)
+- 3 tests exceeded the 500ms threshold
 
-2. **Increase Edge Case Coverage**
-   - Most tests focus on happy paths with valid inputs.
-   - Suggestion: Add tests for boundary conditions, invalid inputs, and error scenarios.
-   - Implementation: For each API endpoint, add tests with empty values, extremely large values, special characters, and malformed requests.
+## Recommendations
 
-3. **Add Load and Stress Testing**
-   - Current performance tests use relatively low concurrency (max 100 users).
-   - Suggestion: Add high-concurrency load tests and stress tests to identify breaking points.
-   - Implementation: Create load test scenarios with gradually increasing concurrency until performance degrades.
+1. **Fix Authentication Issues**
+   - Implement token refresh mechanism
+   - Add pre-test validation of authentication credentials
 
-## Best Practices
+2. **Improve Error Handling**
+   - Add more specific assertions for response structure
+   - Implement retry logic for transient failures
 
-1. **Improve Test Organization**
-   - Tests are not consistently organized by feature or functionality.
-   - Suggestion: Reorganize tests into logical groups based on functionality.
-   - Implementation: Create a directory structure that mirrors your application's architecture.
+3. **Performance Optimization**
+   - Review the /api/users/search endpoint for optimization opportunities
+   - Consider caching frequently accessed resources
+   - Implement pagination for large result sets
 
-2. **Enhance Test Data Management**
-   - Test data is hardcoded in many tests.
-   - Suggestion: Implement a test data management strategy with fixtures or factories.
-   - Implementation: Create a test data generator that produces consistent, realistic test data.
-
-3. **Add Documentation**
-   - Many tests lack clear documentation about their purpose and expected behavior.
-   - Suggestion: Add descriptive comments and documentation to all tests.
-   - Implementation: Standardize on a documentation format that includes purpose, prerequisites, and expected outcomes.
-
-## Implementation Roadmap
-
-We recommend implementing these improvements in the following order:
-
-1. **Immediate (1-2 weeks)**
-   - Fix authentication handling issues
-   - Add retry logic for transient failures
-   - Improve error messages
-
-2. **Short-term (2-4 weeks)**
-   - Optimize slow endpoints
-   - Enhance test organization
-   - Add basic security tests
-
-3. **Medium-term (1-3 months)**
-   - Implement connection pooling
-   - Add edge case coverage
-   - Improve test data management
-
-4. **Long-term (3+ months)**
-   - Reduce payload sizes
-   - Add comprehensive load and stress testing
-   - Enhance documentation
+4. **Test Coverage Improvements**
+   - Add more security tests (currently only 1)
+   - Increase test coverage for error conditions
+   - Add tests for edge cases identified in this analysis
 </code></pre>
-<h2 id="integration-with-cicd"><a class="header" href="#integration-with-cicd">Integration with CI/CD</a></h2>
-<p>You can integrate the improvement suggestions feature into your CI/CD pipeline to automatically generate suggestions after test runs:</p>
-<pre><code class="language-yaml"># Example GitHub Actions workflow step
-- name: Generate Test Improvement Suggestions
-  run: |
-    qitops improve --results test_results.json --output improvements.md
-    
-- name: Upload Improvement Suggestions
-  uses: actions/upload-artifact@v2
-  with:
-    name: test-improvements
-    path: improvements.md
+<h2 id="input-format-requirements"><a class="header" href="#input-format-requirements">Input Format Requirements</a></h2>
+<p>The analysis feature expects test results in a specific JSON format:</p>
+<pre><code class="language-json">[
+  {
+    "test_id": "api-test-001",
+    "name": "User API Test",
+    "description": "Test the user API endpoint",
+    "timestamp": "2025-05-10T12:34:56Z",
+    "duration_ms": 156,
+    "status": "success",
+    "url": "https://api.example.com/users/123",
+    "method": "GET",
+    "request_headers": {
+      "Accept": "application/json",
+      "Authorization": "Bearer token123"
+    },
+    "response_status": 200,
+    "response_headers": {
+      "content-type": "application/json"
+    },
+    "assertions": [
+      {
+        "type": "status",
+        "expected": 200,
+        "actual": 200,
+        "result": "pass"
+      },
+      {
+        "type": "json",
+        "path": "$.id",
+        "expected": 123,
+        "actual": 123,
+        "result": "pass"
+      }
+    ]
+  },
+  {
+    "test_id": "api-test-002",
+    "name": "Invalid User API Test",
+    "description": "Test the user API with invalid ID",
+    "timestamp": "2025-05-10T12:35:12Z",
+    "duration_ms": 134,
+    "status": "failure",
+    "url": "https://api.example.com/users/999",
+    "method": "GET",
+    "request_headers": {
+      "Accept": "application/json",
+      "Authorization": "Bearer token123"
+    },
+    "response_status": 404,
+    "response_headers": {
+      "content-type": "application/json"
+    },
+    "assertions": [
+      {
+        "type": "status",
+        "expected": 200,
+        "actual": 404,
+        "result": "fail"
+      }
+    ],
+    "error": "Expected status 200 but got 404"
+  }
+]
 </code></pre>
 <h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
 <ul>
-<li>Run the improvement suggestions tool regularly (weekly or after major test runs)</li>
-<li>Prioritize suggestions based on their impact and implementation effort</li>
-<li>Create tickets or tasks for implementing high-priority suggestions</li>
-<li>Track the implementation of suggestions over time</li>
-<li>Re-run the tool after implementing suggestions to measure progress</li>
-<li>Customize the focus area based on your current priorities</li>
-<li>Use the suggestions as input for sprint planning and technical debt discussions</li>
-<li>Share the suggestions with your team to foster a culture of continuous improvement</li>
+<li>Include as much detail as possible in your test results</li>
+<li>Run analysis after each test suite execution</li>
+<li>Compare analyses over time to identify trends</li>
+<li>Use the analysis to prioritize test improvements</li>
+<li>Share analysis reports with your team for collaborative debugging</li>
+<li>Customize the analysis by adjusting the temperature parameter</li>
+<li>Use lower temperatures (0.3-0.5) for more factual, concise analyses</li>
+<li>Use higher temperatures (0.7-0.9) for more creative, detailed analyses</li>
 </ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="test-results-analysis.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="test-configuration-generation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="supported-llm-models.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="improvement-suggestions.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -372,11 +391,11 @@ We recommend implementing these improvements in the following order:
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="test-results-analysis.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="test-configuration-generation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="supported-llm-models.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="improvement-suggestions.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
