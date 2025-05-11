@@ -259,7 +259,7 @@ See the [Best Practices Guide](best-practices.md) for recommendations on how to 
 
 ## Contributing
 
-Contributions are welcome! Please see our [Contributing Guide](../CONTRIBUTING.md) for details on how to contribute to QitOps.
+Contributions are welcome! Please see our [Contributing Guide](contributing.md) for details on how to contribute to QitOps.
 
 ## License
 
