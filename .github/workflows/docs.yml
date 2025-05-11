@@ -24,8 +24,8 @@ jobs:
 
       - name: Copy files to docs
         run: |
-          # Clean up any existing files
-          rm -rf docs/*.md docs/*.html docs/index.md#*
+          # Clean up specific problematic files
+          rm -rf docs/*.html docs/index.md#*
 
           # Copy main files
           cp README.md docs/index.md
@@ -34,12 +34,60 @@ jobs:
           cp CONTRIBUTING.md docs/contributing.md
           cp LICENSE docs/LICENSE.md
 
-          # Ensure all files have .md extension
-          for file in docs/*.md; do
-            if [[ "$file" != *.md ]]; then
-              mv "$file" "${file}.md"
-            fi
-          done
+          # Create SUMMARY.md if it doesn't exist
+          if [ ! -f docs/SUMMARY.md ]; then
+            cat > docs/SUMMARY.md << EOF
+          # Summary
+
+          [QitOps: The Ultimate QA CLI Tool](index.md)
+
+          # User Guide
+
+          - [Why QitOps?](index.md#why-qitops)
+          - [Installation](index.md#installation)
+          - [Quick Start](index.md#quick-start)
+
+          # Core Features
+
+          - [API Testing](index.md#api-testing)
+          - [API Collections](index.md#api-collections)
+          - [Performance Testing](index.md#performance-testing)
+          - [Security Testing](index.md#security-testing)
+          - [Web Testing](index.md#web-testing)
+
+          # AI-Powered Testing
+
+          - [AI Features Overview](ai-features.md)
+          - [Test Generation](ai-features.md#test-configuration-generation)
+          - [Results Analysis](ai-features.md#test-results-analysis)
+          - [Improvement Suggestions](ai-features.md#improvement-suggestions)
+          - [Local LLM Support](ai-features.md#supported-llm-models)
+          - [Testing AI Features](testing-ai-features.md)
+
+          # Using QitOps
+
+          - [Usage Guide](usage.md)
+          - [Configuration](configuration.md)
+          - [Best Practices](best-practices.md)
+          - [CI/CD Integration](index.md#cicd-integration)
+          - [Data-Driven Testing](index.md#data-driven-testing)
+
+          # Project Information
+
+          - [Roadmap](roadmap.md)
+          - [Changelog](changelog.md)
+          - [Contributing](contributing.md)
+          - [License](LICENSE.md)
+
+          ---
+
+          [Documentation Setup](GITHUB_PAGES.md)
+          EOF
+          fi
+
+          # List all files in docs directory for debugging
+          echo "Files in docs directory:"
+          ls -la docs/
 
       - name: Update book.toml
         run: |
