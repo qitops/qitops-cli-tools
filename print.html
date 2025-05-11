@@ -1697,10 +1697,787 @@ cargo build --release --target x86_64-unknown-linux-musl
 <div style="break-before: page; page-break-before: always;"></div><h1 id="installation-1"><a class="header" href="#installation-1">Installation</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="quick-start-1"><a class="header" href="#quick-start-1">Quick Start</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="api-testing-5"><a class="header" href="#api-testing-5">API Testing</a></h1>
+<p>QitOps provides comprehensive API testing capabilities that allow you to validate REST APIs, ensure correct functionality, and verify performance and reliability.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>API testing in QitOps allows you to:</p>
+<ul>
+<li>Test individual API endpoints with various HTTP methods</li>
+<li>Validate response status codes, headers, and body content</li>
+<li>Set up authentication and authorization</li>
+<li>Measure and validate response times</li>
+<li>Configure timeouts and retries for reliability</li>
+<li>Chain requests with data from previous responses</li>
+</ul>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<h3 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h3>
+<pre><code class="language-bash"># Run a single API test
+qitops api -c tests/configs/api_test.json
+
+# Run tests in a specific environment
+qitops api -c tests/configs/api_test.json -e production
+
+# Run with custom variables
+qitops api -c tests/configs/api_test.json -v base_url=https://api.example.com -v api_key=12345
+</code></pre>
+<h3 id="command-line-options-1"><a class="header" href="#command-line-options-1">Command-Line Options</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>-c, --config &lt;FILE&gt;</code></td><td>API test configuration file</td></tr>
+<tr><td><code>-e, --environment &lt;ENV&gt;</code></td><td>Environment to use (default: production)</td></tr>
+<tr><td><code>-v, --variable &lt;KEY=VALUE&gt;</code></td><td>Set a variable for the test</td></tr>
+<tr><td><code>--timeout &lt;SECONDS&gt;</code></td><td>Override timeout in seconds</td></tr>
+<tr><td><code>--retries &lt;NUMBER&gt;</code></td><td>Override number of retries</td></tr>
+<tr><td><code>-r, --report &lt;FORMAT&gt;</code></td><td>Report format (json, html, xml, csv)</td></tr>
+<tr><td><code>-o, --output &lt;FILE&gt;</code></td><td>Output file for the report</td></tr>
+<tr><td><code>--verbose</code></td><td>Enable verbose output</td></tr>
+</tbody></table>
+</div>
+<h2 id="configuration-1"><a class="header" href="#configuration-1">Configuration</a></h2>
+<p>API tests are defined in JSON configuration files that specify the endpoint, method, headers, and expected responses.</p>
+<h3 id="basic-configuration-structure"><a class="header" href="#basic-configuration-structure">Basic Configuration Structure</a></h3>
+<pre><code class="language-json">{
+  "name": "Example API Test",
+  "description": "Test description",
+  "timeout": 30,
+  "retries": 3,
+  "environment": "production",
+  "url": "https://api.example.com/users/123",
+  "method": "GET",
+  "headers": {
+    "Accept": "application/json",
+    "User-Agent": "QitOps-Test"
+  },
+  "expected_status": 200,
+  "expected_body": {
+    "id": 123,
+    "name": "John Doe"
+  },
+  "max_response_time": 2,
+  "expected_headers": {
+    "content-type": "application/json",
+    "cache-control": "no-cache"
+  }
+}
+</code></pre>
+<h3 id="configuration-fields"><a class="header" href="#configuration-fields">Configuration Fields</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody>
+<tr><td>name</td><td>string</td><td>Yes</td><td>Name of the test</td></tr>
+<tr><td>description</td><td>string</td><td>No</td><td>Description of the test</td></tr>
+<tr><td>timeout</td><td>number</td><td>No</td><td>Request timeout in seconds (default: 30)</td></tr>
+<tr><td>retries</td><td>number</td><td>No</td><td>Number of retries (default: 3)</td></tr>
+<tr><td>environment</td><td>string</td><td>No</td><td>Environment to use (default: production)</td></tr>
+<tr><td>url</td><td>string</td><td>Yes</td><td>URL to test</td></tr>
+<tr><td>method</td><td>string</td><td>Yes</td><td>HTTP method (GET, POST, PUT, DELETE, etc.)</td></tr>
+<tr><td>headers</td><td>object</td><td>No</td><td>HTTP headers to send</td></tr>
+<tr><td>body</td><td>object/string</td><td>No</td><td>Request body (JSON object or string)</td></tr>
+<tr><td>expected_status</td><td>number</td><td>No</td><td>Expected HTTP status code (default: 200)</td></tr>
+<tr><td>expected_body</td><td>object/string</td><td>No</td><td>Expected response body (JSON object or string)</td></tr>
+<tr><td>max_response_time</td><td>number</td><td>No</td><td>Maximum acceptable response time in seconds</td></tr>
+<tr><td>expected_headers</td><td>object</td><td>No</td><td>Expected response headers</td></tr>
+<tr><td>retry</td><td>object</td><td>No</td><td>Retry configuration</td></tr>
+</tbody></table>
+</div>
+<h3 id="authentication"><a class="header" href="#authentication">Authentication</a></h3>
+<p>QitOps supports various authentication methods:</p>
+<h4 id="basic-authentication"><a class="header" href="#basic-authentication">Basic Authentication</a></h4>
+<pre><code class="language-json">"auth": {
+  "type": "basic",
+  "username": "user",
+  "password": "pass"
+}
+</code></pre>
+<h4 id="bearer-token"><a class="header" href="#bearer-token">Bearer Token</a></h4>
+<pre><code class="language-json">"auth": {
+  "type": "bearer",
+  "token": "your-token"
+}
+</code></pre>
+<h4 id="api-key"><a class="header" href="#api-key">API Key</a></h4>
+<pre><code class="language-json">"auth": {
+  "type": "apikey",
+  "key": "X-API-Key",
+  "value": "your-api-key",
+  "in": "header"  // or "query"
+}
+</code></pre>
+<h4 id="oauth2"><a class="header" href="#oauth2">OAuth2</a></h4>
+<pre><code class="language-json">"auth": {
+  "type": "oauth2",
+  "token_url": "https://auth.example.com/token",
+  "client_id": "your-client-id",
+  "client_secret": "your-client-secret",
+  "scope": "read write"
+}
+</code></pre>
+<h3 id="request-body"><a class="header" href="#request-body">Request Body</a></h3>
+<p>You can specify the request body in different formats:</p>
+<h4 id="json-body"><a class="header" href="#json-body">JSON Body</a></h4>
+<pre><code class="language-json">"body": {
+  "name": "John Doe",
+  "email": "john@example.com",
+  "age": 30
+}
+</code></pre>
+<h4 id="string-body"><a class="header" href="#string-body">String Body</a></h4>
+<pre><code class="language-json">"body": "name=John%20Doe&amp;email=john%40example.com",
+"headers": {
+  "Content-Type": "application/x-www-form-urlencoded"
+}
+</code></pre>
+<h4 id="binary-body"><a class="header" href="#binary-body">Binary Body</a></h4>
+<pre><code class="language-json">"body": {
+  "_file": "path/to/file.pdf"
+},
+"headers": {
+  "Content-Type": "application/pdf"
+}
+</code></pre>
+<h3 id="response-validation"><a class="header" href="#response-validation">Response Validation</a></h3>
+<p>QitOps provides several ways to validate API responses:</p>
+<h4 id="status-code"><a class="header" href="#status-code">Status Code</a></h4>
+<pre><code class="language-json">"expected_status": 200
+</code></pre>
+<h4 id="headers"><a class="header" href="#headers">Headers</a></h4>
+<pre><code class="language-json">"expected_headers": {
+  "content-type": "application/json",
+  "cache-control": "no-cache"
+}
+</code></pre>
+<h4 id="body-exact-match"><a class="header" href="#body-exact-match">Body (Exact Match)</a></h4>
+<pre><code class="language-json">"expected_body": {
+  "id": 123,
+  "name": "John Doe"
+}
+</code></pre>
+<h4 id="body-partial-match"><a class="header" href="#body-partial-match">Body (Partial Match)</a></h4>
+<pre><code class="language-json">"expected_body_contains": {
+  "name": "John Doe"
+}
+</code></pre>
+<h4 id="json-schema-validation"><a class="header" href="#json-schema-validation">JSON Schema Validation</a></h4>
+<pre><code class="language-json">"validate_json_schema": {
+  "type": "object",
+  "required": ["id", "name"],
+  "properties": {
+    "id": { "type": "integer" },
+    "name": { "type": "string" }
+  }
+}
+</code></pre>
+<h4 id="jsonpath-assertions"><a class="header" href="#jsonpath-assertions">JSONPath Assertions</a></h4>
+<pre><code class="language-json">"assertions": [
+  {
+    "jsonpath": "$.name",
+    "expected": "John Doe",
+    "comparison": "equals"
+  },
+  {
+    "jsonpath": "$.age",
+    "expected": 18,
+    "comparison": "greater_than"
+  }
+]
+</code></pre>
+<h3 id="retry-configuration-1"><a class="header" href="#retry-configuration-1">Retry Configuration</a></h3>
+<p>Configure retry behavior for transient failures:</p>
+<pre><code class="language-json">"retry": {
+  "max_retries": 3,
+  "initial_delay_ms": 100,
+  "max_delay_ms": 1000,
+  "retry_status_codes": [408, 429, 500, 502, 503, 504],
+  "retry_on_timeout": true,
+  "retry_on_connection_error": true
+}
+</code></pre>
+<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<h3 id="get-request"><a class="header" href="#get-request">GET Request</a></h3>
+<pre><code class="language-json">{
+  "name": "Get User",
+  "description": "Get a user by ID",
+  "url": "https://api.example.com/users/123",
+  "method": "GET",
+  "headers": {
+    "Accept": "application/json"
+  },
+  "expected_status": 200,
+  "expected_body": {
+    "id": 123,
+    "name": "John Doe",
+    "email": "john@example.com"
+  }
+}
+</code></pre>
+<h3 id="post-request"><a class="header" href="#post-request">POST Request</a></h3>
+<pre><code class="language-json">{
+  "name": "Create User",
+  "description": "Create a new user",
+  "url": "https://api.example.com/users",
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  "body": {
+    "name": "Jane Doe",
+    "email": "jane@example.com",
+    "age": 28
+  },
+  "expected_status": 201,
+  "expected_body_contains": {
+    "id": true,
+    "name": "Jane Doe"
+  }
+}
+</code></pre>
+<h3 id="put-request"><a class="header" href="#put-request">PUT Request</a></h3>
+<pre><code class="language-json">{
+  "name": "Update User",
+  "description": "Update an existing user",
+  "url": "https://api.example.com/users/123",
+  "method": "PUT",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  "body": {
+    "name": "John Smith",
+    "email": "john.smith@example.com"
+  },
+  "expected_status": 200,
+  "expected_body": {
+    "id": 123,
+    "name": "John Smith",
+    "email": "john.smith@example.com"
+  }
+}
+</code></pre>
+<h3 id="delete-request"><a class="header" href="#delete-request">DELETE Request</a></h3>
+<pre><code class="language-json">{
+  "name": "Delete User",
+  "description": "Delete a user",
+  "url": "https://api.example.com/users/123",
+  "method": "DELETE",
+  "expected_status": 204
+}
+</code></pre>
+<h3 id="authentication-example"><a class="header" href="#authentication-example">Authentication Example</a></h3>
+<pre><code class="language-json">{
+  "name": "Authenticated Request",
+  "description": "Make an authenticated API request",
+  "url": "https://api.example.com/protected-resource",
+  "method": "GET",
+  "auth": {
+    "type": "bearer",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  },
+  "expected_status": 200
+}
+</code></pre>
+<h3 id="file-upload"><a class="header" href="#file-upload">File Upload</a></h3>
+<pre><code class="language-json">{
+  "name": "Upload File",
+  "description": "Upload a file to the API",
+  "url": "https://api.example.com/upload",
+  "method": "POST",
+  "headers": {
+    "Content-Type": "multipart/form-data"
+  },
+  "form_data": {
+    "file": {
+      "_file": "path/to/file.jpg"
+    },
+    "description": "Profile picture"
+  },
+  "expected_status": 200,
+  "expected_body_contains": {
+    "success": true
+  }
+}
+</code></pre>
+<h2 id="best-practices-1"><a class="header" href="#best-practices-1">Best Practices</a></h2>
+<h3 id="test-organization"><a class="header" href="#test-organization">Test Organization</a></h3>
+<ul>
+<li>Group related tests in separate configuration files</li>
+<li>Use descriptive names for tests</li>
+<li>Include detailed descriptions</li>
+<li>Organize tests by functionality or endpoint</li>
+</ul>
+<h3 id="reliability"><a class="header" href="#reliability">Reliability</a></h3>
+<ul>
+<li>Set appropriate timeouts based on expected response times</li>
+<li>Configure retries for transient failures</li>
+<li>Use environment-specific configurations</li>
+<li>Validate both success and error scenarios</li>
+</ul>
+<h3 id="validation"><a class="header" href="#validation">Validation</a></h3>
+<ul>
+<li>Validate status codes, headers, and body content</li>
+<li>Use JSON schema validation for complex responses</li>
+<li>Include performance assertions (max_response_time)</li>
+<li>Test edge cases and boundary conditions</li>
+</ul>
+<h3 id="variables-and-environments"><a class="header" href="#variables-and-environments">Variables and Environments</a></h3>
+<ul>
+<li>Use variables for values that change between environments</li>
+<li>Create environment-specific configurations</li>
+<li>Avoid hardcoding sensitive information</li>
+<li>Use variable interpolation for dynamic values</li>
+</ul>
+<h2 id="integration-with-cicd"><a class="header" href="#integration-with-cicd">Integration with CI/CD</a></h2>
+<p>API tests can be integrated into CI/CD pipelines:</p>
+<pre><code class="language-yaml"># Example GitHub Actions workflow step
+- name: Run API Tests
+  run: |
+    qitops api -c tests/configs/api_test.json -e staging --report json --output api-test-results.json
+    
+- name: Upload Test Results
+  uses: actions/upload-artifact@v2
+  with:
+    name: api-test-results
+    path: api-test-results.json
+</code></pre>
+<h2 id="troubleshooting-1"><a class="header" href="#troubleshooting-1">Troubleshooting</a></h2>
+<h3 id="common-issues-1"><a class="header" href="#common-issues-1">Common Issues</a></h3>
+<ul>
+<li><strong>Connection Refused</strong>: Check if the API server is running and accessible</li>
+<li><strong>Timeout Errors</strong>: Increase the timeout value or check server performance</li>
+<li><strong>Authentication Failures</strong>: Verify credentials and token expiration</li>
+<li><strong>Unexpected Responses</strong>: Check if the API contract has changed</li>
+<li><strong>SSL/TLS Errors</strong>: Verify certificate validity and trust chain</li>
+</ul>
+<h3 id="debugging-tips"><a class="header" href="#debugging-tips">Debugging Tips</a></h3>
+<ul>
+<li>Use the <code>--verbose</code> flag for detailed output</li>
+<li>Check the request and response headers</li>
+<li>Verify the request body is correctly formatted</li>
+<li>Test the API endpoint with a tool like curl or Postman</li>
+<li>Check for environment-specific issues</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="api-collections-5"><a class="header" href="#api-collections-5">API Collections</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="performance-testing-5"><a class="header" href="#performance-testing-5">Performance Testing</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="security-testing-5"><a class="header" href="#security-testing-5">Security Testing</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="web-testing-5"><a class="header" href="#web-testing-5">Web Testing</a></h1>
+<p>QitOps provides powerful web testing capabilities that allow you to automate browser interactions, validate web applications, and ensure your websites function correctly across different scenarios.</p>
+<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<p>Web testing in QitOps uses headless browser automation to interact with web pages, perform actions, and validate expected behaviors. This approach allows you to:</p>
+<ul>
+<li>Test complete user journeys through your web application</li>
+<li>Validate UI elements and their properties</li>
+<li>Capture screenshots for visual verification</li>
+<li>Test responsive design across different viewport sizes</li>
+<li>Verify page content, titles, and URLs</li>
+<li>Automate form submissions and user interactions</li>
+</ul>
+<h2 id="getting-started-1"><a class="header" href="#getting-started-1">Getting Started</a></h2>
+<h3 id="basic-usage-1"><a class="header" href="#basic-usage-1">Basic Usage</a></h3>
+<pre><code class="language-bash"># Run a web test
+qitops web -c tests/configs/web_test.json
+
+# Run in headless mode (default)
+qitops web -c tests/configs/web_test.json --headless
+
+# Run with browser visible
+qitops web -c tests/configs/web_test.json --no-headless
+
+# Run with custom viewport
+qitops web -c tests/configs/web_test.json --width 1920 --height 1080
+</code></pre>
+<h3 id="command-line-options-2"><a class="header" href="#command-line-options-2">Command-Line Options</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>-c, --config &lt;FILE&gt;</code></td><td>Web test configuration file</td></tr>
+<tr><td><code>--headless</code></td><td>Run in headless mode (default: true)</td></tr>
+<tr><td><code>--no-headless</code></td><td>Run with browser visible</td></tr>
+<tr><td><code>--width &lt;PIXELS&gt;</code></td><td>Viewport width in pixels</td></tr>
+<tr><td><code>--height &lt;PIXELS&gt;</code></td><td>Viewport height in pixels</td></tr>
+<tr><td><code>--device &lt;DEVICE&gt;</code></td><td>Emulate a specific device (e.g., “iPhone 12”, “iPad”)</td></tr>
+<tr><td><code>--timeout &lt;SECONDS&gt;</code></td><td>Default timeout for actions and assertions</td></tr>
+<tr><td><code>--screenshots</code></td><td>Capture screenshots during test execution</td></tr>
+<tr><td><code>--screenshots-dir &lt;DIR&gt;</code></td><td>Directory to save screenshots</td></tr>
+<tr><td><code>-r, --report &lt;FORMAT&gt;</code></td><td>Report format (json, html, xml, csv)</td></tr>
+<tr><td><code>-o, --output &lt;FILE&gt;</code></td><td>Output file for the report</td></tr>
+</tbody></table>
+</div>
+<h2 id="configuration-2"><a class="header" href="#configuration-2">Configuration</a></h2>
+<p>Web tests are defined in JSON configuration files that specify the target URL, actions to perform, and assertions to validate.</p>
+<h3 id="basic-configuration-structure-1"><a class="header" href="#basic-configuration-structure-1">Basic Configuration Structure</a></h3>
+<pre><code class="language-json">{
+  "name": "Sample Web Test",
+  "description": "Testing a public website",
+  "timeout": 30,
+  "retries": 3,
+  "target_url": "https://example.com",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "device_scale_factor": 1.0,
+    "is_mobile": false
+  },
+  "wait_for_selector": "body",
+  "wait_timeout_secs": 10,
+  "screenshots": true,
+  "user_agent": "QitOps-WebTester/1.0",
+  "assertions": [
+    {
+      "assertion_type": "title",
+      "expected_value": "Example Domain",
+      "comparison": "contains"
+    },
+    {
+      "assertion_type": "element",
+      "selector": "h1",
+      "expected_value": "true"
+    }
+  ],
+  "actions": [
+    {
+      "action_type": "wait",
+      "wait_time_ms": 1000
+    },
+    {
+      "action_type": "click",
+      "selector": "a"
+    }
+  ]
+}
+</code></pre>
+<h3 id="configuration-fields-1"><a class="header" href="#configuration-fields-1">Configuration Fields</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody>
+<tr><td>name</td><td>string</td><td>Yes</td><td>Name of the test</td></tr>
+<tr><td>description</td><td>string</td><td>No</td><td>Description of the test</td></tr>
+<tr><td>timeout</td><td>number</td><td>No</td><td>Default timeout in seconds (default: 30)</td></tr>
+<tr><td>retries</td><td>number</td><td>No</td><td>Number of retries (default: 3)</td></tr>
+<tr><td>target_url</td><td>string</td><td>Yes</td><td>URL to test</td></tr>
+<tr><td>viewport</td><td>object</td><td>No</td><td>Viewport configuration</td></tr>
+<tr><td>wait_for_selector</td><td>string</td><td>No</td><td>Selector to wait for before starting test</td></tr>
+<tr><td>wait_timeout_secs</td><td>number</td><td>No</td><td>Timeout for initial wait (default: 10)</td></tr>
+<tr><td>screenshots</td><td>boolean</td><td>No</td><td>Whether to capture screenshots (default: false)</td></tr>
+<tr><td>user_agent</td><td>string</td><td>No</td><td>Custom user agent string</td></tr>
+<tr><td>assertions</td><td>array</td><td>No</td><td>List of assertions to validate</td></tr>
+<tr><td>actions</td><td>array</td><td>No</td><td>List of actions to perform</td></tr>
+</tbody></table>
+</div>
+<h3 id="viewport-configuration-1"><a class="header" href="#viewport-configuration-1">Viewport Configuration</a></h3>
+<pre><code class="language-json">"viewport": {
+  "width": 1280,
+  "height": 800,
+  "device_scale_factor": 1.0,
+  "is_mobile": false
+}
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>width</td><td>number</td><td>Viewport width in pixels</td></tr>
+<tr><td>height</td><td>number</td><td>Viewport height in pixels</td></tr>
+<tr><td>device_scale_factor</td><td>number</td><td>Device scale factor (1.0 for desktop, 2.0+ for high-DPI)</td></tr>
+<tr><td>is_mobile</td><td>boolean</td><td>Whether to emulate a mobile device</td></tr>
+</tbody></table>
+</div>
+<h2 id="actions"><a class="header" href="#actions">Actions</a></h2>
+<p>Actions define the steps to perform during the test, such as clicking elements, typing text, or navigating to different pages.</p>
+<h3 id="available-actions"><a class="header" href="#available-actions">Available Actions</a></h3>
+<h4 id="click"><a class="header" href="#click">Click</a></h4>
+<pre><code class="language-json">{
+  "action_type": "click",
+  "selector": "button.submit",
+  "timeout_ms": 5000,
+  "button": "left",
+  "click_count": 1,
+  "delay_ms": 0
+}
+</code></pre>
+<h4 id="type"><a class="header" href="#type">Type</a></h4>
+<pre><code class="language-json">{
+  "action_type": "type",
+  "selector": "input[name='username']",
+  "text": "testuser",
+  "delay_ms": 50
+}
+</code></pre>
+<h4 id="navigate"><a class="header" href="#navigate">Navigate</a></h4>
+<pre><code class="language-json">{
+  "action_type": "navigate",
+  "url": "https://example.com/login",
+  "wait_until": "networkidle0"
+}
+</code></pre>
+<h4 id="wait"><a class="header" href="#wait">Wait</a></h4>
+<pre><code class="language-json">{
+  "action_type": "wait",
+  "wait_time_ms": 1000
+}
+</code></pre>
+<h4 id="wait-for-selector"><a class="header" href="#wait-for-selector">Wait For Selector</a></h4>
+<pre><code class="language-json">{
+  "action_type": "wait_for_selector",
+  "selector": "#content",
+  "timeout_ms": 5000,
+  "visible": true
+}
+</code></pre>
+<h4 id="select-option"><a class="header" href="#select-option">Select Option</a></h4>
+<pre><code class="language-json">{
+  "action_type": "select",
+  "selector": "select#country",
+  "value": "US"
+}
+</code></pre>
+<h4 id="checkuncheck"><a class="header" href="#checkuncheck">Check/Uncheck</a></h4>
+<pre><code class="language-json">{
+  "action_type": "check",
+  "selector": "input[type='checkbox']",
+  "checked": true
+}
+</code></pre>
+<h4 id="screenshot"><a class="header" href="#screenshot">Screenshot</a></h4>
+<pre><code class="language-json">{
+  "action_type": "screenshot",
+  "name": "login-page",
+  "full_page": true
+}
+</code></pre>
+<h4 id="scroll"><a class="header" href="#scroll">Scroll</a></h4>
+<pre><code class="language-json">{
+  "action_type": "scroll",
+  "x": 0,
+  "y": 500
+}
+</code></pre>
+<h4 id="hover"><a class="header" href="#hover">Hover</a></h4>
+<pre><code class="language-json">{
+  "action_type": "hover",
+  "selector": ".dropdown-menu"
+}
+</code></pre>
+<h2 id="assertions"><a class="header" href="#assertions">Assertions</a></h2>
+<p>Assertions validate that the web page meets expected conditions.</p>
+<h3 id="available-assertions"><a class="header" href="#available-assertions">Available Assertions</a></h3>
+<h4 id="title"><a class="header" href="#title">Title</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "title",
+  "expected_value": "Dashboard",
+  "comparison": "equals"
+}
+</code></pre>
+<h4 id="url"><a class="header" href="#url">URL</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "url",
+  "expected_value": "https://example.com/dashboard",
+  "comparison": "contains"
+}
+</code></pre>
+<h4 id="element"><a class="header" href="#element">Element</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "element",
+  "selector": ".user-profile",
+  "expected_value": "true"
+}
+</code></pre>
+<h4 id="text-content"><a class="header" href="#text-content">Text Content</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "text",
+  "selector": "h1",
+  "expected_value": "Welcome to Dashboard",
+  "comparison": "equals"
+}
+</code></pre>
+<h4 id="attribute"><a class="header" href="#attribute">Attribute</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "attribute",
+  "selector": "img.logo",
+  "attribute": "src",
+  "expected_value": "/images/logo.png",
+  "comparison": "contains"
+}
+</code></pre>
+<h4 id="count"><a class="header" href="#count">Count</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "count",
+  "selector": "table tr",
+  "expected_value": 5,
+  "comparison": "greater_than"
+}
+</code></pre>
+<h4 id="css-property"><a class="header" href="#css-property">CSS Property</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "css",
+  "selector": ".error-message",
+  "property": "color",
+  "expected_value": "rgb(255, 0, 0)",
+  "comparison": "equals"
+}
+</code></pre>
+<h3 id="comparison-types"><a class="header" href="#comparison-types">Comparison Types</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>equals</td><td>Exact match</td></tr>
+<tr><td>contains</td><td>String contains</td></tr>
+<tr><td>starts_with</td><td>String starts with</td></tr>
+<tr><td>ends_with</td><td>String ends with</td></tr>
+<tr><td>matches</td><td>Regex match</td></tr>
+<tr><td>greater_than</td><td>Numeric greater than</td></tr>
+<tr><td>less_than</td><td>Numeric less than</td></tr>
+<tr><td>greater_than_or_equal</td><td>Numeric greater than or equal</td></tr>
+<tr><td>less_than_or_equal</td><td>Numeric less than or equal</td></tr>
+</tbody></table>
+</div>
+<h2 id="examples-1"><a class="header" href="#examples-1">Examples</a></h2>
+<h3 id="login-form-test"><a class="header" href="#login-form-test">Login Form Test</a></h3>
+<pre><code class="language-json">{
+  "name": "Login Form Test",
+  "description": "Test the login functionality",
+  "target_url": "https://example.com/login",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "wait_for_selector": "form",
+  "screenshots": true,
+  "actions": [
+    {
+      "action_type": "type",
+      "selector": "input[name='username']",
+      "text": "testuser"
+    },
+    {
+      "action_type": "type",
+      "selector": "input[name='password']",
+      "text": "password123"
+    },
+    {
+      "action_type": "screenshot",
+      "name": "before-login"
+    },
+    {
+      "action_type": "click",
+      "selector": "button[type='submit']"
+    },
+    {
+      "action_type": "wait_for_selector",
+      "selector": ".dashboard",
+      "timeout_ms": 5000
+    },
+    {
+      "action_type": "screenshot",
+      "name": "after-login"
+    }
+  ],
+  "assertions": [
+    {
+      "assertion_type": "url",
+      "expected_value": "/dashboard",
+      "comparison": "contains"
+    },
+    {
+      "assertion_type": "element",
+      "selector": ".user-profile",
+      "expected_value": "true"
+    },
+    {
+      "assertion_type": "text",
+      "selector": ".welcome-message",
+      "expected_value": "Welcome, Test User",
+      "comparison": "contains"
+    }
+  ]
+}
+</code></pre>
+<h3 id="responsive-design-test"><a class="header" href="#responsive-design-test">Responsive Design Test</a></h3>
+<pre><code class="language-json">{
+  "name": "Responsive Design Test",
+  "description": "Test responsive behavior across different devices",
+  "target_url": "https://example.com",
+  "screenshots": true,
+  "actions": [
+    {
+      "action_type": "set_viewport",
+      "width": 1920,
+      "height": 1080,
+      "device_scale_factor": 1.0,
+      "is_mobile": false
+    },
+    {
+      "action_type": "screenshot",
+      "name": "desktop-view"
+    },
+    {
+      "action_type": "set_viewport",
+      "width": 768,
+      "height": 1024,
+      "device_scale_factor": 2.0,
+      "is_mobile": true
+    },
+    {
+      "action_type": "screenshot",
+      "name": "tablet-view"
+    },
+    {
+      "action_type": "set_viewport",
+      "width": 375,
+      "height": 812,
+      "device_scale_factor": 3.0,
+      "is_mobile": true
+    },
+    {
+      "action_type": "screenshot",
+      "name": "mobile-view"
+    }
+  ],
+  "assertions": [
+    {
+      "assertion_type": "css",
+      "selector": ".mobile-menu",
+      "property": "display",
+      "expected_value": "block",
+      "comparison": "equals"
+    }
+  ]
+}
+</code></pre>
+<h2 id="best-practices-2"><a class="header" href="#best-practices-2">Best Practices</a></h2>
+<h3 id="selector-strategy"><a class="header" href="#selector-strategy">Selector Strategy</a></h3>
+<ul>
+<li>Use stable selectors that are less likely to change</li>
+<li>Prefer IDs and data attributes over classes or XPaths</li>
+<li>Add test-specific attributes like <code>data-testid="login-button"</code> to your application</li>
+<li>Use specific selectors to avoid ambiguity</li>
+</ul>
+<h3 id="test-organization-1"><a class="header" href="#test-organization-1">Test Organization</a></h3>
+<ul>
+<li>Group related tests in separate configuration files</li>
+<li>Use descriptive names for tests and screenshots</li>
+<li>Structure tests to follow user journeys</li>
+<li>Keep tests focused on specific functionality</li>
+</ul>
+<h3 id="performance-considerations"><a class="header" href="#performance-considerations">Performance Considerations</a></h3>
+<ul>
+<li>Use headless mode for CI/CD environments</li>
+<li>Minimize unnecessary actions and waits</li>
+<li>Use appropriate timeouts for your application</li>
+<li>Consider network conditions when testing</li>
+</ul>
+<h3 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h3>
+<ul>
+<li>Add appropriate waits before interactions</li>
+<li>Use retries for flaky operations</li>
+<li>Capture screenshots at failure points</li>
+<li>Add detailed assertions to pinpoint issues</li>
+</ul>
+<h2 id="integration-with-cicd-1"><a class="header" href="#integration-with-cicd-1">Integration with CI/CD</a></h2>
+<p>Web tests can be integrated into CI/CD pipelines:</p>
+<pre><code class="language-yaml"># Example GitHub Actions workflow step
+- name: Run Web Tests
+  run: |
+    qitops web -c tests/configs/web_test.json --headless --screenshots --report html --output web-test-report.html
+    
+- name: Upload Test Report
+  uses: actions/upload-artifact@v2
+  with:
+    name: web-test-report
+    path: web-test-report.html
+    
+- name: Upload Screenshots
+  uses: actions/upload-artifact@v2
+  with:
+    name: web-test-screenshots
+    path: screenshots/
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="ai-features-1"><a class="header" href="#ai-features-1">AI Features</a></h1>
 <p>QitOps includes powerful AI features that can help you generate test configurations, analyze test results, and suggest improvements to your tests. These features are designed to work completely offline with local LLM models, ensuring your data never leaves your machine.</p>
 <h2 id="installation-2"><a class="header" href="#installation-2">Installation</a></h2>
@@ -1821,7 +2598,7 @@ qitops analyze --results test_results.json --output analysis.md
 <li>The LLM generates a complete JSON configuration file based on your description</li>
 <li>The configuration is saved to the specified output file</li>
 </ol>
-<h3 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h3>
+<h3 id="basic-usage-2"><a class="header" href="#basic-usage-2">Basic Usage</a></h3>
 <pre><code class="language-bash"># Generate an API test configuration
 qitops generate --test-type api --description "Test the GitHub API to fetch user information" --output github_test.json
 
@@ -1834,7 +2611,7 @@ qitops generate --test-type security --description "Security scan for a banking 
 # Generate a web test configuration
 qitops generate --test-type web --description "Test the checkout flow of an e-commerce website" --output web_test.json
 </code></pre>
-<h3 id="command-line-options-1"><a class="header" href="#command-line-options-1">Command-Line Options</a></h3>
+<h3 id="command-line-options-3"><a class="header" href="#command-line-options-3">Command-Line Options</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>--test-type &lt;TYPE&gt;</code></td><td>Type of test to generate (api, performance, security, web)</td></tr>
 <tr><td><code>--description &lt;TEXT&gt;</code></td><td>Natural language description of the test</td></tr>
@@ -1944,7 +2721,7 @@ qitops generate --test-type api \
 <li>Adjust validation criteria</li>
 <li>Add environment-specific variables</li>
 </ol>
-<h3 id="best-practices-1"><a class="header" href="#best-practices-1">Best Practices</a></h3>
+<h3 id="best-practices-3"><a class="header" href="#best-practices-3">Best Practices</a></h3>
 <ul>
 <li>Start with detailed, specific descriptions</li>
 <li>Review generated configurations before using them</li>
@@ -1963,14 +2740,14 @@ qitops generate --test-type api \
 <li>The LLM generates a comprehensive analysis report</li>
 <li>The analysis is saved to the specified output file (typically in Markdown format)</li>
 </ol>
-<h3 id="basic-usage-1"><a class="header" href="#basic-usage-1">Basic Usage</a></h3>
+<h3 id="basic-usage-3"><a class="header" href="#basic-usage-3">Basic Usage</a></h3>
 <pre><code class="language-bash"># Analyze test results
 qitops analyze --results test_results.json --output analysis.md
 
 # Analyze with a specific model
 qitops analyze --results test_results.json --output analysis.md --model llama --model-path /path/to/model.gguf
 </code></pre>
-<h3 id="command-line-options-2"><a class="header" href="#command-line-options-2">Command-Line Options</a></h3>
+<h3 id="command-line-options-4"><a class="header" href="#command-line-options-4">Command-Line Options</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>--results &lt;FILE&gt;</code></td><td>JSON file containing test results</td></tr>
 <tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the analysis report</td></tr>
@@ -2153,7 +2930,7 @@ The main issues were related to authentication failures and timeout errors.
   }
 ]
 </code></pre>
-<h3 id="best-practices-2"><a class="header" href="#best-practices-2">Best Practices</a></h3>
+<h3 id="best-practices-4"><a class="header" href="#best-practices-4">Best Practices</a></h3>
 <ul>
 <li>Include as much detail as possible in your test results</li>
 <li>Run analysis after each test suite execution</li>
@@ -2173,14 +2950,14 @@ The main issues were related to authentication failures and timeout errors.
 <li>The LLM generates specific, actionable improvement suggestions</li>
 <li>The suggestions are saved to the specified output file</li>
 </ol>
-<h3 id="basic-usage-2"><a class="header" href="#basic-usage-2">Basic Usage</a></h3>
+<h3 id="basic-usage-4"><a class="header" href="#basic-usage-4">Basic Usage</a></h3>
 <pre><code class="language-bash"># Generate improvement suggestions
 qitops improve --results test_results.json --output improvements.md
 
 # Generate suggestions with a specific model
 qitops improve --results test_results.json --output improvements.md --model llama --model-path /path/to/model.gguf
 </code></pre>
-<h3 id="command-line-options-3"><a class="header" href="#command-line-options-3">Command-Line Options</a></h3>
+<h3 id="command-line-options-5"><a class="header" href="#command-line-options-5">Command-Line Options</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>--results &lt;FILE&gt;</code></td><td>JSON file containing test results</td></tr>
 <tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the improvement suggestions</td></tr>
@@ -2331,7 +3108,7 @@ We recommend implementing these improvements in the following order:
    - Add comprehensive load and stress testing
    - Enhance documentation
 </code></pre>
-<h3 id="integration-with-cicd"><a class="header" href="#integration-with-cicd">Integration with CI/CD</a></h3>
+<h3 id="integration-with-cicd-2"><a class="header" href="#integration-with-cicd-2">Integration with CI/CD</a></h3>
 <p>You can integrate the improvement suggestions feature into your CI/CD pipeline to automatically generate suggestions after test runs:</p>
 <pre><code class="language-yaml"># Example GitHub Actions workflow step
 - name: Generate Test Improvement Suggestions
@@ -2344,7 +3121,7 @@ We recommend implementing these improvements in the following order:
     name: test-improvements
     path: improvements.md
 </code></pre>
-<h3 id="best-practices-3"><a class="header" href="#best-practices-3">Best Practices</a></h3>
+<h3 id="best-practices-5"><a class="header" href="#best-practices-5">Best Practices</a></h3>
 <ul>
 <li>Run the improvement suggestions tool regularly (weekly or after major test runs)</li>
 <li>Prioritize suggestions based on their impact and implementation effort</li>
@@ -2388,7 +3165,7 @@ cargo build --features ai
 <li>Test all AI features (generation, analysis, improvement)</li>
 <li>Show the generated files</li>
 </ol>
-<h2 id="troubleshooting-1"><a class="header" href="#troubleshooting-1">Troubleshooting</a></h2>
+<h2 id="troubleshooting-2"><a class="header" href="#troubleshooting-2">Troubleshooting</a></h2>
 <h3 id="model-loading-issues"><a class="header" href="#model-loading-issues">Model Loading Issues</a></h3>
 <p>If you encounter issues loading a model:</p>
 <pre><code class="language-bash"># Check if the model file exists
@@ -2637,7 +3414,7 @@ cat test_improvements.md
 </ul>
 </li>
 </ol>
-<h2 id="troubleshooting-2"><a class="header" href="#troubleshooting-2">Troubleshooting</a></h2>
+<h2 id="troubleshooting-3"><a class="header" href="#troubleshooting-3">Troubleshooting</a></h2>
 <h3 id="model-loading-issues-1"><a class="header" href="#model-loading-issues-1">Model Loading Issues</a></h3>
 <p>If you encounter issues loading a model:</p>
 <pre><code class="language-bash"># Check if the model file exists
@@ -3016,7 +3793,7 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
     "system_prompt": "You are an AI assistant specialized in software testing. Your task is to help generate test configurations, analyze test results, and suggest improvements."
 }
 </code></pre>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="best-practices-4"><a class="header" href="#best-practices-4">Best Practices</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="best-practices-6"><a class="header" href="#best-practices-6">Best Practices</a></h1>
 <p>This page provides recommendations on how to use QitOps effectively.</p>
 <h2 id="general-best-practices"><a class="header" href="#general-best-practices">General Best Practices</a></h2>
 <h3 id="configuration-management"><a class="header" href="#configuration-management">Configuration Management</a></h3>
@@ -3026,7 +3803,7 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
 <li><strong>Parameterize Configurations</strong>: Use variables and environment variables to parameterize your configurations.</li>
 <li><strong>Validate Configurations</strong>: Use the JSON schema validation feature to validate your configurations.</li>
 </ul>
-<h3 id="test-organization"><a class="header" href="#test-organization">Test Organization</a></h3>
+<h3 id="test-organization-2"><a class="header" href="#test-organization-2">Test Organization</a></h3>
 <ul>
 <li><strong>Group Related Tests</strong>: Group related tests into collections or directories.</li>
 <li><strong>Use Descriptive Names</strong>: Use descriptive names for your tests and collections.</li>
@@ -3085,7 +3862,7 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
 <li><strong>Set Severity Thresholds</strong>: Set severity thresholds for pass/fail criteria.</li>
 <li><strong>Regular Testing</strong>: Perform security tests regularly to identify new vulnerabilities.</li>
 </ul>
-<h3 id="authentication"><a class="header" href="#authentication">Authentication</a></h3>
+<h3 id="authentication-1"><a class="header" href="#authentication-1">Authentication</a></h3>
 <ul>
 <li><strong>Test Authentication</strong>: Test authentication mechanisms to ensure they are secure.</li>
 <li><strong>Test Authorization</strong>: Test authorization to ensure users can only access resources they are authorized to access.</li>
@@ -3140,7 +3917,7 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cicd-integration-6"><a class="header" href="#cicd-integration-6">CI/CD Integration</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="data-driven-testing-6"><a class="header" href="#data-driven-testing-6">Data-Driven Testing</a></h1>
 <p>Data-driven testing allows you to run the same test with multiple sets of data, making it easy to test different scenarios without duplicating test configurations. QitOps provides robust support for data-driven testing with CSV and JSON data sources.</p>
-<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<h2 id="overview-2"><a class="header" href="#overview-2">Overview</a></h2>
 <p>Data-driven testing in QitOps works by:</p>
 <ol>
 <li>Creating a test configuration template with placeholders</li>
@@ -3156,15 +3933,15 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
 <li>Security testing with different authentication credentials</li>
 <li>Web testing with different user journeys</li>
 </ul>
-<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
-<h3 id="basic-usage-3"><a class="header" href="#basic-usage-3">Basic Usage</a></h3>
+<h2 id="getting-started-2"><a class="header" href="#getting-started-2">Getting Started</a></h2>
+<h3 id="basic-usage-5"><a class="header" href="#basic-usage-5">Basic Usage</a></h3>
 <pre><code class="language-bash"># Run data-driven tests with CSV data
 qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv
 
 # Run data-driven tests with JSON data
 qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/products.json -t json
 </code></pre>
-<h3 id="command-line-options-4"><a class="header" href="#command-line-options-4">Command-Line Options</a></h3>
+<h3 id="command-line-options-6"><a class="header" href="#command-line-options-6">Command-Line Options</a></h3>
 <div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
 <tr><td><code>-c, --config &lt;FILE&gt;</code></td><td>Test configuration file</td></tr>
 <tr><td><code>-d, --data &lt;FILE&gt;</code></td><td>Data source file (CSV or JSON)</td></tr>
@@ -3346,7 +4123,7 @@ qitops data-driven -c config.json -d data.csv -t csv -r csv -o results.csv
 <li>Error messages for failed iterations</li>
 <li>Captured values</li>
 </ul>
-<h2 id="best-practices-5"><a class="header" href="#best-practices-5">Best Practices</a></h2>
+<h2 id="best-practices-7"><a class="header" href="#best-practices-7">Best Practices</a></h2>
 <h3 id="organizing-data-files"><a class="header" href="#organizing-data-files">Organizing Data Files</a></h3>
 <ul>
 <li>Keep data files in a dedicated directory (e.g., <code>tests/data/</code>)</li>
@@ -3362,14 +4139,14 @@ qitops data-driven -c config.json -d data.csv -t csv -r csv -o results.csv
 <li>Use meaningful placeholder names that reflect their purpose</li>
 <li>Group related tests into collections</li>
 </ul>
-<h3 id="performance-considerations"><a class="header" href="#performance-considerations">Performance Considerations</a></h3>
+<h3 id="performance-considerations-1"><a class="header" href="#performance-considerations-1">Performance Considerations</a></h3>
 <ul>
 <li>For large data sets, consider using the <code>--limit</code> option during development</li>
 <li>Monitor memory usage when testing with very large data sets</li>
 <li>Use the <code>--delay</code> option to prevent overwhelming the system under test</li>
 <li>Consider splitting very large data sets into multiple files</li>
 </ul>
-<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<h2 id="examples-2"><a class="header" href="#examples-2">Examples</a></h2>
 <h3 id="testing-user-registration"><a class="header" href="#testing-user-registration">Testing User Registration</a></h3>
 <p>Configuration (<code>user_registration.json</code>):</p>
 <pre><code class="language-json">{
@@ -3634,7 +4411,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 </ul>
 <h2 id="code-of-conduct"><a class="header" href="#code-of-conduct">Code of Conduct</a></h2>
 <p>By participating in this project, you agree to abide by our Code of Conduct. Please be respectful, inclusive, and considerate in all interactions.</p>
-<h2 id="getting-started-1"><a class="header" href="#getting-started-1">Getting Started</a></h2>
+<h2 id="getting-started-3"><a class="header" href="#getting-started-3">Getting Started</a></h2>
 <h3 id="prerequisites-2"><a class="header" href="#prerequisites-2">Prerequisites</a></h3>
 <ul>
 <li>Rust 1.70 or higher</li>
@@ -3780,7 +4557,7 @@ cargo build --all-features
 </ul>
 <h2 id="issue-and-pr-labels"><a class="header" href="#issue-and-pr-labels">Issue and PR Labels</a></h2>
 <p>We use the following label categories:</p>
-<h3 id="type"><a class="header" href="#type">Type</a></h3>
+<h3 id="type-1"><a class="header" href="#type-1">Type</a></h3>
 <ul>
 <li><code>type:bug</code>: Bug fixes</li>
 <li><code>type:feature</code>: New features</li>
@@ -3855,7 +4632,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="github-pages-setup"><a class="header" href="#github-pages-setup">GitHub Pages Setup</a></h1>
 <p>This document explains how the QitOps documentation is deployed to GitHub Pages.</p>
-<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
+<h2 id="overview-3"><a class="header" href="#overview-3">Overview</a></h2>
 <p>The QitOps documentation is built using <a href="https://rust-lang.github.io/mdBook/">mdBook</a> and automatically deployed to GitHub Pages whenever changes are pushed to the <code>master</code> branch that affect the documentation.</p>
 <p>The deployed documentation is available at: <a href="https://qitops.github.io/qitops-cli-tools/">https://qitops.github.io/qitops-cli-tools/</a></p>
 <h2 id="deployment-workflow"><a class="header" href="#deployment-workflow">Deployment Workflow</a></h2>
@@ -3915,7 +4692,7 @@ SOFTWARE.</p>
   -f source.path=/
 </code></pre>
 <p>This requires a personal access token with the <code>repo</code> scope.</p>
-<h2 id="configuration-1"><a class="header" href="#configuration-1">Configuration</a></h2>
+<h2 id="configuration-3"><a class="header" href="#configuration-3">Configuration</a></h2>
 <p>The documentation is configured in the <code>docs/book.toml</code> file, which includes:</p>
 <ul>
 <li>Book metadata (title, authors, etc.)</li>
@@ -3942,7 +4719,7 @@ site-url = "/qitops-cli-tools/"
 <h2 id="verifying-the-setup"><a class="header" href="#verifying-the-setup">Verifying the Setup</a></h2>
 <p>Once GitHub Pages is enabled, you can verify that the documentation is accessible by visiting:
 https://qitops.github.io/qitops-cli-tools/</p>
-<h2 id="troubleshooting-3"><a class="header" href="#troubleshooting-3">Troubleshooting</a></h2>
+<h2 id="troubleshooting-4"><a class="header" href="#troubleshooting-4">Troubleshooting</a></h2>
 <p>If the documentation is not accessible after enabling GitHub Pages:</p>
 <ol>
 <li>Check that the gh-pages branch exists</li>
