@@ -2580,6 +2580,326 @@ qitops --ci-mode -r html -o report.html api -c tests/configs/api_test.json
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="cicd-integration-6"><a class="header" href="#cicd-integration-6">CI/CD Integration</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="data-driven-testing-6"><a class="header" href="#data-driven-testing-6">Data-Driven Testing</a></h1>
+<p>Data-driven testing allows you to run the same test with multiple sets of data, making it easy to test different scenarios without duplicating test configurations. QitOps provides robust support for data-driven testing with CSV and JSON data sources.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>Data-driven testing in QitOps works by:</p>
+<ol>
+<li>Creating a test configuration template with placeholders</li>
+<li>Providing a data source (CSV or JSON) with values for the placeholders</li>
+<li>Running the test for each row/entry in the data source</li>
+<li>Generating a report with results for each iteration</li>
+</ol>
+<p>This approach is particularly useful for:</p>
+<ul>
+<li>Testing APIs with different input parameters</li>
+<li>Validating business logic with multiple test cases</li>
+<li>Performance testing with various payload sizes</li>
+<li>Security testing with different authentication credentials</li>
+<li>Web testing with different user journeys</li>
+</ul>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<h3 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h3>
+<pre><code class="language-bash"># Run data-driven tests with CSV data
+qitops data-driven -c tests/configs/data_driven_api_test.json -d tests/data/users.csv -t csv
+
+# Run data-driven tests with JSON data
+qitops data-driven -c tests/configs/data_driven_collection.json -d tests/data/products.json -t json
+</code></pre>
+<h3 id="command-line-options-1"><a class="header" href="#command-line-options-1">Command-Line Options</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>-c, --config &lt;FILE&gt;</code></td><td>Test configuration file</td></tr>
+<tr><td><code>-d, --data &lt;FILE&gt;</code></td><td>Data source file (CSV or JSON)</td></tr>
+<tr><td><code>-t, --type &lt;TYPE&gt;</code></td><td>Data source type (csv or json)</td></tr>
+<tr><td><code>--limit &lt;NUMBER&gt;</code></td><td>Maximum number of iterations to run</td></tr>
+<tr><td><code>--stop-on-failure</code></td><td>Stop execution after the first failure</td></tr>
+<tr><td><code>--delay &lt;MILLISECONDS&gt;</code></td><td>Delay between iterations in milliseconds</td></tr>
+<tr><td><code>-r, --report &lt;FORMAT&gt;</code></td><td>Report format (json, html, xml, csv)</td></tr>
+<tr><td><code>-o, --output &lt;FILE&gt;</code></td><td>Output file for the report</td></tr>
+</tbody></table>
+</div>
+<h2 id="configuration-templates"><a class="header" href="#configuration-templates">Configuration Templates</a></h2>
+<p>Test configuration templates use the <code>{{variable}}</code> syntax for placeholders that will be replaced with values from the data source.</p>
+<h3 id="example-api-test-template"><a class="header" href="#example-api-test-template">Example API Test Template</a></h3>
+<pre><code class="language-json">{
+  "name": "User API Test - {{username}}",
+  "description": "Test the user API for {{username}}",
+  "url": "https://api.example.com/users/{{username}}",
+  "method": "GET",
+  "headers": {
+    "Authorization": "Bearer {{token}}",
+    "Accept": "application/json"
+  },
+  "expected_status": {{expected_status}},
+  "expected_body": {
+    "username": "{{username}}",
+    "email": "{{email}}",
+    "role": "{{role}}"
+  }
+}
+</code></pre>
+<h3 id="example-api-collection-template"><a class="header" href="#example-api-collection-template">Example API Collection Template</a></h3>
+<pre><code class="language-json">{
+  "name": "Product API Collection - {{product_id}}",
+  "description": "Test product API flows for {{product_name}}",
+  "variables": {
+    "base_url": "https://api.example.com",
+    "product_id": "{{product_id}}",
+    "product_name": "{{product_name}}",
+    "price": {{price}}
+  },
+  "requests": [
+    {
+      "name": "Get Product",
+      "id": "get-product",
+      "url": "{{base_url}}/products/{{product_id}}",
+      "method": "GET",
+      "expected_status": 200,
+      "expected_body": {
+        "id": "{{product_id}}",
+        "name": "{{product_name}}",
+        "price": {{price}}
+      },
+      "capture": {
+        "product_url": "$.url"
+      }
+    },
+    {
+      "name": "Get Product Reviews",
+      "id": "get-product-reviews",
+      "url": "{{product_url}}/reviews",
+      "method": "GET",
+      "depends_on": ["get-product"],
+      "expected_status": 200
+    }
+  ]
+}
+</code></pre>
+<h2 id="data-sources"><a class="header" href="#data-sources">Data Sources</a></h2>
+<h3 id="csv-data-source"><a class="header" href="#csv-data-source">CSV Data Source</a></h3>
+<p>CSV files should have a header row with column names that match the placeholder names in the template.</p>
+<p>Example <code>users.csv</code>:</p>
+<pre><code class="language-csv">username,email,role,token,expected_status
+user1,user1@example.com,user,token123,200
+user2,user2@example.com,admin,token456,200
+nonexistent,,,token789,404
+</code></pre>
+<h3 id="json-data-source"><a class="header" href="#json-data-source">JSON Data Source</a></h3>
+<p>JSON data sources can be either an array of objects or a single object with arrays as values.</p>
+<p>Example <code>products.json</code> (array of objects):</p>
+<pre><code class="language-json">[
+  {
+    "product_id": "prod-001",
+    "product_name": "Smartphone",
+    "price": 999.99,
+    "category": "electronics"
+  },
+  {
+    "product_id": "prod-002",
+    "product_name": "Laptop",
+    "price": 1499.99,
+    "category": "electronics"
+  },
+  {
+    "product_id": "prod-003",
+    "product_name": "Headphones",
+    "price": 199.99,
+    "category": "accessories"
+  }
+]
+</code></pre>
+<p>Example <code>test_matrix.json</code> (object with arrays):</p>
+<pre><code class="language-json">{
+  "product_id": ["prod-001", "prod-002", "prod-003"],
+  "product_name": ["Smartphone", "Laptop", "Headphones"],
+  "price": [999.99, 1499.99, 199.99],
+  "category": ["electronics", "electronics", "accessories"]
+}
+</code></pre>
+<h2 id="advanced-features"><a class="header" href="#advanced-features">Advanced Features</a></h2>
+<h3 id="iteration-control"><a class="header" href="#iteration-control">Iteration Control</a></h3>
+<p>Control the number of iterations and behavior on failure:</p>
+<pre><code class="language-bash"># Limit to first 10 iterations
+qitops data-driven -c config.json -d data.csv -t csv --limit 10
+
+# Stop on first failure
+qitops data-driven -c config.json -d data.csv -t csv --stop-on-failure
+
+# Add delay between iterations (500ms)
+qitops data-driven -c config.json -d data.csv -t csv --delay 500
+</code></pre>
+<h3 id="data-transformation"><a class="header" href="#data-transformation">Data Transformation</a></h3>
+<p>QitOps supports basic data transformation using template functions:</p>
+<pre><code class="language-json">{
+  "url": "https://api.example.com/users/{{lowercase:username}}",
+  "headers": {
+    "Authorization": "Bearer {{uppercase:token}}"
+  },
+  "body": {
+    "timestamp": "{{now}}",
+    "random_id": "{{uuid}}",
+    "formatted_price": "{{format_number:price}}"
+  }
+}
+</code></pre>
+<p>Available functions:</p>
+<ul>
+<li><code>lowercase</code>: Convert to lowercase</li>
+<li><code>uppercase</code>: Convert to uppercase</li>
+<li><code>now</code>: Current timestamp</li>
+<li><code>uuid</code>: Generate a UUID</li>
+<li><code>format_number</code>: Format a number with commas</li>
+<li><code>base64_encode</code>: Encode to Base64</li>
+<li><code>base64_decode</code>: Decode from Base64</li>
+<li><code>url_encode</code>: URL encode a string</li>
+<li><code>url_decode</code>: URL decode a string</li>
+</ul>
+<h3 id="environment-variables-2"><a class="header" href="#environment-variables-2">Environment Variables</a></h3>
+<p>You can use environment variables in your data sources:</p>
+<pre><code class="language-bash"># Set environment variables
+export API_TOKEN="your-secret-token"
+export API_URL="https://api.example.com"
+
+# Run with environment variables
+qitops data-driven -c config.json -d data.csv -t csv
+</code></pre>
+<p>In your CSV file:</p>
+<pre><code class="language-csv">username,token,api_url
+user1,${API_TOKEN},${API_URL}/users
+user2,${API_TOKEN},${API_URL}/admin
+</code></pre>
+<h2 id="reporting"><a class="header" href="#reporting">Reporting</a></h2>
+<p>Generate detailed reports for data-driven tests:</p>
+<pre><code class="language-bash"># Generate JSON report
+qitops data-driven -c config.json -d data.csv -t csv -r json -o report.json
+
+# Generate HTML report
+qitops data-driven -c config.json -d data.csv -t csv -r html -o report.html
+
+# Generate CSV report
+qitops data-driven -c config.json -d data.csv -t csv -r csv -o results.csv
+</code></pre>
+<p>The reports include:</p>
+<ul>
+<li>Summary of all iterations</li>
+<li>Individual results for each iteration</li>
+<li>Execution time for each iteration</li>
+<li>Success/failure status</li>
+<li>Error messages for failed iterations</li>
+<li>Captured values</li>
+</ul>
+<h2 id="best-practices-2"><a class="header" href="#best-practices-2">Best Practices</a></h2>
+<h3 id="organizing-data-files"><a class="header" href="#organizing-data-files">Organizing Data Files</a></h3>
+<ul>
+<li>Keep data files in a dedicated directory (e.g., <code>tests/data/</code>)</li>
+<li>Use descriptive filenames that indicate the test scenario</li>
+<li>Version control your data files alongside your test configurations</li>
+<li>Document the structure and purpose of your data files</li>
+</ul>
+<h3 id="test-design-5"><a class="header" href="#test-design-5">Test Design</a></h3>
+<ul>
+<li>Start with a small data set during development</li>
+<li>Gradually add more test cases as you refine your tests</li>
+<li>Include edge cases and error scenarios</li>
+<li>Use meaningful placeholder names that reflect their purpose</li>
+<li>Group related tests into collections</li>
+</ul>
+<h3 id="performance-considerations"><a class="header" href="#performance-considerations">Performance Considerations</a></h3>
+<ul>
+<li>For large data sets, consider using the <code>--limit</code> option during development</li>
+<li>Monitor memory usage when testing with very large data sets</li>
+<li>Use the <code>--delay</code> option to prevent overwhelming the system under test</li>
+<li>Consider splitting very large data sets into multiple files</li>
+</ul>
+<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<h3 id="testing-user-registration"><a class="header" href="#testing-user-registration">Testing User Registration</a></h3>
+<p>Configuration (<code>user_registration.json</code>):</p>
+<pre><code class="language-json">{
+  "name": "User Registration - {{username}}",
+  "description": "Test user registration with {{email}}",
+  "url": "https://api.example.com/register",
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "username": "{{username}}",
+    "email": "{{email}}",
+    "password": "{{password}}",
+    "age": {{age}}
+  },
+  "expected_status": {{expected_status}},
+  "expected_body": {
+    "success": {{expected_success}},
+    "message": "{{expected_message}}"
+  }
+}
+</code></pre>
+<p>Data (<code>registration_data.csv</code>):</p>
+<pre><code class="language-csv">username,email,password,age,expected_status,expected_success,expected_message
+validuser,valid@example.com,Password123,30,201,true,User registered successfully
+,invalid@example.com,Password123,30,400,false,Username is required
+validuser,,Password123,30,400,false,Email is required
+validuser,valid@example.com,,30,400,false,Password is required
+validuser,valid@example.com,Password123,17,400,false,Age must be 18 or older
+</code></pre>
+<p>Command:</p>
+<pre><code class="language-bash">qitops data-driven -c user_registration.json -d registration_data.csv -t csv -r html -o registration_report.html
+</code></pre>
+<h3 id="testing-product-search"><a class="header" href="#testing-product-search">Testing Product Search</a></h3>
+<p>Configuration (<code>product_search.json</code>):</p>
+<pre><code class="language-json">{
+  "name": "Product Search - {{query}}",
+  "description": "Test product search with query '{{query}}'",
+  "url": "https://api.example.com/products/search?q={{url_encode:query}}&amp;category={{category}}&amp;min_price={{min_price}}&amp;max_price={{max_price}}",
+  "method": "GET",
+  "headers": {
+    "Accept": "application/json"
+  },
+  "expected_status": 200,
+  "assertions": [
+    {
+      "type": "json",
+      "path": "$.total_results",
+      "comparison": "&gt;=",
+      "value": {{min_expected_results}}
+    },
+    {
+      "type": "json",
+      "path": "$.products[0].category",
+      "comparison": "equals",
+      "value": "{{category}}"
+    }
+  ]
+}
+</code></pre>
+<p>Data (<code>search_queries.json</code>):</p>
+<pre><code class="language-json">[
+  {
+    "query": "smartphone",
+    "category": "electronics",
+    "min_price": 500,
+    "max_price": 2000,
+    "min_expected_results": 5
+  },
+  {
+    "query": "laptop",
+    "category": "electronics",
+    "min_price": 1000,
+    "max_price": 3000,
+    "min_expected_results": 3
+  },
+  {
+    "query": "headphones",
+    "category": "accessories",
+    "min_price": 50,
+    "max_price": 500,
+    "min_expected_results": 10
+  }
+]
+</code></pre>
+<p>Command:</p>
+<pre><code class="language-bash">qitops data-driven -c product_search.json -d search_queries.json -t json -r json -o search_results.json
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="qitops-roadmap"><a class="header" href="#qitops-roadmap">QitOps Roadmap</a></h1>
 <p>This document outlines the development roadmap for QitOps, positioning it as a compelling alternative to established testing tools like Postman and k6.</p>
 <h2 id="vision"><a class="header" href="#vision">Vision</a></h2>
@@ -2755,7 +3075,7 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
 </ul>
 <h2 id="code-of-conduct"><a class="header" href="#code-of-conduct">Code of Conduct</a></h2>
 <p>By participating in this project, you agree to abide by our Code of Conduct. Please be respectful, inclusive, and considerate in all interactions.</p>
-<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<h2 id="getting-started-1"><a class="header" href="#getting-started-1">Getting Started</a></h2>
 <h3 id="prerequisites-2"><a class="header" href="#prerequisites-2">Prerequisites</a></h3>
 <ul>
 <li>Rust 1.70 or higher</li>
@@ -2976,7 +3296,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="github-pages-setup"><a class="header" href="#github-pages-setup">GitHub Pages Setup</a></h1>
 <p>This document explains how the QitOps documentation is deployed to GitHub Pages.</p>
-<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<h2 id="overview-1"><a class="header" href="#overview-1">Overview</a></h2>
 <p>The QitOps documentation is built using <a href="https://rust-lang.github.io/mdBook/">mdBook</a> and automatically deployed to GitHub Pages whenever changes are pushed to the <code>master</code> branch that affect the documentation.</p>
 <p>The deployed documentation is available at: <a href="https://qitops.github.io/qitops-cli-tools/">https://qitops.github.io/qitops-cli-tools/</a></p>
 <h2 id="deployment-workflow"><a class="header" href="#deployment-workflow">Deployment Workflow</a></h2>
