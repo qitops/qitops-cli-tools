@@ -36,6 +36,7 @@
 # Project Information
 
 - [Roadmap](roadmap.md)
+- [Enhancement Ideas](enhancement-ideas.md)
 - [Changelog](changelog.md)
 - [Contributing](contributing.md)
 - [License](LICENSE.md)

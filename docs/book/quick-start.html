@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Changelog - QitOps Documentation</title>
+        <title>Quick Start - QitOps Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -133,7 +133,7 @@
                         <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./changelog.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./quick-start.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -162,39 +162,183 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
-<p>All notable changes to QitOps will be documented in this file.</p>
-<p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
-and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
-<h2 id="010---2024-05-10"><a class="header" href="#010---2024-05-10">[0.1.0] - 2024-05-10</a></h2>
-<h3 id="added"><a class="header" href="#added">Added</a></h3>
+                        <h1 id="quick-start"><a class="header" href="#quick-start">Quick Start</a></h1>
+<p>This guide will help you get started with QitOps quickly. You’ll learn how to run your first tests and understand the basic workflow.</p>
+<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<p>Before you begin, make sure you have:</p>
 <ul>
-<li>Initial release of QitOps CLI</li>
-<li>Basic API testing module</li>
-<li>Basic performance testing module</li>
-<li>Basic security testing module</li>
-<li>Basic web testing module</li>
-<li>API Collections with variable interpolation and request chaining</li>
-<li>Enhanced performance testing with load profiles and scenarios</li>
-<li>Data-driven testing with CSV and JSON support</li>
-<li>JSON config schema validation</li>
-<li>Documentation for all test types</li>
-<li>GitHub Actions integration example</li>
+<li>QitOps installed (see <a href="installation.html">Installation</a>)</li>
+<li>A target API or web application to test</li>
+<li>Basic understanding of HTTP requests and responses</li>
 </ul>
-<h3 id="fixed"><a class="header" href="#fixed">Fixed</a></h3>
+<h2 id="your-first-api-test"><a class="header" href="#your-first-api-test">Your First API Test</a></h2>
+<p>Let’s start with a simple API test to verify that a public API is working correctly.</p>
+<h3 id="1-create-a-test-configuration"><a class="header" href="#1-create-a-test-configuration">1. Create a Test Configuration</a></h3>
+<p>Create a file named <code>github_api_test.json</code> with the following content:</p>
+<pre><code class="language-json">{
+  "name": "GitHub API Test",
+  "description": "Test the GitHub API to fetch user information",
+  "url": "https://api.github.com/users/octocat",
+  "method": "GET",
+  "headers": {
+    "Accept": "application/vnd.github.v3+json",
+    "User-Agent": "QitOps-Test"
+  },
+  "expected_status": 200,
+  "expected_body": {
+    "login": "octocat",
+    "type": "User"
+  }
+}
+</code></pre>
+<p>This configuration defines a test that:</p>
 <ul>
-<li>Dead code warnings in api_collection.rs and performance_enhanced.rs</li>
+<li>Makes a GET request to the GitHub API</li>
+<li>Expects a 200 status code</li>
+<li>Validates that the response contains specific fields</li>
 </ul>
+<h3 id="2-run-the-test"><a class="header" href="#2-run-the-test">2. Run the Test</a></h3>
+<p>Run the test using the QitOps CLI:</p>
+<pre><code class="language-bash">qitops api -c github_api_test.json
+</code></pre>
+<p>You should see output similar to:</p>
+<pre><code>Running API test: GitHub API Test
+✓ Status code is 200
+✓ Response body contains expected fields
+✓ Test completed successfully in 0.324s
+</code></pre>
+<h3 id="3-generate-a-report"><a class="header" href="#3-generate-a-report">3. Generate a Report</a></h3>
+<p>Generate a detailed report of the test results:</p>
+<pre><code class="language-bash">qitops api -c github_api_test.json -r html -o github_test_report.html
+</code></pre>
+<p>This command runs the test and generates an HTML report with detailed information about the request, response, and validation results.</p>
+<h2 id="testing-an-api-collection"><a class="header" href="#testing-an-api-collection">Testing an API Collection</a></h2>
+<p>Now let’s create a collection of related API tests.</p>
+<h3 id="1-create-a-collection-configuration"><a class="header" href="#1-create-a-collection-configuration">1. Create a Collection Configuration</a></h3>
+<p>Create a file named <code>github_api_collection.json</code> with the following content:</p>
+<pre><code class="language-json">{
+  "name": "GitHub API Collection",
+  "description": "A collection of GitHub API tests",
+  "variables": {
+    "base_url": "https://api.github.com",
+    "username": "octocat"
+  },
+  "defaults": {
+    "headers": {
+      "Accept": "application/vnd.github.v3+json",
+      "User-Agent": "QitOps-Test"
+    }
+  },
+  "requests": [
+    {
+      "name": "Get User",
+      "id": "get-user",
+      "url": "{{base_url}}/users/{{username}}",
+      "method": "GET",
+      "expected_status": 200,
+      "capture": {
+        "repos_url": "$.repos_url"
+      }
+    },
+    {
+      "name": "Get User Repos",
+      "id": "get-repos",
+      "url": "{{repos_url}}",
+      "method": "GET",
+      "depends_on": ["get-user"],
+      "expected_status": 200
+    }
+  ]
+}
+</code></pre>
+<p>This collection defines:</p>
+<ul>
+<li>Variables that can be reused across requests</li>
+<li>Default headers for all requests</li>
+<li>Two related requests, where the second depends on the first</li>
+<li>Data capture from the first request to use in the second</li>
+</ul>
+<h3 id="2-run-the-collection"><a class="header" href="#2-run-the-collection">2. Run the Collection</a></h3>
+<p>Run the collection using the QitOps CLI:</p>
+<pre><code class="language-bash">qitops collection -c github_api_collection.json
+</code></pre>
+<p>You should see output showing the execution of each request in the collection.</p>
+<h2 id="running-a-performance-test"><a class="header" href="#running-a-performance-test">Running a Performance Test</a></h2>
+<p>Let’s run a simple performance test to measure the response time of an API.</p>
+<h3 id="1-create-a-performance-test-configuration"><a class="header" href="#1-create-a-performance-test-configuration">1. Create a Performance Test Configuration</a></h3>
+<p>Create a file named <code>performance_test.json</code> with the following content:</p>
+<pre><code class="language-json">{
+  "name": "GitHub API Performance Test",
+  "description": "Test the performance of the GitHub API",
+  "target_url": "https://api.github.com/users/octocat",
+  "method": "GET",
+  "headers": {
+    "Accept": "application/vnd.github.v3+json",
+    "User-Agent": "QitOps-Test"
+  },
+  "concurrent_users": 10,
+  "duration_secs": 30,
+  "ramp_up_time_secs": 5,
+  "success_threshold": 95.0,
+  "max_response_time_ms": 500
+}
+</code></pre>
+<p>This configuration defines a performance test that:</p>
+<ul>
+<li>Simulates 10 concurrent users</li>
+<li>Runs for 30 seconds</li>
+<li>Gradually ramps up to full load over 5 seconds</li>
+<li>Expects a 95% success rate</li>
+<li>Expects a maximum response time of 500ms</li>
+</ul>
+<h3 id="2-run-the-performance-test"><a class="header" href="#2-run-the-performance-test">2. Run the Performance Test</a></h3>
+<p>Run the performance test using the QitOps CLI:</p>
+<pre><code class="language-bash">qitops performance -c performance_test.json
+</code></pre>
+<p>You should see output showing real-time metrics during the test and a summary at the end.</p>
+<h2 id="using-ai-features"><a class="header" href="#using-ai-features">Using AI Features</a></h2>
+<p>QitOps includes AI features that can help you create and improve tests.</p>
+<h3 id="1-generate-a-test-configuration"><a class="header" href="#1-generate-a-test-configuration">1. Generate a Test Configuration</a></h3>
+<p>Generate a test configuration from a natural language description:</p>
+<pre><code class="language-bash">qitops generate --test-type api --description "Test the GitHub API to fetch user information for 'octocat' and verify the response contains the correct login name and user type" --output generated_test.json
+</code></pre>
+<p>This command uses AI to generate a test configuration based on your description.</p>
+<h3 id="2-analyze-test-results"><a class="header" href="#2-analyze-test-results">2. Analyze Test Results</a></h3>
+<p>Run a test and analyze the results:</p>
+<pre><code class="language-bash"># Run a test and save the results
+qitops api -c github_api_test.json -r json -o test_results.json
+
+# Analyze the results
+qitops analyze --results test_results.json --output analysis.md
+</code></pre>
+<p>The analysis will provide insights into the test results and identify any patterns or issues.</p>
+<h3 id="3-get-improvement-suggestions"><a class="header" href="#3-get-improvement-suggestions">3. Get Improvement Suggestions</a></h3>
+<p>Get suggestions for improving your tests:</p>
+<pre><code class="language-bash">qitops improve --results test_results.json --output improvements.md
+</code></pre>
+<p>The suggestions will help you enhance your tests for better coverage and reliability.</p>
+<h2 id="next-steps"><a class="header" href="#next-steps">Next Steps</a></h2>
+<p>Now that you’ve run your first tests with QitOps, you can explore more advanced features:</p>
+<ul>
+<li><a href="api-testing.html">API Testing</a>: Learn more about API testing capabilities</li>
+<li><a href="api-collections.html">API Collections</a>: Create complex API test workflows</li>
+<li><a href="performance-testing.html">Performance Testing</a>: Measure and validate system performance</li>
+<li><a href="security-testing.html">Security Testing</a>: Identify vulnerabilities and ensure compliance</li>
+<li><a href="web-testing.html">Web Testing</a>: Automate browser interactions and validate web applications</li>
+<li><a href="data-driven-testing.html">Data-Driven Testing</a>: Run tests with multiple data sets</li>
+<li><a href="ai-features.html">AI Features</a>: Leverage AI to enhance your testing workflow</li>
+</ul>
+<p>For a complete reference of all QitOps commands and options, see the <a href="usage.html">Usage Guide</a>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="enhancement-ideas.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="installation.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="contributing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="api-testing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -204,11 +348,11 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="enhancement-ideas.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="installation.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="contributing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="api-testing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

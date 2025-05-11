@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Changelog - QitOps Documentation</title>
+        <title>Local LLM Support - QitOps Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -133,7 +133,7 @@
                         <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./changelog.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./supported-llm-models.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -162,39 +162,137 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
-<p>All notable changes to QitOps will be documented in this file.</p>
-<p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
-and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
-<h2 id="010---2024-05-10"><a class="header" href="#010---2024-05-10">[0.1.0] - 2024-05-10</a></h2>
-<h3 id="added"><a class="header" href="#added">Added</a></h3>
+                        <h1 id="supported-llm-models"><a class="header" href="#supported-llm-models">Supported LLM Models</a></h1>
+<p>QitOps supports a variety of local LLM models for its AI features. These models run entirely on your local machine, ensuring privacy and offline operation.</p>
+<h2 id="llama-models"><a class="header" href="#llama-models">LLaMA Models</a></h2>
 <ul>
-<li>Initial release of QitOps CLI</li>
-<li>Basic API testing module</li>
-<li>Basic performance testing module</li>
-<li>Basic security testing module</li>
-<li>Basic web testing module</li>
-<li>API Collections with variable interpolation and request chaining</li>
-<li>Enhanced performance testing with load profiles and scenarios</li>
-<li>Data-driven testing with CSV and JSON support</li>
-<li>JSON config schema validation</li>
-<li>Documentation for all test types</li>
-<li>GitHub Actions integration example</li>
+<li><strong>LLaMA 1</strong>: The original Meta AI model (7B, 13B, 33B, 65B parameters)</li>
+<li><strong>LLaMA 2</strong>: Improved version with longer context (7B, 13B, 70B parameters)</li>
+<li><strong>LLaMA 3</strong>: Latest version with enhanced capabilities (8B, 70B parameters)</li>
+<li><strong>Code LLaMA</strong>: Specialized for code generation and analysis</li>
 </ul>
-<h3 id="fixed"><a class="header" href="#fixed">Fixed</a></h3>
+<h2 id="mistral-models"><a class="header" href="#mistral-models">Mistral Models</a></h2>
 <ul>
-<li>Dead code warnings in api_collection.rs and performance_enhanced.rs</li>
+<li><strong>Mistral 7B</strong>: Efficient base model with strong performance</li>
+<li><strong>Mixtral 8x7B</strong>: Mixture-of-experts model with enhanced capabilities</li>
+<li><strong>Mistral Instruct</strong>: Fine-tuned for instruction following</li>
+<li><strong>Mistral Small</strong>: Smaller, faster models for resource-constrained environments</li>
+</ul>
+<h2 id="phi-models"><a class="header" href="#phi-models">Phi Models</a></h2>
+<ul>
+<li><strong>Phi-1</strong>: Microsoft’s small but capable model (1.3B parameters)</li>
+<li><strong>Phi-2</strong>: Improved version with enhanced reasoning (2.7B parameters)</li>
+<li><strong>Phi-3</strong>: Latest version with advanced capabilities (3.8B, 14B parameters)</li>
+</ul>
+<h2 id="other-supported-models"><a class="header" href="#other-supported-models">Other Supported Models</a></h2>
+<ul>
+<li><strong>GPT-J</strong>: EleutherAI’s open-source GPT model (6B parameters)</li>
+<li><strong>GPT4All</strong>: Locally running assistant models</li>
+<li><strong>Falcon</strong>: Technology Innovation Institute’s models</li>
+<li><strong>MPT</strong>: MosaicML’s Pretrained Transformer models</li>
+<li><strong>RWKV</strong>: RNN with transformer-like capabilities</li>
+<li><strong>Qwen</strong>: Alibaba’s series of multilingual models</li>
+</ul>
+<h2 id="model-format-support"><a class="header" href="#model-format-support">Model Format Support</a></h2>
+<ul>
+<li><strong>GGUF</strong>: Primary supported format for efficient inference</li>
+<li><strong>GGML</strong>: Legacy format (automatically converted to GGUF)</li>
+<li><strong>ONNX</strong>: Support via external runtime</li>
+</ul>
+<h2 id="recommended-models-for-different-use-cases"><a class="header" href="#recommended-models-for-different-use-cases">Recommended Models for Different Use Cases</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Use Case</th><th>Recommended Model</th><th>Size</th><th>Performance</th></tr></thead><tbody>
+<tr><td>Test Generation</td><td>Phi-2</td><td>2.7GB</td><td>Good balance of size and quality</td></tr>
+<tr><td>Results Analysis</td><td>Mistral 7B</td><td>4.1GB</td><td>Strong reasoning capabilities</td></tr>
+<tr><td>Improvement Suggestions</td><td>LLaMA 2 13B</td><td>8.2GB</td><td>Detailed, high-quality suggestions</td></tr>
+<tr><td>Resource-Constrained</td><td>Phi-1</td><td>1.5GB</td><td>Works on machines with limited RAM</td></tr>
+<tr><td>Best Quality</td><td>Mixtral 8x7B</td><td>26GB</td><td>Highest quality results (requires 32GB+ RAM)</td></tr>
+</tbody></table>
+</div>
+<h2 id="where-to-download-models"><a class="header" href="#where-to-download-models">Where to Download Models</a></h2>
+<p>Models can be downloaded from:</p>
+<ul>
+<li><a href="https://huggingface.co/models">Hugging Face</a> - Search for GGUF versions</li>
+<li><a href="https://huggingface.co/TheBloke">TheBloke’s repositories</a> - Pre-converted GGUF models</li>
+<li><a href="https://ollama.com/library">Ollama Library</a> - Easy model management</li>
+</ul>
+<h2 id="model-quantization-options"><a class="header" href="#model-quantization-options">Model Quantization Options</a></h2>
+<p>QitOps supports various quantization levels to balance quality and resource usage:</p>
+<div class="table-wrapper"><table><thead><tr><th>Quantization</th><th>File Size</th><th>RAM Usage</th><th>Quality</th><th>Speed</th></tr></thead><tbody>
+<tr><td>Q4_K_M</td><td>Smallest</td><td>Lowest</td><td>Good</td><td>Fastest</td></tr>
+<tr><td>Q5_K_M</td><td>Small</td><td>Low</td><td>Better</td><td>Fast</td></tr>
+<tr><td>Q6_K</td><td>Medium</td><td>Medium</td><td>Very Good</td><td>Medium</td></tr>
+<tr><td>Q8_0</td><td>Large</td><td>High</td><td>Excellent</td><td>Slower</td></tr>
+</tbody></table>
+</div>
+<p>Example model selection with quantization:</p>
+<pre><code class="language-bash"># Use a smaller, faster model
+qitops generate --test-type api --description "Test the login API" --model phi --model-path models/phi-2.Q4_K_M.gguf
+
+# Use a higher quality model
+qitops analyze --results test_results.json --output analysis.md --model mistral --model-path models/mistral-7b.Q8_0.gguf
+</code></pre>
+<h2 id="model-configuration"><a class="header" href="#model-configuration">Model Configuration</a></h2>
+<p>QitOps allows you to configure various model parameters:</p>
+<pre><code class="language-bash"># Set context size
+qitops generate --test-type api --description "Test the login API" --context-size 8192
+
+# Set temperature
+qitops analyze --results test_results.json --output analysis.md --temperature 0.7
+
+# Set maximum tokens
+qitops improve --results test_results.json --output improvements.md --max-tokens 4096
+</code></pre>
+<h2 id="using-ollama-models"><a class="header" href="#using-ollama-models">Using Ollama Models</a></h2>
+<p>QitOps can use models managed by Ollama:</p>
+<pre><code class="language-bash"># Use an Ollama model
+qitops generate --test-type api --description "Test the login API" --model ollama:phi
+
+# Use a specific Ollama model version
+qitops analyze --results test_results.json --output analysis.md --model ollama:mistral:7b-instruct
+</code></pre>
+<h2 id="using-local-model-files"><a class="header" href="#using-local-model-files">Using Local Model Files</a></h2>
+<p>QitOps can use model files stored locally:</p>
+<pre><code class="language-bash"># Use a local model file
+qitops generate --test-type api --description "Test the login API" --model-path /path/to/models/phi-2.gguf
+
+# Use a local model with specific parameters
+qitops analyze --results test_results.json --output analysis.md --model-path /path/to/models/mistral-7b.gguf --context-size 4096 --temperature 0.5
+</code></pre>
+<h2 id="model-performance-considerations"><a class="header" href="#model-performance-considerations">Model Performance Considerations</a></h2>
+<ul>
+<li><strong>Memory Usage</strong>: Larger models require more RAM</li>
+<li><strong>Disk Space</strong>: Model files can be large (1-30GB)</li>
+<li><strong>CPU vs. GPU</strong>: GPU acceleration significantly improves performance</li>
+<li><strong>Quantization</strong>: Lower quantization reduces quality but improves speed and reduces memory usage</li>
+<li><strong>Context Size</strong>: Larger context sizes require more memory but can improve results for complex tasks</li>
+</ul>
+<h2 id="troubleshooting"><a class="header" href="#troubleshooting">Troubleshooting</a></h2>
+<h3 id="common-issues"><a class="header" href="#common-issues">Common Issues</a></h3>
+<ul>
+<li><strong>Out of Memory</strong>: Try a smaller model or lower quantization</li>
+<li><strong>Slow Generation</strong>: Use GPU acceleration or a smaller model</li>
+<li><strong>Poor Quality Results</strong>: Try a larger model or higher quantization</li>
+<li><strong>Model Not Found</strong>: Check the model path and ensure the file exists</li>
+<li><strong>Unsupported Format</strong>: Ensure the model is in GGUF format</li>
+</ul>
+<h3 id="performance-optimization"><a class="header" href="#performance-optimization">Performance Optimization</a></h3>
+<ul>
+<li><strong>GPU Acceleration</strong>: Enable GPU acceleration for faster inference</li>
+<li><strong>Batch Processing</strong>: Process multiple requests in batch for better throughput</li>
+<li><strong>Quantization</strong>: Use appropriate quantization for your hardware</li>
+<li><strong>Context Size</strong>: Use the smallest context size that works for your use case</li>
+<li><strong>Model Selection</strong>: Choose the smallest model that provides acceptable quality</li>
 </ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="enhancement-ideas.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="improvement-suggestions.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="contributing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="testing-ai-features.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -204,11 +302,11 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="enhancement-ideas.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="improvement-suggestions.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="contributing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="testing-ai-features.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

@@ -1,0 +1,648 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Web Testing - QitOps Documentation</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        <link rel="stylesheet" href="custom.css">
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">QitOps Documentation</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./web-testing.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="web-testing"><a class="header" href="#web-testing">Web Testing</a></h1>
+<p>QitOps provides powerful web testing capabilities that allow you to automate browser interactions, validate web applications, and ensure your websites function correctly across different scenarios.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p>Web testing in QitOps uses headless browser automation to interact with web pages, perform actions, and validate expected behaviors. This approach allows you to:</p>
+<ul>
+<li>Test complete user journeys through your web application</li>
+<li>Validate UI elements and their properties</li>
+<li>Capture screenshots for visual verification</li>
+<li>Test responsive design across different viewport sizes</li>
+<li>Verify page content, titles, and URLs</li>
+<li>Automate form submissions and user interactions</li>
+</ul>
+<h2 id="getting-started"><a class="header" href="#getting-started">Getting Started</a></h2>
+<h3 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h3>
+<pre><code class="language-bash"># Run a web test
+qitops web -c tests/configs/web_test.json
+
+# Run in headless mode (default)
+qitops web -c tests/configs/web_test.json --headless
+
+# Run with browser visible
+qitops web -c tests/configs/web_test.json --no-headless
+
+# Run with custom viewport
+qitops web -c tests/configs/web_test.json --width 1920 --height 1080
+</code></pre>
+<h3 id="command-line-options"><a class="header" href="#command-line-options">Command-Line Options</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>-c, --config &lt;FILE&gt;</code></td><td>Web test configuration file</td></tr>
+<tr><td><code>--headless</code></td><td>Run in headless mode (default: true)</td></tr>
+<tr><td><code>--no-headless</code></td><td>Run with browser visible</td></tr>
+<tr><td><code>--width &lt;PIXELS&gt;</code></td><td>Viewport width in pixels</td></tr>
+<tr><td><code>--height &lt;PIXELS&gt;</code></td><td>Viewport height in pixels</td></tr>
+<tr><td><code>--device &lt;DEVICE&gt;</code></td><td>Emulate a specific device (e.g., “iPhone 12”, “iPad”)</td></tr>
+<tr><td><code>--timeout &lt;SECONDS&gt;</code></td><td>Default timeout for actions and assertions</td></tr>
+<tr><td><code>--screenshots</code></td><td>Capture screenshots during test execution</td></tr>
+<tr><td><code>--screenshots-dir &lt;DIR&gt;</code></td><td>Directory to save screenshots</td></tr>
+<tr><td><code>-r, --report &lt;FORMAT&gt;</code></td><td>Report format (json, html, xml, csv)</td></tr>
+<tr><td><code>-o, --output &lt;FILE&gt;</code></td><td>Output file for the report</td></tr>
+</tbody></table>
+</div>
+<h2 id="configuration"><a class="header" href="#configuration">Configuration</a></h2>
+<p>Web tests are defined in JSON configuration files that specify the target URL, actions to perform, and assertions to validate.</p>
+<h3 id="basic-configuration-structure"><a class="header" href="#basic-configuration-structure">Basic Configuration Structure</a></h3>
+<pre><code class="language-json">{
+  "name": "Sample Web Test",
+  "description": "Testing a public website",
+  "timeout": 30,
+  "retries": 3,
+  "target_url": "https://example.com",
+  "viewport": {
+    "width": 1280,
+    "height": 800,
+    "device_scale_factor": 1.0,
+    "is_mobile": false
+  },
+  "wait_for_selector": "body",
+  "wait_timeout_secs": 10,
+  "screenshots": true,
+  "user_agent": "QitOps-WebTester/1.0",
+  "assertions": [
+    {
+      "assertion_type": "title",
+      "expected_value": "Example Domain",
+      "comparison": "contains"
+    },
+    {
+      "assertion_type": "element",
+      "selector": "h1",
+      "expected_value": "true"
+    }
+  ],
+  "actions": [
+    {
+      "action_type": "wait",
+      "wait_time_ms": 1000
+    },
+    {
+      "action_type": "click",
+      "selector": "a"
+    }
+  ]
+}
+</code></pre>
+<h3 id="configuration-fields"><a class="header" href="#configuration-fields">Configuration Fields</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody>
+<tr><td>name</td><td>string</td><td>Yes</td><td>Name of the test</td></tr>
+<tr><td>description</td><td>string</td><td>No</td><td>Description of the test</td></tr>
+<tr><td>timeout</td><td>number</td><td>No</td><td>Default timeout in seconds (default: 30)</td></tr>
+<tr><td>retries</td><td>number</td><td>No</td><td>Number of retries (default: 3)</td></tr>
+<tr><td>target_url</td><td>string</td><td>Yes</td><td>URL to test</td></tr>
+<tr><td>viewport</td><td>object</td><td>No</td><td>Viewport configuration</td></tr>
+<tr><td>wait_for_selector</td><td>string</td><td>No</td><td>Selector to wait for before starting test</td></tr>
+<tr><td>wait_timeout_secs</td><td>number</td><td>No</td><td>Timeout for initial wait (default: 10)</td></tr>
+<tr><td>screenshots</td><td>boolean</td><td>No</td><td>Whether to capture screenshots (default: false)</td></tr>
+<tr><td>user_agent</td><td>string</td><td>No</td><td>Custom user agent string</td></tr>
+<tr><td>assertions</td><td>array</td><td>No</td><td>List of assertions to validate</td></tr>
+<tr><td>actions</td><td>array</td><td>No</td><td>List of actions to perform</td></tr>
+</tbody></table>
+</div>
+<h3 id="viewport-configuration"><a class="header" href="#viewport-configuration">Viewport Configuration</a></h3>
+<pre><code class="language-json">"viewport": {
+  "width": 1280,
+  "height": 800,
+  "device_scale_factor": 1.0,
+  "is_mobile": false
+}
+</code></pre>
+<div class="table-wrapper"><table><thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>width</td><td>number</td><td>Viewport width in pixels</td></tr>
+<tr><td>height</td><td>number</td><td>Viewport height in pixels</td></tr>
+<tr><td>device_scale_factor</td><td>number</td><td>Device scale factor (1.0 for desktop, 2.0+ for high-DPI)</td></tr>
+<tr><td>is_mobile</td><td>boolean</td><td>Whether to emulate a mobile device</td></tr>
+</tbody></table>
+</div>
+<h2 id="actions"><a class="header" href="#actions">Actions</a></h2>
+<p>Actions define the steps to perform during the test, such as clicking elements, typing text, or navigating to different pages.</p>
+<h3 id="available-actions"><a class="header" href="#available-actions">Available Actions</a></h3>
+<h4 id="click"><a class="header" href="#click">Click</a></h4>
+<pre><code class="language-json">{
+  "action_type": "click",
+  "selector": "button.submit",
+  "timeout_ms": 5000,
+  "button": "left",
+  "click_count": 1,
+  "delay_ms": 0
+}
+</code></pre>
+<h4 id="type"><a class="header" href="#type">Type</a></h4>
+<pre><code class="language-json">{
+  "action_type": "type",
+  "selector": "input[name='username']",
+  "text": "testuser",
+  "delay_ms": 50
+}
+</code></pre>
+<h4 id="navigate"><a class="header" href="#navigate">Navigate</a></h4>
+<pre><code class="language-json">{
+  "action_type": "navigate",
+  "url": "https://example.com/login",
+  "wait_until": "networkidle0"
+}
+</code></pre>
+<h4 id="wait"><a class="header" href="#wait">Wait</a></h4>
+<pre><code class="language-json">{
+  "action_type": "wait",
+  "wait_time_ms": 1000
+}
+</code></pre>
+<h4 id="wait-for-selector"><a class="header" href="#wait-for-selector">Wait For Selector</a></h4>
+<pre><code class="language-json">{
+  "action_type": "wait_for_selector",
+  "selector": "#content",
+  "timeout_ms": 5000,
+  "visible": true
+}
+</code></pre>
+<h4 id="select-option"><a class="header" href="#select-option">Select Option</a></h4>
+<pre><code class="language-json">{
+  "action_type": "select",
+  "selector": "select#country",
+  "value": "US"
+}
+</code></pre>
+<h4 id="checkuncheck"><a class="header" href="#checkuncheck">Check/Uncheck</a></h4>
+<pre><code class="language-json">{
+  "action_type": "check",
+  "selector": "input[type='checkbox']",
+  "checked": true
+}
+</code></pre>
+<h4 id="screenshot"><a class="header" href="#screenshot">Screenshot</a></h4>
+<pre><code class="language-json">{
+  "action_type": "screenshot",
+  "name": "login-page",
+  "full_page": true
+}
+</code></pre>
+<h4 id="scroll"><a class="header" href="#scroll">Scroll</a></h4>
+<pre><code class="language-json">{
+  "action_type": "scroll",
+  "x": 0,
+  "y": 500
+}
+</code></pre>
+<h4 id="hover"><a class="header" href="#hover">Hover</a></h4>
+<pre><code class="language-json">{
+  "action_type": "hover",
+  "selector": ".dropdown-menu"
+}
+</code></pre>
+<h2 id="assertions"><a class="header" href="#assertions">Assertions</a></h2>
+<p>Assertions validate that the web page meets expected conditions.</p>
+<h3 id="available-assertions"><a class="header" href="#available-assertions">Available Assertions</a></h3>
+<h4 id="title"><a class="header" href="#title">Title</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "title",
+  "expected_value": "Dashboard",
+  "comparison": "equals"
+}
+</code></pre>
+<h4 id="url"><a class="header" href="#url">URL</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "url",
+  "expected_value": "https://example.com/dashboard",
+  "comparison": "contains"
+}
+</code></pre>
+<h4 id="element"><a class="header" href="#element">Element</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "element",
+  "selector": ".user-profile",
+  "expected_value": "true"
+}
+</code></pre>
+<h4 id="text-content"><a class="header" href="#text-content">Text Content</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "text",
+  "selector": "h1",
+  "expected_value": "Welcome to Dashboard",
+  "comparison": "equals"
+}
+</code></pre>
+<h4 id="attribute"><a class="header" href="#attribute">Attribute</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "attribute",
+  "selector": "img.logo",
+  "attribute": "src",
+  "expected_value": "/images/logo.png",
+  "comparison": "contains"
+}
+</code></pre>
+<h4 id="count"><a class="header" href="#count">Count</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "count",
+  "selector": "table tr",
+  "expected_value": 5,
+  "comparison": "greater_than"
+}
+</code></pre>
+<h4 id="css-property"><a class="header" href="#css-property">CSS Property</a></h4>
+<pre><code class="language-json">{
+  "assertion_type": "css",
+  "selector": ".error-message",
+  "property": "color",
+  "expected_value": "rgb(255, 0, 0)",
+  "comparison": "equals"
+}
+</code></pre>
+<h3 id="comparison-types"><a class="header" href="#comparison-types">Comparison Types</a></h3>
+<div class="table-wrapper"><table><thead><tr><th>Type</th><th>Description</th></tr></thead><tbody>
+<tr><td>equals</td><td>Exact match</td></tr>
+<tr><td>contains</td><td>String contains</td></tr>
+<tr><td>starts_with</td><td>String starts with</td></tr>
+<tr><td>ends_with</td><td>String ends with</td></tr>
+<tr><td>matches</td><td>Regex match</td></tr>
+<tr><td>greater_than</td><td>Numeric greater than</td></tr>
+<tr><td>less_than</td><td>Numeric less than</td></tr>
+<tr><td>greater_than_or_equal</td><td>Numeric greater than or equal</td></tr>
+<tr><td>less_than_or_equal</td><td>Numeric less than or equal</td></tr>
+</tbody></table>
+</div>
+<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<h3 id="login-form-test"><a class="header" href="#login-form-test">Login Form Test</a></h3>
+<pre><code class="language-json">{
+  "name": "Login Form Test",
+  "description": "Test the login functionality",
+  "target_url": "https://example.com/login",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  },
+  "wait_for_selector": "form",
+  "screenshots": true,
+  "actions": [
+    {
+      "action_type": "type",
+      "selector": "input[name='username']",
+      "text": "testuser"
+    },
+    {
+      "action_type": "type",
+      "selector": "input[name='password']",
+      "text": "password123"
+    },
+    {
+      "action_type": "screenshot",
+      "name": "before-login"
+    },
+    {
+      "action_type": "click",
+      "selector": "button[type='submit']"
+    },
+    {
+      "action_type": "wait_for_selector",
+      "selector": ".dashboard",
+      "timeout_ms": 5000
+    },
+    {
+      "action_type": "screenshot",
+      "name": "after-login"
+    }
+  ],
+  "assertions": [
+    {
+      "assertion_type": "url",
+      "expected_value": "/dashboard",
+      "comparison": "contains"
+    },
+    {
+      "assertion_type": "element",
+      "selector": ".user-profile",
+      "expected_value": "true"
+    },
+    {
+      "assertion_type": "text",
+      "selector": ".welcome-message",
+      "expected_value": "Welcome, Test User",
+      "comparison": "contains"
+    }
+  ]
+}
+</code></pre>
+<h3 id="responsive-design-test"><a class="header" href="#responsive-design-test">Responsive Design Test</a></h3>
+<pre><code class="language-json">{
+  "name": "Responsive Design Test",
+  "description": "Test responsive behavior across different devices",
+  "target_url": "https://example.com",
+  "screenshots": true,
+  "actions": [
+    {
+      "action_type": "set_viewport",
+      "width": 1920,
+      "height": 1080,
+      "device_scale_factor": 1.0,
+      "is_mobile": false
+    },
+    {
+      "action_type": "screenshot",
+      "name": "desktop-view"
+    },
+    {
+      "action_type": "set_viewport",
+      "width": 768,
+      "height": 1024,
+      "device_scale_factor": 2.0,
+      "is_mobile": true
+    },
+    {
+      "action_type": "screenshot",
+      "name": "tablet-view"
+    },
+    {
+      "action_type": "set_viewport",
+      "width": 375,
+      "height": 812,
+      "device_scale_factor": 3.0,
+      "is_mobile": true
+    },
+    {
+      "action_type": "screenshot",
+      "name": "mobile-view"
+    }
+  ],
+  "assertions": [
+    {
+      "assertion_type": "css",
+      "selector": ".mobile-menu",
+      "property": "display",
+      "expected_value": "block",
+      "comparison": "equals"
+    }
+  ]
+}
+</code></pre>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<h3 id="selector-strategy"><a class="header" href="#selector-strategy">Selector Strategy</a></h3>
+<ul>
+<li>Use stable selectors that are less likely to change</li>
+<li>Prefer IDs and data attributes over classes or XPaths</li>
+<li>Add test-specific attributes like <code>data-testid="login-button"</code> to your application</li>
+<li>Use specific selectors to avoid ambiguity</li>
+</ul>
+<h3 id="test-organization"><a class="header" href="#test-organization">Test Organization</a></h3>
+<ul>
+<li>Group related tests in separate configuration files</li>
+<li>Use descriptive names for tests and screenshots</li>
+<li>Structure tests to follow user journeys</li>
+<li>Keep tests focused on specific functionality</li>
+</ul>
+<h3 id="performance-considerations"><a class="header" href="#performance-considerations">Performance Considerations</a></h3>
+<ul>
+<li>Use headless mode for CI/CD environments</li>
+<li>Minimize unnecessary actions and waits</li>
+<li>Use appropriate timeouts for your application</li>
+<li>Consider network conditions when testing</li>
+</ul>
+<h3 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h3>
+<ul>
+<li>Add appropriate waits before interactions</li>
+<li>Use retries for flaky operations</li>
+<li>Capture screenshots at failure points</li>
+<li>Add detailed assertions to pinpoint issues</li>
+</ul>
+<h2 id="integration-with-cicd"><a class="header" href="#integration-with-cicd">Integration with CI/CD</a></h2>
+<p>Web tests can be integrated into CI/CD pipelines:</p>
+<pre><code class="language-yaml"># Example GitHub Actions workflow step
+- name: Run Web Tests
+  run: |
+    qitops web -c tests/configs/web_test.json --headless --screenshots --report html --output web-test-report.html
+    
+- name: Upload Test Report
+  uses: actions/upload-artifact@v2
+  with:
+    name: web-test-report
+    path: web-test-report.html
+    
+- name: Upload Screenshots
+  uses: actions/upload-artifact@v2
+  with:
+    name: web-test-screenshots
+    path: screenshots/
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="security-testing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="ai-features.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="security-testing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="ai-features.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+        <script>
+            window.playground_line_numbers = true;
+        </script>
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+        <script src="ace.js"></script>
+        <script src="editor.js"></script>
+        <script src="mode-rust.js"></script>
+        <script src="theme-dawn.js"></script>
+        <script src="theme-tomorrow_night.js"></script>
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+        <script src="custom.js"></script>
+
+
+    </div>
+    </body>
+</html>

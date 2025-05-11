@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Changelog - QitOps Documentation</title>
+        <title>Test Generation - QitOps Documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -133,7 +133,7 @@
                         <a href="https://github.com/qitops/qitops-cli-tools" title="Git repository" aria-label="Git repository">
                             <i id="git-repository-button" class="fa fa-github"></i>
                         </a>
-                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./changelog.md" title="Suggest an edit" aria-label="Suggest an edit">
+                        <a href="https://github.com/qitops/qitops-cli-tools/edit/master/docs/./test-configuration-generation.md" title="Suggest an edit" aria-label="Suggest an edit">
                             <i id="git-edit-button" class="fa fa-edit"></i>
                         </a>
 
@@ -162,39 +162,158 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
-<p>All notable changes to QitOps will be documented in this file.</p>
-<p>The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>,
-and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.</p>
-<h2 id="010---2024-05-10"><a class="header" href="#010---2024-05-10">[0.1.0] - 2024-05-10</a></h2>
-<h3 id="added"><a class="header" href="#added">Added</a></h3>
+                        <h1 id="test-configuration-generation"><a class="header" href="#test-configuration-generation">Test Configuration Generation</a></h1>
+<p>QitOps can automatically generate test configurations from natural language descriptions, saving you time and effort in creating test files manually. This feature leverages local LLMs to understand your testing requirements and produce appropriate JSON configurations.</p>
+<h2 id="how-it-works"><a class="header" href="#how-it-works">How It Works</a></h2>
+<ol>
+<li>You provide a natural language description of the test you want to create</li>
+<li>QitOps processes this description using a local LLM</li>
+<li>The LLM generates a complete JSON configuration file based on your description</li>
+<li>The configuration is saved to the specified output file</li>
+</ol>
+<h2 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h2>
+<pre><code class="language-bash"># Generate an API test configuration
+qitops generate --test-type api --description "Test the GitHub API to fetch user information" --output github_test.json
+
+# Generate a performance test configuration
+qitops generate --test-type performance --description "Load test for an e-commerce checkout API with 100 concurrent users" --output perf_test.json
+
+# Generate a security test configuration
+qitops generate --test-type security --description "Security scan for a banking API" --output security_test.json
+
+# Generate a web test configuration
+qitops generate --test-type web --description "Test the checkout flow of an e-commerce website" --output web_test.json
+</code></pre>
+<h2 id="command-line-options"><a class="header" href="#command-line-options">Command-Line Options</a></h2>
+<div class="table-wrapper"><table><thead><tr><th>Option</th><th>Description</th></tr></thead><tbody>
+<tr><td><code>--test-type &lt;TYPE&gt;</code></td><td>Type of test to generate (api, performance, security, web)</td></tr>
+<tr><td><code>--description &lt;TEXT&gt;</code></td><td>Natural language description of the test</td></tr>
+<tr><td><code>--output &lt;FILE&gt;</code></td><td>Output file for the generated configuration</td></tr>
+<tr><td><code>--model &lt;MODEL&gt;</code></td><td>LLM model to use (default: auto)</td></tr>
+<tr><td><code>--model-path &lt;PATH&gt;</code></td><td>Path to the model file</td></tr>
+<tr><td><code>--temperature &lt;FLOAT&gt;</code></td><td>Temperature for generation (0.0-1.0)</td></tr>
+<tr><td><code>--context-size &lt;INT&gt;</code></td><td>Context size in tokens</td></tr>
+<tr><td><code>--max-tokens &lt;INT&gt;</code></td><td>Maximum tokens for generation</td></tr>
+<tr><td><code>--system-prompt &lt;TEXT&gt;</code></td><td>Custom system prompt for the model</td></tr>
+</tbody></table>
+</div>
+<h2 id="writing-effective-descriptions"><a class="header" href="#writing-effective-descriptions">Writing Effective Descriptions</a></h2>
+<p>The quality of the generated configuration depends on the clarity and specificity of your description. Here are some tips for writing effective descriptions:</p>
+<h3 id="for-api-tests"><a class="header" href="#for-api-tests">For API Tests:</a></h3>
 <ul>
-<li>Initial release of QitOps CLI</li>
-<li>Basic API testing module</li>
-<li>Basic performance testing module</li>
-<li>Basic security testing module</li>
-<li>Basic web testing module</li>
-<li>API Collections with variable interpolation and request chaining</li>
-<li>Enhanced performance testing with load profiles and scenarios</li>
-<li>Data-driven testing with CSV and JSON support</li>
-<li>JSON config schema validation</li>
-<li>Documentation for all test types</li>
-<li>GitHub Actions integration example</li>
+<li>Specify the endpoint URL and HTTP method</li>
+<li>Mention any required headers or authentication</li>
+<li>Describe the expected response status and content</li>
+<li>Include any specific validation requirements</li>
 </ul>
-<h3 id="fixed"><a class="header" href="#fixed">Fixed</a></h3>
+<p>Example: “Test the GitHub API to fetch user information for ‘octocat’ using GET request to /users/octocat endpoint. Verify that the response status is 200 and the response contains the correct login name and user type.”</p>
+<h3 id="for-performance-tests"><a class="header" href="#for-performance-tests">For Performance Tests:</a></h3>
 <ul>
-<li>Dead code warnings in api_collection.rs and performance_enhanced.rs</li>
+<li>Specify the target URL and HTTP method</li>
+<li>Mention the number of concurrent users</li>
+<li>Describe the test duration and ramp-up time</li>
+<li>Include any performance thresholds</li>
+</ul>
+<p>Example: “Load test the checkout API at https://api.example.com/checkout with 100 concurrent users for 5 minutes. Use a 30-second ramp-up time. The API should handle at least 50 requests per second with a response time under 200ms.”</p>
+<h3 id="for-security-tests"><a class="header" href="#for-security-tests">For Security Tests:</a></h3>
+<ul>
+<li>Specify the target URL or application</li>
+<li>Mention the types of security checks to perform</li>
+<li>Describe any authentication requirements</li>
+<li>Include any specific vulnerability concerns</li>
+</ul>
+<p>Example: “Security scan the banking API at https://api.bank.com/v1 focusing on SQL injection, XSS, and authentication vulnerabilities. Use Bearer token authentication and check for sensitive data exposure in responses.”</p>
+<h3 id="for-web-tests"><a class="header" href="#for-web-tests">For Web Tests:</a></h3>
+<ul>
+<li>Specify the target website URL</li>
+<li>Describe the user journey or actions to test</li>
+<li>Mention any specific elements to interact with</li>
+<li>Include validation criteria</li>
+</ul>
+<p>Example: “Test the checkout flow of an e-commerce website at https://shop.example.com. Add a product to the cart, proceed to checkout, fill in shipping and payment information, and complete the purchase. Verify that the order confirmation page shows the correct order details.”</p>
+<h2 id="example-generated-configurations"><a class="header" href="#example-generated-configurations">Example Generated Configurations</a></h2>
+<h3 id="api-test-configuration"><a class="header" href="#api-test-configuration">API Test Configuration</a></h3>
+<pre><code class="language-json">{
+  "name": "GitHub User API Test",
+  "description": "Test the GitHub API to fetch user information",
+  "url": "https://api.github.com/users/octocat",
+  "method": "GET",
+  "headers": {
+    "Accept": "application/vnd.github.v3+json",
+    "User-Agent": "QitOps-Test"
+  },
+  "expected_status": 200,
+  "expected_body": {
+    "login": "octocat",
+    "type": "User"
+  },
+  "timeout": 30,
+  "retries": 3
+}
+</code></pre>
+<h3 id="performance-test-configuration"><a class="header" href="#performance-test-configuration">Performance Test Configuration</a></h3>
+<pre><code class="language-json">{
+  "name": "E-commerce Checkout API Load Test",
+  "description": "Load test for an e-commerce checkout API with 100 concurrent users",
+  "target_url": "https://api.example.com/checkout",
+  "method": "POST",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json"
+  },
+  "body": {
+    "cart_id": "{{cart_id}}",
+    "payment_method": "credit_card",
+    "shipping_method": "standard"
+  },
+  "concurrent_users": 100,
+  "duration_secs": 300,
+  "ramp_up_time_secs": 30,
+  "success_threshold": 95.0,
+  "max_response_time_ms": 200,
+  "requests_per_second_threshold": 50
+}
+</code></pre>
+<h2 id="customizing-generation"><a class="header" href="#customizing-generation">Customizing Generation</a></h2>
+<p>You can customize the generation process by adjusting the model parameters:</p>
+<pre><code class="language-bash"># Use a specific model with custom parameters
+qitops generate --test-type api \
+  --description "Test the login API with different credentials" \
+  --output login_test.json \
+  --model llama \
+  --model-path models/llama-2-7b.gguf \
+  --temperature 0.8 \
+  --context-size 4096 \
+  --max-tokens 2048
+</code></pre>
+<h2 id="post-generation-editing"><a class="header" href="#post-generation-editing">Post-Generation Editing</a></h2>
+<p>Generated configurations are meant to be starting points. You may want to:</p>
+<ol>
+<li>Review and edit the generated configuration</li>
+<li>Add or modify specific fields</li>
+<li>Adjust validation criteria</li>
+<li>Add environment-specific variables</li>
+</ol>
+<h2 id="best-practices"><a class="header" href="#best-practices">Best Practices</a></h2>
+<ul>
+<li>Start with detailed, specific descriptions</li>
+<li>Review generated configurations before using them</li>
+<li>Use lower temperature (0.3-0.5) for more deterministic results</li>
+<li>Use higher temperature (0.7-0.9) for more creative variations</li>
+<li>Keep descriptions focused on one test scenario at a time</li>
+<li>Specify concrete details like URLs, methods, and expected responses</li>
+<li>Use the generated configurations as starting points, not final products</li>
 </ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="enhancement-ideas.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="ai-features.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="contributing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="test-results-analysis.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -204,11 +323,11 @@ and this project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semant
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="enhancement-ideas.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="ai-features.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="contributing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="test-results-analysis.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
