@@ -35,9 +35,9 @@
 
 # Project Information
 
-- [Roadmap](../ROADMAP.md)
-- [Changelog](../CHANGELOG.md)
-- [Contributing](../CONTRIBUTING.md)
+- [Roadmap](roadmap.md)
+- [Changelog](changelog.md)
+- [Contributing](contributing.md)
 - [License](LICENSE.md)
 
 ---

@@ -24,16 +24,26 @@ jobs:
 
       - name: Copy files to docs
         run: |
+          # Clean up any existing files
+          rm -rf docs/*.md docs/*.html docs/index.md#*
+
+          # Copy main files
           cp README.md docs/index.md
           cp CHANGELOG.md docs/changelog.md
           cp ROADMAP.md docs/roadmap.md
           cp CONTRIBUTING.md docs/contributing.md
           cp LICENSE docs/LICENSE.md
 
-      - name: Create book.toml if it doesn't exist
+          # Ensure all files have .md extension
+          for file in docs/*.md; do
+            if [[ "$file" != *.md ]]; then
+              mv "$file" "${file}.md"
+            fi
+          done
+
+      - name: Update book.toml
         run: |
-          if [ ! -f docs/book.toml ]; then
-            cat > docs/book.toml << EOF
+          cat > docs/book.toml << EOF
           [book]
           authors = ["Jonathan Opperman"]
           language = "en"
@@ -45,13 +55,55 @@ jobs:
           git-repository-url = "https://github.com/qitops/qitops-cli-tools"
           git-repository-icon = "fa-github"
           edit-url-template = "https://github.com/qitops/qitops-cli-tools/edit/master/docs/{path}"
+          site-url = "/qitops-cli-tools/"
+          additional-css = ["custom.css"]
+          additional-js = ["custom.js"]
+          mathjax-support = false
+          copy-fonts = true
+          no-section-label = false
+          preferred-dark-theme = "navy"
+          smart-punctuation = true
+          search-enabled = true
+          search-js = true
+
+          [output.html.fold]
+          enable = true
+          level = 0
+
+          [output.html.playground]
+          editable = true
+          line-numbers = true
+          runnable = false
+
+          [output.html.search]
+          limit-results = 20
+          use-boolean-and = true
+          boost-title = 2
+          boost-hierarchy = 2
+          boost-paragraph = 1
+          expand = true
+          heading-split-level = 3
+          copy-js = true
           EOF
+
+      - name: Ensure custom CSS and JS files exist
+        run: |
+          if [ ! -f docs/custom.css ]; then
+            cp docs/custom.css.example docs/custom.css || touch docs/custom.css
+          fi
+          if [ ! -f docs/custom.js ]; then
+            cp docs/custom.js.example docs/custom.js || touch docs/custom.js
           fi
 
       - name: Build documentation
         run: |
           cd docs
           mdbook build
+
+      - name: Debug - List files in book directory
+        run: |
+          echo "Files in docs/book directory:"
+          ls -la docs/book/
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
