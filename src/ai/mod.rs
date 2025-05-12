@@ -62,12 +62,10 @@ pub fn create_model(model_name: &str, model_path: Option<&str>) -> Result<Box<dy
                 ))
             }
         }
-        _ => {
-            Err(crate::error::Error::AiModelError(format!(
-                "Unsupported model: {}",
-                model_name
-            )))
-        }
+        _ => Err(crate::error::Error::AiModelError(format!(
+            "Unsupported model: {}",
+            model_name
+        ))),
     }
 }
 
