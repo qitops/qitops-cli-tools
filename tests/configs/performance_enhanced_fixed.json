@@ -1,23 +1,23 @@
 {
     "name": "Enhanced Performance Test",
-    "description": "Testing API performance with multiple scenarios and load profiles",
-    "timeout": 60,
+    "description": "Testing API performance with enhanced configuration",
+    "timeout": 30,
     "retries": 0,
     "environment": "production",
     "load_profile": {
         "type": "constant_vus",
-        "initial": 1,
+        "initial": 5,
         "stages": [
-            {
-                "duration_secs": 5,
-                "target": 5
-            },
             {
                 "duration_secs": 10,
                 "target": 10
             },
             {
-                "duration_secs": 5,
+                "duration_secs": 20,
+                "target": 5
+            },
+            {
+                "duration_secs": 10,
                 "target": 0
             }
         ]
@@ -34,12 +34,12 @@
             "weight": 3,
             "tags": {
                 "endpoint": "posts",
-                "category": "read"
+                "operation": "read"
             }
         },
         {
-            "name": "Get Comments",
-            "target_url": "https://jsonplaceholder.typicode.com/comments",
+            "name": "Get Users",
+            "target_url": "https://jsonplaceholder.typicode.com/users",
             "method": "GET",
             "headers": {
                 "Accept": "application/json",
@@ -47,29 +47,25 @@
             },
             "weight": 1,
             "tags": {
-                "endpoint": "comments",
-                "category": "read"
+                "endpoint": "users",
+                "operation": "read"
             }
         }
     ],
     "thresholds": [
         {
-            "metric": "response_time.avg",
-            "expression": "< 0.5",
+            "metric": "response_time",
+            "expression": "p95 < 0.5",
             "abort_on_fail": false
         },
         {
-            "metric": "response_time.p95",
-            "expression": "< 1.0",
-            "abort_on_fail": false
-        },
-        {
-            "metric": "success.avg",
-            "expression": "> 0.95",
+            "metric": "success",
+            "expression": "rate > 0.95",
             "abort_on_fail": true
         }
     ],
     "success_threshold": 95.0,
+    "custom_metrics": ["request_size", "response_size"],
     "stream_metrics": true,
-    "metrics_interval_secs": 1
+    "metrics_interval_secs": 5
 }

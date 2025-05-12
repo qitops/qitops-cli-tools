@@ -1,0 +1,17 @@
+{
+    "name": "Simple Performance Test",
+    "description": "Testing API performance with a simple configuration",
+    "timeout": 30,
+    "retries": 0,
+    "environment": "production",
+    "target_url": "https://jsonplaceholder.typicode.com/posts",
+    "method": "GET",
+    "headers": {
+        "Accept": "application/json",
+        "User-Agent": "QitOps-Test/1.0"
+    },
+    "concurrent_users": 5,
+    "duration": 10,
+    "ramp_up": 2,
+    "success_threshold": 95.0
+}

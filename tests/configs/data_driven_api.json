@@ -1,6 +1,6 @@
 {
-    "name": "User API Test for {{name}}",
-    "description": "Test the user API for {{name}}",
+    "name": "User API Test",
+    "description": "Test the JSONPlaceholder API to fetch user information",
     "timeout": 30,
     "retries": 0,
     "environment": "production",
@@ -8,10 +8,10 @@
     "method": "GET",
     "headers": {
         "Accept": "application/json",
-        "User-Agent": "QitOps-Test"
+        "User-Agent": "QitOps-Test/1.0"
     },
     "expected_status": 200,
     "expected_body": {
-        "name": "{{name}}"
+        "name": "{{expected_name}}"
     }
 }

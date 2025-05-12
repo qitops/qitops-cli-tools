@@ -257,9 +257,9 @@ static ENHANCED_PERFORMANCE_SCHEMA: Lazy<JSONSchema> = Lazy::new(|| {
             "environment": {"type": "string"},
             "load_profile": {
                 "type": "object",
-                "required": ["profile_type"],
+                "required": ["type"],
                 "properties": {
-                    "profile_type": {"type": "string", "enum": ["constant_vus", "ramping_vus", "constant_arrival_rate", "ramping_arrival_rate", "spike"]},
+                    "type": {"type": "string", "enum": ["constant_vus", "ramping_vus", "constant_arrival_rate", "ramping_arrival_rate", "spike"]},
                     "initial": {"type": "integer", "minimum": 1},
                     "target": {"type": "integer", "minimum": 0},
                     "duration_secs": {"type": "integer", "minimum": 1},

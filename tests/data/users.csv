@@ -1,6 +1,6 @@
-user_id,username,email,role
-1,Bret,Sincere@april.biz,admin
-2,Antonette,Shanna@melissa.tv,user
-3,Samantha,Nathan@yesenia.net,user
-4,Karianne,Julianne.OConner@kory.org,user
-5,Kamren,Lucio_Hettinger@annie.ca,user
+user_id,name,email,role
+1,Leanne Graham,Sincere@april.biz,admin
+2,Ervin Howell,Shanna@melissa.tv,user
+3,Clementine Bauch,Nathan@yesenia.net,user
+4,Patricia Lebsack,Julianne.OConner@kory.org,user
+5,Chelsey Dietrich,Lucio_Hettinger@annie.ca,user
