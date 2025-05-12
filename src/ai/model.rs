@@ -24,6 +24,12 @@ impl MockModel {
     }
 }
 
+impl Default for MockModel {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[async_trait]
 impl AiModel for MockModel {
     async fn generate(&self, prompt: &str) -> Result<ModelResponse> {
@@ -136,6 +142,7 @@ impl AiModel for MockModel {
 }
 
 // Custom model for external LLMs
+#[allow(dead_code)]
 pub struct CustomModel {
     path: String,
     client: Client,

@@ -17,8 +17,7 @@ pub fn create_model(model_name: &str, model_path: Option<&str>) -> Result<Box<dy
     match model_name {
         "custom" => {
             if let Some(path) = model_path {
-                if path.starts_with("ollama:") {
-                    let model_id = &path[7..];
+                if let Some(model_id) = path.strip_prefix("ollama:") {
                     info!("Creating Ollama model with ID: {}", model_id);
                     #[cfg(feature = "ai")]
                     {
@@ -26,9 +25,9 @@ pub fn create_model(model_name: &str, model_path: Option<&str>) -> Result<Box<dy
                     }
                     #[cfg(not(feature = "ai"))]
                     {
-                        return Err(crate::error::Error::AiModelError(
+                        Err(crate::error::Error::AiModelError(
                             "AI features are not enabled. Recompile with --features ai".to_string(),
-                        ));
+                        ))
                     }
                 } else {
                     info!("Creating custom model with path: {}", path);
@@ -38,15 +37,15 @@ pub fn create_model(model_name: &str, model_path: Option<&str>) -> Result<Box<dy
                     }
                     #[cfg(not(feature = "ai"))]
                     {
-                        return Err(crate::error::Error::AiModelError(
+                        Err(crate::error::Error::AiModelError(
                             "AI features are not enabled. Recompile with --features ai".to_string(),
-                        ));
+                        ))
                     }
                 }
             } else {
-                return Err(crate::error::Error::AiModelError(
+                Err(crate::error::Error::AiModelError(
                     "Model path is required for custom model".to_string(),
-                ));
+                ))
             }
         }
         "mock" => {
@@ -57,17 +56,17 @@ pub fn create_model(model_name: &str, model_path: Option<&str>) -> Result<Box<dy
             }
             #[cfg(not(any(feature = "ai", feature = "ai-mock")))]
             {
-                return Err(crate::error::Error::AiModelError(
+                Err(crate::error::Error::AiModelError(
                     "AI features are not enabled. Recompile with --features ai or --features ai-mock"
                         .to_string(),
-                ));
+                ))
             }
         }
         _ => {
-            return Err(crate::error::Error::AiModelError(format!(
+            Err(crate::error::Error::AiModelError(format!(
                 "Unsupported model: {}",
                 model_name
-            )));
+            )))
         }
     }
 }
