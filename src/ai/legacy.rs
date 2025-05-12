@@ -216,6 +216,103 @@ The test was successful with a response time of 0.19 seconds.
     ]
 }"#
             .to_string())
+        } else if prompt.contains("Generate a JSON configuration for a performance test") {
+            Ok(r#"{
+    "name": "E-commerce Checkout API Load Test",
+    "description": "Load test for an e-commerce checkout API with 100 concurrent users",
+    "environment": "production",
+    "target_url": "https://api.example.com/checkout",
+    "method": "POST",
+    "headers": {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "User-Agent": "QitOps-PerformanceTester/1.0"
+    },
+    "body": {
+        "cart_id": "{{cartId}}",
+        "payment_method": "credit_card",
+        "shipping_method": "express"
+    },
+    "users": 100,
+    "duration": 300,
+    "ramp_up": 60,
+    "think_time": 2,
+    "thresholds": {
+        "http_req_duration": ["p(95)<500", "p(99)<1000"],
+        "http_req_failed": ["rate<0.01"]
+    }
+}"#
+            .to_string())
+        } else if prompt.contains("Generate a JSON configuration for a security test") {
+            Ok(r#"{
+    "name": "API Security Test",
+    "description": "Security test for the API endpoints",
+    "environment": "staging",
+    "target_url": "https://api.example.com",
+    "scan_types": ["xss", "sqli", "csrf", "auth"],
+    "headers": {
+        "User-Agent": "QitOps-SecurityTester/1.0"
+    },
+    "auth": {
+        "type": "bearer",
+        "token": "{{API_TOKEN}}"
+    },
+    "depth": 3,
+    "max_urls": 50,
+    "passive": true
+}"#
+            .to_string())
+        } else if prompt.contains("Generate a JSON configuration for a web UI test") {
+            Ok(r#"{
+    "name": "Web UI Login Test",
+    "description": "Test the login functionality of the web application",
+    "target_url": "https://example.com/login",
+    "viewport": {
+        "width": 1280,
+        "height": 720
+    },
+    "wait_for_selector": "\\#login-form",
+    "wait_timeout_secs": 10,
+    "screenshots": true,
+    "assertions": [
+        {
+            "assertion_type": "title",
+            "expected_value": "Login - Example",
+            "comparison": "equals"
+        },
+        {
+            "assertion_type": "element",
+            "selector": "\\#login-form",
+            "expected_value": "true"
+        }
+    ],
+    "actions": [
+        {
+            "action_type": "type",
+            "selector": "\\#username",
+            "value": "testuser"
+        },
+        {
+            "action_type": "type",
+            "selector": "\\#password",
+            "value": "password123"
+        },
+        {
+            "action_type": "click",
+            "selector": "\\#login-button"
+        },
+        {
+            "action_type": "wait",
+            "wait_time_ms": 2000
+        },
+        {
+            "action_type": "wait_for_selector",
+            "selector": "\\.dashboard",
+            "wait_time_ms": 5000
+        }
+    ]
+}"#
+            .to_string())
         } else {
             Ok("Llama mock response for testing".to_string())
         }
