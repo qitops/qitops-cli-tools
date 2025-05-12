@@ -309,7 +309,10 @@ The test was successful with a response time of 0.45 seconds.
 
     async fn run_custom_inference(&self, prompt: &str, model_path: &str) -> Result<String> {
         // Mock implementation for testing
-        Ok(format!("Custom model response from {}: {}", model_path, prompt))
+        Ok(format!(
+            "Custom model response from {}: {}",
+            model_path, prompt
+        ))
     }
 
     fn create_api_test_prompt(&self, description: &str) -> String {

@@ -256,7 +256,10 @@ async fn generate_security_test(
     Ok(())
 }
 
-async fn analyze_api_test_results(_model: &dyn AiModel, _results: &serde_json::Value) -> Result<String> {
+async fn analyze_api_test_results(
+    _model: &dyn AiModel,
+    _results: &serde_json::Value,
+) -> Result<String> {
     // Implementation would go here
     Ok("API test analysis placeholder".to_string())
 }

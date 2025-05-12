@@ -9,7 +9,10 @@ pub async fn generate_web_test(
     description: &str,
     url: Option<&str>,
 ) -> Result<WebTestConfig> {
-    info!("Generating web test configuration using AI for: {}", description);
+    info!(
+        "Generating web test configuration using AI for: {}",
+        description
+    );
 
     let prompt = format!(
         r#"

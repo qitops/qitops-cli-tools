@@ -28,7 +28,7 @@ impl MockModel {
 impl AiModel for MockModel {
     async fn generate(&self, prompt: &str) -> Result<ModelResponse> {
         info!("Mock model generating response for prompt: {}", prompt);
-        
+
         // Return a simple mock response based on the prompt
         if prompt.contains("web test") {
             Ok(ModelResponse {
@@ -63,7 +63,8 @@ impl AiModel for MockModel {
     }
   ],
   "actions": []
-}"#.to_string(),
+}"#
+                .to_string(),
             })
         } else if prompt.contains("api test") {
             Ok(ModelResponse {
@@ -80,7 +81,8 @@ impl AiModel for MockModel {
     "userId": 1,
     "id": 1
   }
-}"#.to_string(),
+}"#
+                .to_string(),
             })
         } else if prompt.contains("performance test") {
             Ok(ModelResponse {
@@ -98,7 +100,8 @@ impl AiModel for MockModel {
   "thresholds": {
     "http_req_duration": ["p(95)<500"]
   }
-}"#.to_string(),
+}"#
+                .to_string(),
             })
         } else if prompt.contains("security test") {
             Ok(ModelResponse {
@@ -113,7 +116,8 @@ impl AiModel for MockModel {
   "auth": null,
   "depth": 1,
   "max_urls": 10
-}"#.to_string(),
+}"#
+                .to_string(),
             })
         } else if prompt.contains("analyze") {
             Ok(ModelResponse {
@@ -143,7 +147,7 @@ impl CustomModel {
             .timeout(Duration::from_secs(60))
             .build()
             .map_err(|e| Error::AiError(format!("Failed to create HTTP client: {}", e)))?;
-        
+
         Ok(Self {
             path: path.to_string(),
             client,
@@ -156,7 +160,7 @@ impl AiModel for CustomModel {
     async fn generate(&self, prompt: &str) -> Result<ModelResponse> {
         info!("Custom model generating response for prompt");
         debug!("Prompt: {}", prompt);
-        
+
         // This would be implemented to call an external API or local model
         // For now, just return a mock response
         Ok(ModelResponse {
@@ -189,7 +193,7 @@ impl OllamaModel {
             .timeout(Duration::from_secs(300))
             .build()
             .map_err(|e| Error::AiError(format!("Failed to create HTTP client: {}", e)))?;
-        
+
         Ok(Self {
             model_id: model_id.to_string(),
             client,
@@ -200,34 +204,38 @@ impl OllamaModel {
 #[async_trait]
 impl AiModel for OllamaModel {
     async fn generate(&self, prompt: &str) -> Result<ModelResponse> {
-        info!("Ollama model generating response for prompt using model: {}", self.model_id);
+        info!(
+            "Ollama model generating response for prompt using model: {}",
+            self.model_id
+        );
         debug!("Prompt: {}", prompt);
-        
+
         let request = OllamaRequest {
             model: self.model_id.clone(),
             prompt: prompt.to_string(),
             stream: false,
         };
-        
-        let response = self.client
+
+        let response = self
+            .client
             .post("http://localhost:11434/api/generate")
             .json(&request)
             .send()
             .await
             .map_err(|e| Error::AiError(format!("Failed to send request to Ollama: {}", e)))?;
-        
+
         if !response.status().is_success() {
             return Err(Error::AiError(format!(
                 "Ollama API returned error status: {}",
                 response.status()
             )));
         }
-        
+
         let ollama_response: OllamaResponse = response
             .json()
             .await
             .map_err(|e| Error::AiError(format!("Failed to parse Ollama response: {}", e)))?;
-        
+
         Ok(ModelResponse {
             content: ollama_response.response,
         })
