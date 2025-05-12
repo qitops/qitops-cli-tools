@@ -46,6 +46,10 @@ candle-transformers = { version = "0.3.3", optional = true }
 half = { version = "2.3.1", optional = true }
 rand_distr = { version = "0.4.3", optional = true }
 
+# Web testing dependencies
+playwright = { version = "0.0.20", optional = true }
+scraper = { version = "0.18.1", optional = true }
+
 [features]
 default = []
 # Basic AI features without platform-specific optimizations
@@ -57,5 +61,9 @@ ai-full = ["llama_cpp_rs", "candle-core", "candle-transformers", "half", "rand_d
 # Platform-specific optimizations - these will be enabled automatically when appropriate
 ai-cuda = ["ai-full", "candle-core/cuda"]
 ai-metal = ["ai-full", "candle-core/metal"]
+
+# Web testing features
+web-testing = ["playwright", "scraper"]
+web-testing-ai = ["web-testing", "ai"]
 
 # We'll handle compatibility issues in the code instead of using patches

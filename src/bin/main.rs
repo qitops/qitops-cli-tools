@@ -4,7 +4,7 @@ use log::{info, warn};
 use std::path::PathBuf;
 
 // Import modules from the crate
-use qitops::ai::{AiConfig, AiModelType, AiTestGenerator};
+use qitops::ai::legacy::{AiConfig, AiModelType, AiTestGenerator};
 use qitops::ai_compat;
 use qitops::api::{ApiTestConfig, ApiTestRunner};
 use qitops::api_collection::ApiCollectionRunner;

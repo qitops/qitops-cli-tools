@@ -1,9 +1,12 @@
+pub mod legacy;
 pub mod model;
 pub mod web;
 
+// Re-export legacy types for backward compatibility
+pub use legacy::{AiConfig, AiModelType, AiTestGenerator};
+
 use crate::error::Result;
-use log::{debug, info};
-use model::{AiModel, ModelResponse};
+use log::info;
 use std::path::Path;
 
 // Re-export the model module
@@ -23,7 +26,7 @@ pub fn create_model(model_name: &str, model_path: Option<&str>) -> Result<Box<dy
                     }
                     #[cfg(not(feature = "ai"))]
                     {
-                        return Err(crate::error::Error::AiError(
+                        return Err(crate::error::Error::AiModelError(
                             "AI features are not enabled. Recompile with --features ai".to_string(),
                         ));
                     }
@@ -35,13 +38,13 @@ pub fn create_model(model_name: &str, model_path: Option<&str>) -> Result<Box<dy
                     }
                     #[cfg(not(feature = "ai"))]
                     {
-                        return Err(crate::error::Error::AiError(
+                        return Err(crate::error::Error::AiModelError(
                             "AI features are not enabled. Recompile with --features ai".to_string(),
                         ));
                     }
                 }
             } else {
-                return Err(crate::error::Error::AiError(
+                return Err(crate::error::Error::AiModelError(
                     "Model path is required for custom model".to_string(),
                 ));
             }
@@ -54,14 +57,14 @@ pub fn create_model(model_name: &str, model_path: Option<&str>) -> Result<Box<dy
             }
             #[cfg(not(any(feature = "ai", feature = "ai-mock")))]
             {
-                return Err(crate::error::Error::AiError(
+                return Err(crate::error::Error::AiModelError(
                     "AI features are not enabled. Recompile with --features ai or --features ai-mock"
                         .to_string(),
                 ));
             }
         }
         _ => {
-            return Err(crate::error::Error::AiError(format!(
+            return Err(crate::error::Error::AiModelError(format!(
                 "Unsupported model: {}",
                 model_name
             )));
@@ -95,13 +98,13 @@ pub async fn generate_test_config(
             }
             #[cfg(not(feature = "web-testing-ai"))]
             {
-                Err(crate::error::Error::AiError(
+                Err(crate::error::Error::AiModelError(
                     "Web testing AI features are not enabled. Recompile with --features web-testing-ai"
                         .to_string(),
                 ))
             }
         }
-        _ => Err(crate::error::Error::AiError(format!(
+        _ => Err(crate::error::Error::AiModelError(format!(
             "Unsupported test type: {}",
             test_type
         ))),
@@ -138,14 +141,14 @@ pub async fn analyze_test_results(
             }
             #[cfg(not(feature = "web-testing-ai"))]
             {
-                return Err(crate::error::Error::AiError(
+                return Err(crate::error::Error::AiModelError(
                     "Web testing AI features are not enabled. Recompile with --features web-testing-ai"
                         .to_string(),
                 ));
             }
         }
         _ => {
-            return Err(crate::error::Error::AiError(format!(
+            return Err(crate::error::Error::AiModelError(format!(
                 "Unsupported test type: {}",
                 test_type
             )));
@@ -188,14 +191,14 @@ pub async fn generate_test_improvements(
             }
             #[cfg(not(feature = "web-testing-ai"))]
             {
-                return Err(crate::error::Error::AiError(
+                return Err(crate::error::Error::AiModelError(
                     "Web testing AI features are not enabled. Recompile with --features web-testing-ai"
                         .to_string(),
                 ));
             }
         }
         _ => {
-            return Err(crate::error::Error::AiError(format!(
+            return Err(crate::error::Error::AiModelError(format!(
                 "Unsupported test type: {}",
                 test_type
             )));
@@ -219,7 +222,7 @@ fn determine_test_type(results: &serde_json::Value) -> Result<&'static str> {
     } else if results["type"] == "web" {
         Ok("web")
     } else {
-        Err(crate::error::Error::AiError(
+        Err(crate::error::Error::AiModelError(
             "Could not determine test type from results".to_string(),
         ))
     }

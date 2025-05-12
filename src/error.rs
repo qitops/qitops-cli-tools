@@ -35,6 +35,9 @@ pub enum Error {
     #[error("AI model error: {0}")]
     AiModelError(String),
 
+    #[error("AI error: {0}")]
+    AiError(String),
+
     #[error("Unsupported feature: {0}")]
     UnsupportedFeatureError(String),
 }

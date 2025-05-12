@@ -160,7 +160,7 @@ mod ai_tests {
 // This module contains tests that run regardless of whether the AI feature is enabled
 #[cfg(test)]
 mod general_ai_tests {
-    use qitops::ai::{AiConfig, AiModelType};
+    use qitops::ai::legacy::{AiConfig, AiModelType};
 
     // Test that verifies AiConfig can be serialized and deserialized
     #[test]

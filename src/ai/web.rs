@@ -1,8 +1,7 @@
-use crate::ai::model::{AiModel, ModelResponse};
+use crate::ai::model::AiModel;
 use crate::error::Result;
-use crate::web::{WebAction, WebAssertion, WebTestConfig, Viewport};
+use crate::web::WebTestConfig;
 use log::{debug, info};
-use serde_json::json;
 
 /// Generate a web test configuration using AI
 pub async fn generate_web_test(
