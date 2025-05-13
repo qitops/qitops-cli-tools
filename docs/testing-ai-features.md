@@ -95,7 +95,7 @@ cargo run --features ai -- improve --results sample_test_results.json --output t
 
 ## Option 3: Testing with Mock Implementation
 
-For quick testing without a real model, you can use the built-in mock implementation.
+For quick testing without a real model, you can use the built-in mock implementation. This is especially useful for CI/CD environments where installing and running a local LLM might not be feasible.
 
 ### Step 1: Create Sample Test Results
 
@@ -183,9 +183,55 @@ cargo run --features ai -- analyze --results sample_test_results.json --output t
 cargo run --features ai -- improve --results sample_test_results.json --output test_improvements.md
 ```
 
-## Automated Testing Script
+## Automated Testing Scripts
 
-For convenience, you can use the provided test script to test all AI features at once:
+For convenience, you can use the provided test scripts to test all AI features at once:
+
+### Testing with Real LLM
+
+```bash
+# Make the script executable
+chmod +x test_ai_features.sh
+
+# Run the test script with a real LLM (requires Ollama with phi model)
+./test_ai_features.sh
+```
+
+The real LLM test script will:
+1. Build QitOps with AI features enabled
+2. Connect to your local Ollama instance
+3. Generate actual AI-powered test configurations
+4. Create actual AI-powered analysis and improvement suggestions
+5. Save all outputs to the `ai_test_outputs` directory
+
+### Testing with Mock Implementation (for CI/CD)
+
+```bash
+# Make the script executable
+chmod +x test_ai_features_mock.sh
+
+# Run the mock test script (no LLM required)
+./test_ai_features_mock.sh
+```
+
+The mock test script will:
+1. Build QitOps with AI features enabled
+2. Create mock test configurations
+3. Create mock analysis and improvement suggestions
+4. Save all outputs to the `ai_test_outputs` directory
+
+This mock script is particularly useful for CI/CD environments where running a local LLM is not feasible. Our GitHub Actions workflow uses this approach:
+
+```yaml
+- name: Test AI features with mock
+  run: |
+    chmod +x test_ai_features_mock.sh
+    ./test_ai_features_mock.sh
+```
+
+### Legacy Testing Script
+
+For backward compatibility, you can also use the legacy test script:
 
 ```bash
 # Download the test script
@@ -196,7 +242,7 @@ chmod +x test_local_ai.sh
 ./test_local_ai.sh
 ```
 
-The test script will:
+The legacy test script will:
 1. Set up environment variables for offline mode
 2. Create a directory for test outputs
 3. Test all AI features (generation, analysis, improvement)

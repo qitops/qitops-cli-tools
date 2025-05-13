@@ -49,10 +49,10 @@ jobs:
           command: build
           args: --features ai
 
-      - name: Test AI features
+      - name: Test AI features with mock
         run: |
-          chmod +x test_ai_features.sh
-          ./test_ai_features.sh
+          chmod +x test_ai_features_mock.sh
+          ./test_ai_features_mock.sh
 
       # Documentation build steps
       - name: Setup mdBook
