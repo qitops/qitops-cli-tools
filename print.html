@@ -5389,7 +5389,7 @@ cargo run --features ai -- analyze --results sample_test_results.json --output t
 cargo run --features ai -- improve --results sample_test_results.json --output test_improvements.md --model custom --model-path models/phi-2.gguf
 </code></pre>
 <h2 id="option-3-testing-with-mock-implementation"><a class="header" href="#option-3-testing-with-mock-implementation">Option 3: Testing with Mock Implementation</a></h2>
-<p>For quick testing without a real model, you can use the built-in mock implementation.</p>
+<p>For quick testing without a real model, you can use the built-in mock implementation. This is especially useful for CI/CD environments where installing and running a local LLM might not be feasible.</p>
 <h3 id="step-1-create-sample-test-results"><a class="header" href="#step-1-create-sample-test-results">Step 1: Create Sample Test Results</a></h3>
 <p>Create a sample test results file for testing analysis and improvement features:</p>
 <pre><code class="language-bash">cat &gt; sample_test_results.json &lt;&lt; EOF
@@ -5469,8 +5469,45 @@ cargo run --features ai -- analyze --results sample_test_results.json --output t
 # Test improvement suggestions
 cargo run --features ai -- improve --results sample_test_results.json --output test_improvements.md
 </code></pre>
-<h2 id="automated-testing-script"><a class="header" href="#automated-testing-script">Automated Testing Script</a></h2>
-<p>For convenience, you can use the provided test script to test all AI features at once:</p>
+<h2 id="automated-testing-scripts"><a class="header" href="#automated-testing-scripts">Automated Testing Scripts</a></h2>
+<p>For convenience, you can use the provided test scripts to test all AI features at once:</p>
+<h3 id="testing-with-real-llm"><a class="header" href="#testing-with-real-llm">Testing with Real LLM</a></h3>
+<pre><code class="language-bash"># Make the script executable
+chmod +x test_ai_features.sh
+
+# Run the test script with a real LLM (requires Ollama with phi model)
+./test_ai_features.sh
+</code></pre>
+<p>The real LLM test script will:</p>
+<ol>
+<li>Build QitOps with AI features enabled</li>
+<li>Connect to your local Ollama instance</li>
+<li>Generate actual AI-powered test configurations</li>
+<li>Create actual AI-powered analysis and improvement suggestions</li>
+<li>Save all outputs to the <code>ai_test_outputs</code> directory</li>
+</ol>
+<h3 id="testing-with-mock-implementation-for-cicd"><a class="header" href="#testing-with-mock-implementation-for-cicd">Testing with Mock Implementation (for CI/CD)</a></h3>
+<pre><code class="language-bash"># Make the script executable
+chmod +x test_ai_features_mock.sh
+
+# Run the mock test script (no LLM required)
+./test_ai_features_mock.sh
+</code></pre>
+<p>The mock test script will:</p>
+<ol>
+<li>Build QitOps with AI features enabled</li>
+<li>Create mock test configurations</li>
+<li>Create mock analysis and improvement suggestions</li>
+<li>Save all outputs to the <code>ai_test_outputs</code> directory</li>
+</ol>
+<p>This mock script is particularly useful for CI/CD environments where running a local LLM is not feasible. Our GitHub Actions workflow uses this approach:</p>
+<pre><code class="language-yaml">- name: Test AI features with mock
+  run: |
+    chmod +x test_ai_features_mock.sh
+    ./test_ai_features_mock.sh
+</code></pre>
+<h3 id="legacy-testing-script"><a class="header" href="#legacy-testing-script">Legacy Testing Script</a></h3>
+<p>For backward compatibility, you can also use the legacy test script:</p>
 <pre><code class="language-bash"># Download the test script
 curl -O https://raw.githubusercontent.com/qitops/qitops-cli-tools/master/test_local_ai.sh
 chmod +x test_local_ai.sh
@@ -5478,7 +5515,7 @@ chmod +x test_local_ai.sh
 # Run the test script
 ./test_local_ai.sh
 </code></pre>
-<p>The test script will:</p>
+<p>The legacy test script will:</p>
 <ol>
 <li>Set up environment variables for offline mode</li>
 <li>Create a directory for test outputs</li>
