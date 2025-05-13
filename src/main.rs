@@ -1,8 +1,7 @@
 use env_logger::Env;
-use log::{info, LevelFilter};
+use log::info;
 use qitops::ai::model::{AiModel, OllamaModel};
 use std::error::Error;
-use std::path::Path;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
